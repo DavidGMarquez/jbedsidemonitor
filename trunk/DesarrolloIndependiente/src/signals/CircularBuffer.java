@@ -7,6 +7,9 @@ package signals;
 /**
  * Clase que representa un buffer circular.
  * Es un buffer simple con la particularidad de que al llenarse vuelve a escribir al principio del array.
+ * indexnext representa por donde vamos a escribir.
+ * indexold apunta a la muestra mas antigua que hay en el array
+ * full es un boleano que indica si el buffer se ha lleanado ya de datos completamente
  * @author USUARIO
  */
 class CircularBuffer {
@@ -15,7 +18,7 @@ class CircularBuffer {
     private int indexold;
     private int size;
     private float data[];
-    private boolean lleno;
+    private boolean full;
 
     public float[] getData() {
         return data;
@@ -33,12 +36,12 @@ class CircularBuffer {
         this.indexold = indexold;
     }
 
-    public boolean isLleno() {
-        return lleno;
+    public boolean isFull() {
+        return full;
     }
 
-    public void setLleno(boolean lleno) {
-        this.lleno = lleno;
+    public void setFull(boolean full) {
+        this.full = full;
     }
 
     
@@ -66,7 +69,7 @@ class CircularBuffer {
         data = new float[size];
         indexnext = 0;
         indexold = 0;
-        lleno=false;
+        full=false;
     }
     /**
      * Crea un buffer circular con el tamaño que indique size
@@ -77,7 +80,7 @@ class CircularBuffer {
         data = new float[size];
         indexnext = 0;
         indexold = 0;
-        lleno=false;
+        full=false;
     }
     /**
      * Escribe datos en el buffer.
@@ -108,7 +111,7 @@ class CircularBuffer {
                 System.arraycopy(datatowrite, iniori, this.data, inidest, tam);
                 tocopy = tocopy - tam;
                 this.indexnext = 0;
-                lleno=true;
+                full=true;
                 this.indexold=0;
             } else {
                 //Copia simple
@@ -118,7 +121,7 @@ class CircularBuffer {
                 System.arraycopy(datatowrite, iniori, this.data, inidest, tam);
                 tocopy = tocopy - tam;
                 this.indexnext =(this.indexnext + tam)%this.size;
-                if(lleno==true)
+                if(full==true)
                 {
                     this.indexold=this.indexnext;
                 }
