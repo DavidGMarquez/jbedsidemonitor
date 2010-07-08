@@ -2,26 +2,95 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package signals;
 
 /**
+ * Representa una serie temporal.
+ * identifier es una cadena de texto que representa a la serie temporal.
+ * agent identifica al agente que produce los datos, si estos son parámetros fisiológicos que proceden del paciente tendrá el valor 'simulated'
+ * data es el buffer circular que contiene los datos
+ * frequency tiene la frecuencia de muestreo de la señal (Hz)
+ * units es una cadena de texto que contiene las unidades del parámetro representado por la serie temporal
  *
+ * dudas?? La frecuencia es por float? o habría q introducir un parámetro que fuera la cantidad de datos que se añaden cada vez que se muestrea
+ * falta validar el identifier con los espacios y tal
  * @author USUARIO
  */
 public class TemporalSeries {
     //Parametros generales
+
     private String identifier;
     private String agent;
-    
     //Parametros serie temporal
-    private int nmuestras;
-    private float frecuencia;
-    private int ultimamuestra;
-    private int nuevamuestra;
-    private String units;
     private CircularBuffer data;
+    private float frequency;
+    private String units;
+    private int oldsample;
+    private int newsample;
 
+    public TemporalSeries(String identifier, String agent, float frequency, String units) {
+        this.identifier = identifier;
+        this.agent = agent;
+        this.frequency = frequency;
+        this.units = units;
+        this.oldsample = -1;
+        this.newsample = -1;
 
+        if (3600 * 6 * this.frequency > 100000) {
+            this.data = new CircularBuffer(100000);
+        } else {
+            this.data = new CircularBuffer(3600 * 6);
+        }
+    }
 
+    public String getAgent() {
+        return agent;
+    }
+
+    public float getFrequency() {
+        return frequency;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * Devuelve la muestra más nueva
+     * @return -1 si el buffer esta vacio en otro caso el indice
+     */
+    public int getNewsample() {
+        if (data.getIndexnext() == 0) {
+            if (data.isFull()) {
+                return (data.getSize() - 1);
+            } else {
+                return -1;
+            }
+        }
+
+        newsample = (data.getIndexnext() - 1);
+        return newsample;
+    }
+
+    /**
+     * Indice de la muestra mas antigua
+     * @return -1 si el buffer esta vacio en otro caso el indice
+     */
+    public int getOldsample() {
+        if (data.getIndexold() == 0 && data.getIndexnext() == 0 && data.isFull() == false) {
+            return -1;
+        }
+        oldsample = (data.getIndexold());
+        return oldsample;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+    public float[] read( int posSrc,int sizetoread) {
+        return this.data.read(posSrc, sizetoread);
+    }
+        boolean write(float[] datatowrite, int sizetowrite) {
+        return this.data.write(datatowrite, sizetowrite);
+    }
 }
