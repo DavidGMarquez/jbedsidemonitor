@@ -16,12 +16,9 @@ package signals;
  * falta validar el identifier con los espacios y tal
  * @author USUARIO
  */
-public class TemporalSeries {
-    //Parametros generales
-
-    private String identifier;
-    private String agent;
+public class TemporalSeries extends Series {
     //Parametros serie temporal
+
     private CircularBuffer data;
     private float frequency;
     private String units;
@@ -29,30 +26,25 @@ public class TemporalSeries {
     private int newsample;
 
     public TemporalSeries(String identifier, String agent, float frequency, String units) {
-        this.identifier = identifier;
-        this.agent = agent;
-        this.frequency = frequency;
-        this.units = units;
-        this.oldsample = -1;
-        this.newsample = -1;
+        if (this.setIdentifier(identifier)) {
+            this.setAgent(agent);
+            this.frequency = frequency;
+            this.units = units;
+            this.oldsample = -1;
+            this.newsample = -1;
 
-        if (3600 * 6 * this.frequency > 100000) {
-            this.data = new CircularBuffer(100000);
+            if (3600 * 6 * this.frequency > 100000) {
+                this.data = new CircularBuffer(100000);
+            } else {
+                this.data = new CircularBuffer(3600 * 6);
+            }
         } else {
-            this.data = new CircularBuffer(3600 * 6);
+            System.err.println("Nombre de identificador no válido");
         }
-    }
-
-    public String getAgent() {
-        return agent;
     }
 
     public float getFrequency() {
         return frequency;
-    }
-
-    public String getIdentifier() {
-        return identifier;
     }
 
     /**
@@ -87,10 +79,12 @@ public class TemporalSeries {
     public String getUnits() {
         return units;
     }
-    public float[] read( int posSrc,int sizetoread) {
+
+    public float[] read(int posSrc, int sizetoread) {
         return this.data.read(posSrc, sizetoread);
     }
-        boolean write(float[] datatowrite, int sizetowrite) {
+
+    boolean write(float[] datatowrite, int sizetowrite) {
         return this.data.write(datatowrite, sizetowrite);
     }
 }
