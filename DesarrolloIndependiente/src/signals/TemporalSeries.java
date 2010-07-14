@@ -24,23 +24,33 @@ public class TemporalSeries extends Series {
     private String units;
     private int oldsample;
     private int newsample;
+    private long samplescounter;
 
-    public TemporalSeries(String identifier, String agent, float frequency, String units) {
-        if (this.setIdentifier(identifier)) {
-            this.setAgent(agent);
-            this.frequency = frequency;
-            this.units = units;
-            this.oldsample = -1;
-            this.newsample = -1;
-
-            if (3600 * 6 * this.frequency > 100000) {
-                this.data = new CircularBuffer(100000);
-            } else {
-                this.data = new CircularBuffer(3600 * 6);
-            }
+    /**
+     * 
+     * Cambiar los métodos que tienen ademas del array la cantidad
+     * @param identifier
+     * @param agent
+     * @param frequency
+     * @param units
+     */
+    public TemporalSeries(String identifier, String agent, long timeinit, float frequency, String units) {
+        super(identifier, agent, timeinit);
+        this.frequency = frequency;
+        this.units = units;
+        this.oldsample = -1;
+        this.newsample = -1;
+        this.samplescounter=0;
+        if (3600 * 6 * this.frequency > 100000) {
+            this.data = new CircularBuffer(100000);
         } else {
-            System.err.println("Nombre de identificador no válido");
+            this.data = new CircularBuffer(3600 * 6);
         }
+
+    }
+
+    public long getSamplescounter() {
+        return samplescounter;
     }
 
     public float getFrequency() {
@@ -85,6 +95,11 @@ public class TemporalSeries extends Series {
     }
 
     boolean write(float[] datatowrite, int sizetowrite) {
-        return this.data.write(datatowrite, sizetowrite);
+        if( this.data.write(datatowrite, sizetowrite))
+        {
+            this.samplescounter=this.samplescounter+sizetowrite;
+            return true;
+        }
+        return false;
     }
 }

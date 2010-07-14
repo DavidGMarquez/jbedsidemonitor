@@ -4,11 +4,8 @@
  */
 package signals;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- *
+ *  
  * @author USUARIO
  */
 public abstract class Series {
@@ -16,6 +13,7 @@ public abstract class Series {
 
     private String identifier;
     private String agent;
+    private long timeinit;
 
     public String getIdentifier() {
         return identifier;
@@ -25,21 +23,32 @@ public abstract class Series {
         return agent;
     }
 
-    public boolean setAgent(String agent) {
+    private boolean setAgent(String agent) {
         if (agent.isEmpty()) {
             this.agent = "simulated";
         } else {
-            this.agent = agent;
+            this.agent = agent.trim();
         }
         return true;
     }
 
-    public boolean setIdentifier(String identifier) {
-        if (identifier.startsWith(" ") || identifier.startsWith("  ") || identifier.endsWith(" ") || identifier.endsWith("  ")) {
-            return false;
-        } else {
-            this.identifier = identifier;
-        }
+    private boolean setIdentifier(String identifier) {
+            this.identifier = identifier.trim();
         return true;
+    }
+
+    public long getTimeinit() {
+        return timeinit;
+    }
+
+    private void setTimeinit(long timeinit) {
+        this.timeinit = timeinit;
+    }
+    
+    protected Series(String identifier,String agent,long timeinit)
+    {
+        this.setIdentifier(identifier);
+        this.setAgent(agent);
+        this.setTimeinit(timeinit);
     }
 }

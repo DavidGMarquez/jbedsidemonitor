@@ -13,29 +13,29 @@ import java.util.Map;
  * @author USUARIO
  */
 public class Event {
-    private long moment;
+    private long location;
     private String type;
     private Map<Object,Object> attributes;
 
     public Event(int moment, String type) {
-        this.moment = moment;
+        this.location = moment;
         this.type = type;
          attributes = new HashMap<Object,Object>();
     }
 
     public Event(String type) {
         this.type = type;
-        this.moment=System.currentTimeMillis();
+        this.location=System.currentTimeMillis();
         attributes = new HashMap<Object,Object>();
     }
 
     public Event(long moment, String type, Map<Object, Object> attributes) {
-        this.moment = moment;
+        this.location = moment;
         this.type = type;
         this.attributes = attributes;
     }
     public Event(String type, Map<Object, Object> attributes) {
-        this.moment = System.currentTimeMillis();
+        this.location = System.currentTimeMillis();
         this.type = type;
         this.attributes = attributes;
     }
@@ -45,7 +45,7 @@ public class Event {
     }
 
     public long getMoment() {
-        return moment;
+        return location;
     }
 
     public String getType() {
