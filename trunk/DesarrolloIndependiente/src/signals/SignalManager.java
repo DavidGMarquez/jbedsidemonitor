@@ -10,5 +10,11 @@ package signals;
  * @author USUARIO
  */
 public class SignalManager {
+    private SignalManager(){}
+     private static final SignalManager INSTANCE= new SignalManager();
+
+    public static SignalManager getInstance(){
+        return INSTANCE;
+    }
 
 }
