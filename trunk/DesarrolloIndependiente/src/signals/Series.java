@@ -47,8 +47,8 @@ public abstract class Series {
     
     protected Series(String identifier,String agent,long timeinit)
     {
-        this.setIdentifier(identifier);
-        this.setAgent(agent);
+        this.setIdentifier(identifier.trim());
+        this.setAgent(agent.trim());
         this.setTimeinit(timeinit);
     }
 }

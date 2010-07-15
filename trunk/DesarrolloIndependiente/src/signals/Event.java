@@ -27,7 +27,7 @@ public final class Event {
     public Event(long moment, String type, Map<Object, Object> attributes) {
         this.location = moment;
         this.type = type.trim();
-        this.attributes = attributes;
+        this.attributes = new HashMap<Object,Object>(attributes);
     }
     public Map<Object, Object> getAttributes() {
         return new HashMap<Object,Object>(this.attributes);

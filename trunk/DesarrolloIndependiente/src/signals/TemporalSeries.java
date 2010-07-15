@@ -37,7 +37,7 @@ public class TemporalSeries extends Series {
     public TemporalSeries(String identifier, String agent, long timeinit, float frequency, String units) {
         super(identifier, agent, timeinit);
         this.frequency = frequency;
-        this.units = units;
+        this.units = units.trim();
         this.oldsample = -1;
         this.newsample = -1;
         this.samplescounter=0;

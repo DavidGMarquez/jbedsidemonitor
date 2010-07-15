@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  * No habría que devolver el evento al pedir uno sino una copia.
  * Primer evento es el primero en tiempo? o el primero de la lista? igual para el útlimo
+ * Los unicos metodos que modifican deberían ser addEvent y deleteEvent
  * @author USUARIO
  */
 public class NoTemporalSeries extends Series {
@@ -25,8 +26,8 @@ public class NoTemporalSeries extends Series {
 
     public NoTemporalSeries(String identifier, String agent, long timeinit, ArrayList<String> imputs, String units) {
         super(identifier, agent, timeinit);
-        this.imputs = imputs;
-        this.units = units;
+        this.imputs = new ArrayList<String>(imputs);
+        this.units = units.trim();
         this.firstevent = Long.MAX_VALUE;
         this.lastevent = Long.MIN_VALUE;
         this.typeevents = new HashMap<String, Long>();
@@ -35,10 +36,39 @@ public class NoTemporalSeries extends Series {
 
     }
 
+
+    public ArrayList<String> getImputs() {
+        return new ArrayList<String>(imputs);
+    }
+
+    public Map<String, Long> getTypeevents() {
+        return new HashMap<String, Long>(typeevents);
+    }
+
+
+    public long getFirstevent() {
+        return firstevent;
+    }
+
+    public long getLastevent() {
+        return lastevent;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
     public Event getEvent(int index) {
         Event e=this.events.get(index);
         return e;
     }
+    public int getSizeEvents() {
+        return this.events.size();
+    }
+        public ArrayList<Event> getEventsCopy() {
+        return new ArrayList<Event>(this.events);
+    }
+
 
     public boolean addEvent(Event even) {
         if (this.events.add(even)) {
