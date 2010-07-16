@@ -55,11 +55,11 @@ public class CircularBufferTest {
         datatowrite[0] = 1;
         datatowrite[1] = 2;
         datatowrite[2] = 3;
-        int sizetowrite = 3;
         CircularBuffer instance = new CircularBuffer(5);
-        boolean result = instance.write(datatowrite, sizetowrite);
+        boolean result = instance.write(datatowrite);
         assertEquals(true, result);
-        assertEquals(true, compareArray(instance.getData(), datatowrite, sizetowrite));
+        assertEquals(true, compareArray(instance.getData(), datatowrite,
+                datatowrite.length));
         assertEquals(0, instance.getIndexold());
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -75,11 +75,10 @@ public class CircularBufferTest {
         datatowrite[2] = 3;
         datatowrite[3] = 4;
         datatowrite[4] = 5;
-        int sizetowrite = 5;
         CircularBuffer instance = new CircularBuffer(5);
-        boolean result = instance.write(datatowrite, sizetowrite);
+        boolean result = instance.write(datatowrite);
         assertEquals(true, result);
-        assertEquals(true, compareArray(instance.getData(), datatowrite, sizetowrite));
+        assertEquals(true, compareArray(instance.getData(), datatowrite, datatowrite.length));
         // TODO review the generated test code and remove the default call to fail.
         assertEquals(0, instance.getIndexold());
     }
@@ -93,7 +92,7 @@ public class CircularBufferTest {
         int sizetowrite = 6;
         float[] datatowrite = this.generateArray(sizetowrite);
         CircularBuffer instance = new CircularBuffer(5);
-        boolean result = instance.write(datatowrite, sizetowrite);
+        boolean result = instance.write(datatowrite);
         assertEquals(false, result);
         assertEquals(0, instance.getIndexold());
         // TODO review the generated test code and remove the default call to fail.
@@ -108,9 +107,9 @@ public class CircularBufferTest {
         float[] datatowrite = null;
         datatowrite = this.generateArray(sizetowrite);
         CircularBuffer instance = new CircularBuffer(6);
-        boolean result = instance.write(datatowrite, sizetowrite);
+        boolean result = instance.write(datatowrite);
         assertEquals(true, result);
-        result = instance.write(datatowrite, sizetowrite);
+        result = instance.write(datatowrite);
         assertEquals(true, result);
         assertEquals(true, compareArray(instance.getData(), datatowrite, sizetowrite));
         assertEquals(0, instance.getIndexold());
@@ -125,9 +124,9 @@ public class CircularBufferTest {
         int sizetowrite = 4;
         float[] datatowrite = {1, 2, 3, 4};
         CircularBuffer instance = new CircularBuffer(5);
-        boolean result = instance.write(datatowrite, sizetowrite);
+        boolean result = instance.write(datatowrite);
         assertEquals(0, instance.getIndexold());
-        result = instance.write(datatowrite, sizetowrite);
+        result = instance.write(datatowrite);
 
         assertEquals(true, result);
 
@@ -135,7 +134,7 @@ public class CircularBufferTest {
         assertEquals(true, compareArray(instance.getData(), datacompare, instance.getData().length));
         assertEquals(3, instance.getIndexold());
         float[] datacompare2 = {3, 4, 4, 1, 2};
-        result = instance.write(datatowrite, sizetowrite);
+        result = instance.write(datatowrite);
         assertEquals(true, compareArray(instance.getData(), datacompare2, instance.getData().length));
 
         assertEquals(true, result);
@@ -170,14 +169,14 @@ public class CircularBufferTest {
         float[] array1 = generateArray(5);
         float[] array2 = generateArray(5);
         float[] array3 = generateArray(5);
-        instance.write(array1, 5);
+        instance.write(array1);
         assertEquals(0, instance.getIndexold());
 
         assertEquals(true, compareArray(array1, instance.read(0, 5), 5));
-        instance.write(array2, 5);
+        instance.write(array2);
         assertEquals(1, instance.getIndexold());
         assertEquals(true, compareArray(array2, instance.read(5, 5), 5));
-        instance.write(array3, 5);
+        instance.write(array3);
         assertEquals(6, instance.getIndexold());
         assertEquals(true, compareArray(array3, instance.read(1, 5), 5));
     }
@@ -191,40 +190,40 @@ public class CircularBufferTest {
         float[] array1 = {11, 12, 13, 14, 15, 16, 17};
         float[] array2 = {21, 22, 23, 24, 25};
         float[] array3 = {31, 32, 33};
-        instance.write(array1, 5);
+        instance.write(array1);
         assertEquals(0, instance.getIndexold());
 
-        assertEquals(true, compareArray(array1, instance.read(0, 5), 5));
-        instance.write(array1, 2);
-        assertEquals(0, instance.getIndexold());
-
-        assertEquals(false, compareArray(array1, instance.read(0, 7), 7));
-        float[] result1 = {11, 12, 13, 14, 15, 11, 12};
-        assertEquals(true, compareArray(instance.read(0, 7), result1, 7));
-        instance.write(array3, 3);
-        assertEquals(1, instance.getIndexold());
-
-        assertEquals(false, compareArray(array1, instance.read(0, 7), 7));
-        float[] result2 = {33, 12, 13, 14, 15, 11, 12, 31, 32};
-        assertEquals(true, compareArray(result2, instance.read(0, 9), 9));
-        instance.write(array2, 5);
-        assertEquals(6, instance.getIndexold());
-
-        float[] result3 = {33, 21, 22, 23, 24, 25, 12, 31, 32};
-        assertEquals(true, compareArray(result3, instance.read(0, 9), 9));
-        instance.write(array1, 3);
-        float[] result4 = {33, 21, 22, 23, 24, 25, 11, 12, 13};
-        assertEquals(true, compareArray(result4, instance.read(0, 9), 9));
-        assertEquals(0, instance.getIndexold());
-        instance.write(array2, 5);
-        float[] result5 = {21, 22, 23, 24, 25, 25, 11, 12, 13};
-        assertEquals(true, compareArray(result5, instance.read(0, 9), 9));
+        assertEquals(true, compareArray(array1, instance.read(0, 7), 7));
+        instance.write(array1);
         assertEquals(5, instance.getIndexold());
 
-        instance.write(array1, 7);
-        float[] result6 = {15, 16, 17, 24, 25, 11, 12, 13, 14};
+        assertEquals(false, compareArray(array1, instance.read(0, 7), 7));
+        float[] result1 = {13, 14, 15, 16, 17, 16, 17, 11, 12};
+        assertEquals(true, compareArray(instance.read(0, 7), result1, 7));
+        instance.write(array3);
+        assertEquals(8, instance.getIndexold());
+
+        assertEquals(false, compareArray(array1, instance.read(0, 7), 7));
+        float[] result2 = {13, 14, 15, 16, 17, 31, 32, 33, 12};
+        assertEquals(true, compareArray(result2, instance.read(0, 9), 9));
+        instance.write(array2);
+        assertEquals(4, instance.getIndexold());
+
+        float[] result3 = {22, 23,  24, 25, 17,31, 32, 33, 21};
+        assertEquals(true, compareArray(result3, instance.read(0, 9), 9));
+        instance.write(array1);
+        float[] result4 = {16, 17,  24, 25, 11,12, 13, 14, 15};
+        assertEquals(true, compareArray(result4, instance.read(0, 9), 9));
+        assertEquals(2, instance.getIndexold());
+        instance.write(array2);
+        float[] result5 = {16, 17,  21, 22, 23, 24, 25, 14, 15};
+        assertEquals(true, compareArray(result5, instance.read(0, 9), 9));
+        assertEquals(7, instance.getIndexold());
+
+        instance.write(array1);
+        float[] result6 = {13, 14, 15, 16, 17, 24, 25, 11, 12};
         assertEquals(true, compareArray(result6, instance.read(0, 9), 9));
-        assertEquals(3, instance.getIndexold());
+        assertEquals(5, instance.getIndexold());
 
     }
 
