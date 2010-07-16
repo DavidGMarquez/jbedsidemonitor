@@ -12,8 +12,14 @@ public abstract class Series {
     //Parametros generales
 
     private String identifier;
-    private String agent;
-    private long timeinit;
+    private String agent = "simulated";//comentario así nunca nos vamos a olvidar
+    private long origin;
+
+    protected Series(String identifier,String agent,long timeinit)    {
+        this.setIdentifier(identifier.trim());
+        this.setAgent(agent.trim());
+        this.setOrigin(timeinit);
+    }
 
     public String getIdentifier() {
         return identifier;
@@ -37,18 +43,11 @@ public abstract class Series {
         return true;
     }
 
-    public long getTimeinit() {
-        return timeinit;
+    public long getOrigin() {
+        return origin;
     }
 
-    private void setTimeinit(long timeinit) {
-        this.timeinit = timeinit;
-    }
-    
-    protected Series(String identifier,String agent,long timeinit)
-    {
-        this.setIdentifier(identifier.trim());
-        this.setAgent(agent.trim());
-        this.setTimeinit(timeinit);
+    private void setOrigin(long timeinit) {
+        this.origin = timeinit;
     }
 }
