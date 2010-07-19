@@ -15,7 +15,6 @@ import java.util.Map;
  * type is a String that represent the type of the event
  * attributes is a Map that collect de pair of the Object that represent de attributes of the event
  *
- * Me quedan dudas a la hora de devolver los atributos yo creo que de esta forma es correcto pero tendría que comprobarlo
  * @author USUARIO
  */
 //@@comentario ahora implementa la clase Comparable y los eventos se ordenan de acuerdo con
@@ -29,7 +28,11 @@ public final class Event implements Comparable<Event> {
     public Event(long location, String type, Map<Object, Object> attributes) {
         this.location = location;
         this.type = type.trim();
+        //@duda añado esto para que me permita inicializar eventos sin atributos
+        if(attributes!=null)
         this.attributes = new HashMap<Object, Object>(attributes);
+        else
+            this.attributes=null;
     }
 
     public Map<Object, Object> getAttributes() {
@@ -47,7 +50,9 @@ public final class Event implements Comparable<Event> {
     public int compareTo(Event o) {
         return (int) (location - o.location);
     }
-
+    //@duda supongo que esto será para luego ordenar
+    //pero esta bien que digamso que dos eventos son iguales
+    //porque sean en el mismo instante aun cuando pueden ser de distintos tipos?
     public boolean equals(Object o) {
         if (!(o instanceof Event)) {
             return false;

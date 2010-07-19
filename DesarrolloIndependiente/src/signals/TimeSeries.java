@@ -12,8 +12,7 @@ package signals;
  * frequency tiene la frecuencia de muestreo de la señal (Hz)
  * units es una cadena de texto que contiene las unidades del parámetro representado por la serie temporal
  *
- * dudas?? La frecuencia es por float? o habría q introducir un parámetro que fuera la cantidad de datos que se añaden cada vez que se muestrea
- * falta validar el identifier con los espacios y tal
+ * @duda habría que añadir un campo que sea el numero de muestras de cada muestreo?
  * @author USUARIO
  */
 public class TimeSeries extends Series {

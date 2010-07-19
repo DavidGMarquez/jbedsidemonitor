@@ -7,6 +7,7 @@ package signals;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -44,120 +45,7 @@ public class NoTemporalSeriesTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getImputs method, of class EventSeries.
-     */
-    @Test
-    public void testGetImputs() {
-        System.out.println("getImputs");
-        EventSeries instance = null;
-        ArrayList<String> expResult = null;
-        ArrayList<String> result = instance.getSeriesIsGeneratedFrom();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
-    /**
-     * Test of getTypeevents method, of class EventSeries.
-     */
-    @Test
-    public void testGetTypeevents() {
-        System.out.println("getTypeevents");
-        EventSeries instance = null;
-        Set<String> expResult = null;
-        Set<String> result = instance.getEventTypes();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getFirstevent method, of class EventSeries.
-     */
-    @Test
-    public void testGetFirstevent() {
-        System.out.println("getFirstevent");
-        EventSeries instance = null;
-        long expResult = 0L;
-        long result = instance.getFirstevent();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getLastevent method, of class EventSeries.
-     */
-    @Test
-    public void testGetLastevent() {
-        System.out.println("getLastevent");
-        EventSeries instance = null;
-        long expResult = 0L;
-        long result = instance.getLastevent();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getUnits method, of class EventSeries.
-     */
-    @Test
-    public void testGetUnits() {
-        System.out.println("getUnits");
-        EventSeries instance = null;
-        String expResult = "";
-        String result = instance.getUnits();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getEvent method, of class EventSeries.
-     */
-    @Test
-    public void testGetEvent() {
-        System.out.println("getEvent");
-        int index = 0;
-        EventSeries instance = null;
-        Event expResult = null;
-        SortedSet<Event> result = instance.getEvent(index,index);
-        assert(result.isEmpty());
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of addEvent method, of class EventSeries.
-     */
-    @Test
-    public void testAddEvent() {
-        System.out.println("addEvent");
-        Event even = null;
-        EventSeries instance = null;
-        boolean expResult = false;
-        boolean result = instance.addEvent(even);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of deleteEvent method, of class EventSeries.
-     */
-    @Test
-    public void testDeleteEvent() {
-        System.out.println("deleteEvent");
-        int index = 0;
-        EventSeries instance = null;
-        boolean expResult = false;
-        boolean result = instance.deleteEvent(index);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
     @Test
     public void TestCrear1(){
         ArrayList<String> imputs=new ArrayList<String>();
@@ -193,11 +81,14 @@ public class NoTemporalSeriesTest {
         System.out.println(NTS.getSeriesIsGeneratedFrom().get(0)+" "+imputs.get(0));
         imputs.remove(0);
         System.out.println(NTS.getSeriesIsGeneratedFrom().get(0)+" "+imputs.get(0));
-        try{        NTS.getEvent(0,0);
-        fail("Deberia Fallar porque no hay eventos");}
+        try{
+        assertEquals( NTS.getEvent(0,0).size(), 0);
+        assertEquals( NTS.getNumberOfEvents(), 0);
+        }
         catch(Exception e)
         {
-          e.getCause();   
+          e.getCause();
+          fail("Deberia de funcionar y dar un set vacio");
         }
 
 
@@ -215,7 +106,7 @@ public class NoTemporalSeriesTest {
             Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Event e1=new Event(new Date().getTime(), "A", null);
+        Event e1=new Event(new Date().getTime(), "A", new HashMap<Object,Object>());
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
@@ -231,20 +122,20 @@ public class NoTemporalSeriesTest {
         Event e3=new Event(new Date().getTime(), "C", null);
         NTS.addEvent(e1);
         NTS.addEvent(e2);
-        NTS.addEvent(e3);
-        assertEquals(e1,NTS.getEvent(0));
-        assertEquals(e2,NTS.getEvent(1));
-        assertEquals(e3,NTS.getEvent(2));
-        assertEquals(3,NTS.getTypeevents().size());
+        NTS.addEvent(e3);            System.out.println(e1.getMoment()+" "+e2.getMoment()+" "+e3.getMoment()+" "+(e1.getMoment()-e3.getMoment()));
+            System.out.println(NTS.getEvent(e1.getMoment(),e3.getMoment()).size());
+        assertEquals(e1,NTS.getEvent(e1.getMoment(),e3.getMoment()).first());
+        assertEquals(e2,NTS.getEvent(e1.getMoment(),e3.getMoment()).last());
         assertEquals(e1.getMoment(), NTS.getFirstevent());
-            System.out.println(e1.getMoment()+" "+e2.getMoment()+" "+e3.getMoment()+" "+(e1.getMoment()-e3.getMoment()));
         assertEquals(e3.getMoment(), NTS.getLastevent());
-        NTS.deleteEvent(NTS.getSizeEvents()-1);
+        NTS.deleteEvent(e3.getMoment());
         assertEquals(e2.getMoment(), NTS.getLastevent());
-        NTS.deleteEvent(0);
+        NTS.deleteEvent(e1.getMoment());
         assertEquals(NTS.getFirstevent(), NTS.getLastevent());
-        assertEquals(1,NTS.getTypeevents().size());
+        assertEquals(1,NTS.getNumberOfEvents());
     }
+        
+         
 @Test
               public void TesDeleteAddEvent(){
         ArrayList<String> imputs=new ArrayList<String>();
@@ -308,18 +199,11 @@ public class NoTemporalSeriesTest {
         NTS.addEvent(e5);
         NTS.addEvent(e6);
         NTS.addEvent(e7);
-        assertEquals(4,NTS.getTypeevents().size());
-        assertEquals(7,NTS.getSizeEvents());
-        NTS.deleteEvent(NTS.getSizeEvents()-1);
-        assertEquals(3,NTS.getTypeevents().size());
-        assertEquals(6,NTS.getSizeEvents());
-        NTS.deleteEvent(0);
-        NTS.deleteEvent(0);
-        NTS.deleteEvent(0);
-        assertEquals(3,NTS.getTypeevents().size());
-        assertEquals(3,NTS.getSizeEvents());
-        assertEquals(e4.getMoment(), NTS.getFirstevent());
-        assertEquals(e6.getMoment(), NTS.getLastevent());
+        assertEquals(NTS.getNumberOfEvents(), 7);
+
+        assertEquals(NTS.getEvent(e2.getMoment(), e6.getMoment()).size(),4);
+        NTS.getEvent(e2.getMoment(), e6.getMoment()).remove(e3);
+        assertEquals(NTS.getEvent(e2.getMoment(), e6.getMoment()).size(),4);
     }
 
 }
