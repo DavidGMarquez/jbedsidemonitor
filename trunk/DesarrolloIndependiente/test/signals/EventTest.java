@@ -44,44 +44,6 @@ public class EventTest {
     /**
      * Test of getAttributes method, of class Event.
      */
-    @Test
-    public void testGetAttributes() {
-        System.out.println("getAttributes");
-        Event instance = null;
-        Map expResult = null;
-        Map result = instance.getAttributes();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getMoment method, of class Event.
-     */
-    @Test
-    public void testGetMoment() {
-        System.out.println("getMoment");
-        Event instance = null;
-        long expResult = 0L;
-        long result = instance.getMoment();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getType method, of class Event.
-     */
-    @Test
-    public void testGetType() {
-        System.out.println("getType");
-        Event instance = null;
-        String expResult = "";
-        String result = instance.getType();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
    @Test
     public void testCrear1() {
         Event e=new Event(new Date().getTime(), "Standard", new HashMap<Object, Object>());
