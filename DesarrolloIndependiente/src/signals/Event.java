@@ -17,15 +17,11 @@ import java.util.Map;
  *
  * @author USUARIO
  */
-//@comentario ahora implementa la clase Comparable y los eventos se ordenan de acuerdo con
-//su localizacion
 public final class Event implements Comparable<Event> {
 
     private final long location;
     private final String type;
     private final Map<String, String> attributes;
-    //@hacer cambiar a String String y buscar un metodo para copia, y comprobar en los test, y cambiar para que devuelva null en get
-    //@hacer habría que sobreescribir .hashCode
 
     public Event(long location, String type, Map<String, String> attributes) {
         this.location = location;
@@ -50,7 +46,6 @@ public final class Event implements Comparable<Event> {
     }
 
     public int compareTo(Event o) {
-        //return ((int) (location - o.location)+(int) (type.hashCode()-o.type.hashCode()));
         if(location-o.location==0)
         {
          return type.compareToIgnoreCase(o.type);
@@ -60,9 +55,7 @@ public final class Event implements Comparable<Event> {
         return (int) (location - o.location);
         }
     }
-    //@duda supongo que esto será para luego ordenar
-    //pero esta bien que digamso que dos eventos son iguales
-    //porque sean en el mismo instante aun cuando pueden ser de distintos tipos?
+
     public boolean equals(Object o) {
         if (!(o instanceof Event)) {
             return false;

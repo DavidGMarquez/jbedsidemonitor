@@ -244,5 +244,73 @@ public class EvenSeriesTest {
         NTS2.deleteEvent(e12);
         assertEquals(NTS2.getNumberOfEvents(), 1);
 }
+@Test
+              public void TestDeleteEventsSameTime(){
+
+    ArrayList<String> imputs=new ArrayList<String>();
+        imputs.add("Electro");
+        imputs.add("Oxigeno");
+        imputs.add(" Latidos " );
+        EventSeries NTS=new EventSeries("O2", "Simulador", new Date().getTime(), imputs, "mV");
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long time=new Date().getTime();
+        Event e1=new Event(time, "A", null);
+        Event e2=new Event(time, "A", null);
+        Event e3=new Event(time, "B", null);
+        Event e4=new Event(time, "D", null);
+        NTS.addEvent(e1);
+        NTS.addEvent(e2);
+        NTS.addEvent(e3);
+        NTS.addEvent(e4);
+        assertEquals(NTS.getNumberOfEvents(), 3);
+        NTS.deleteEventsAtLocation(time);
+        assertEquals(NTS.getNumberOfEvents(), 0);
+        NTS.addEvent(e1);
+        NTS.addEvent(e3);
+        NTS.addEvent(e4);
+        NTS.addEvent(e1);
+        NTS.addEvent(e2);
+        NTS.addEvent(e3);
+        NTS.addEvent(e4);
+        assertEquals(NTS.getNumberOfEvents(), 3);
+        assertEquals(NTS.getEventTypes().size(),3);
+        Event e11=new Event(time+2, "A", null);
+        Event e22=new Event(time+1, "A", null);
+        Event e33=new Event(time+2, "B", null);
+        Event e44=new Event(time+1, "D", null);
+                NTS.addEvent(e11);
+        NTS.addEvent(e22);
+        NTS.addEvent(e33);
+        NTS.addEvent(e44);
+                assertEquals(NTS.getNumberOfEvents(), 7);
+        assertEquals(NTS.getEventTypes().size(),3);
+        NTS.deleteEventsAtLocation(time+2);
+                        assertEquals(NTS.getNumberOfEvents(), 5);
+        assertEquals(NTS.getEventTypes().size(),3);
+        NTS.deleteEvent(e3);
+                        assertEquals(NTS.getNumberOfEvents(), 4);
+        assertEquals(NTS.getEventTypes().size(),2);
+        NTS.deleteEventsAtLocation(time);
+                        assertEquals(NTS.getNumberOfEvents(), 2);
+        assertEquals(NTS.getEventTypes().size(),2);
+        NTS.deleteEvent(e44);
+                        assertEquals(NTS.getNumberOfEvents(), 1);
+        assertEquals(NTS.getEventTypes().size(),1);
+                NTS.addEvent(e11);
+                                        assertEquals(NTS.getNumberOfEvents(), 2);
+        assertEquals(NTS.getEventTypes().size(),1);
+        NTS.deleteEventsAtLocation(time);
+        NTS.deleteEventsAtLocation(time+1);
+        NTS.deleteEventsAtLocation(time+2);
+                                        assertEquals(NTS.getNumberOfEvents(), 0);
+        assertEquals(NTS.getEventTypes().size(),0);
+        
+
+
+}
 
 }
