@@ -56,7 +56,6 @@ public class TimeSeries extends Series {
     //Aqui estos métodos no me quedan muy claros
     public int getIndexNewsample() {
         if(buffer.isEmpty()) return -1;
-        //return buffer.getLastData();
         return (buffer.getIndexNextWrite()-1)%this.getCapacity();
     }
 
@@ -85,7 +84,7 @@ public class TimeSeries extends Series {
         try {
             return this.buffer.write(datatowrite);
         } catch (TooMuchDataToWriteException e) {
-            throw new TooMuchDataToWriteException(e,this.getIdentifier());
+            throw new TooMuchDataToWriteException(e,this.getIdentifier(),this.getCapacity(),datatowrite.length);
         }
 
 

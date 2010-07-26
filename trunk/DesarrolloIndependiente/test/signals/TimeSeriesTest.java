@@ -82,8 +82,22 @@ public class TimeSeriesTest {
         assertEquals(compareArray(TS.read(75000, 75000), datatowrite, 75000), true);
     }
     @Test
-    public void TestTodoCompleto(){
-        
+    public void TestDesbordar(){
+        TimeSeries TS = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 10, "mV");
+         float[] datatowrite = null;
+         try{
+           datatowrite = this.generateArray(100001);
+           TS.write(datatowrite);
+           fail("Deberia haber fallado");
+         }
+        catch(TooMuchDataToWriteException e)
+        {
+            System.out.println(e.getMessage());
+        }
+         catch(Exception e)
+         {
+             System.out.println(e.getMessage());
+         }
     }
 
 
