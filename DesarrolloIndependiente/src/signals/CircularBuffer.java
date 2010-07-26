@@ -19,17 +19,15 @@ class CircularBuffer {
     private int capacity;
     private float data[];
     private boolean full;
-
-    //@comentario: los constructores siempre son un primero de la clase
+   
     /**
      * Crea un buffer con el tamaño por defecto asignado
      */
     public CircularBuffer() {
-        //ojo este constructor duplicaba completamente el codigo del siguiente
         this(10000);
     }
-    //@duda: esto tendría que revisarlo ya que no tengo claro como hacerlo para 
-   // que no escape la refencia durante la construcción a la hora de ser concurrente
+    //@pendiente:  para que no escape la refencia durante la construcción a la
+    //hora de ser concurrente habría que hacer el constructor mediante un metodo static
     /**
      * Crea un buffer circular con el tamaño que indique capacity
      * @param capacity
@@ -56,26 +54,14 @@ class CircularBuffer {
      * @param dataToWrite
      * @return
      */
-    //@comentario el numero de parametros ideal para un metodo es 0, Seguido
-    //de lejos por un parametro, seguido de lejos por dos parametros,
-    //seguido de muy lejos por tres parámetros. Con mas de tres parámetros,
-    //el metodo est mal
-    //@comentario Número de lóneas del método original: 28; número de variables: 6
-    //número de líneas del m!todo modificado: 17; número de variables: 3
     boolean write(float[] dataToWrite) {
         if (dataToWrite.length > this.capacity) {
-            return false;
-            //@ojo Esta situación efectivamente es posible. Y muy grave.
-            //si esto se produce, la aplicaci+n simplemente no puede seguir funcionando de modo correcto
-            //lanza una excepcion chequeada para garantizar que o alguien resuelve esto,
-            //o la aplicacion falla
-            //@duda entonces hago un trhow de una Exception que yo haga? o con devolver false ya se gestiona a nivel superior?
-            //@duda tengo dudas del caso en el que exactamente tenemos que escribir el tamaño del buffer
-            //parece que me da problemas cone l getCapacity ya que index next apunta a 0 creo parece como que nunca se llena
+            //@pendiente revisar esto
+            throw new TooMuchDataToWriteException("dataToWrite is bigger that the size of buffer");
         }
         int numberOfDataRemainingToBeCopied = dataToWrite.length;
         int firstNewDataToCopy = 0;
-        if (numberOfDataRemainingToBeCopied + this.indexNextWrite > this.capacity) { //Se desborda el buffer circular
+        if (numberOfDataRemainingToBeCopied + this.indexNextWrite >= this.capacity) { //Se desborda el buffer circular
             int numNewDataToCopy = this.capacity - this.indexNextWrite;
             System.arraycopy(dataToWrite, firstNewDataToCopy, this.data, indexNextWrite, numNewDataToCopy);
             numberOfDataRemainingToBeCopied = numberOfDataRemainingToBeCopied - numNewDataToCopy;
@@ -87,9 +73,6 @@ class CircularBuffer {
             firstNewDataToCopy = dataToWrite.length - numberOfDataRemainingToBeCopied;
             System.arraycopy(dataToWrite, firstNewDataToCopy, this.data, indexNextWrite, numberOfDataRemainingToBeCopied);
             this.indexNextWrite = (this.indexNextWrite + numberOfDataRemainingToBeCopied) % this.capacity;
-            //Esto es lo que añado por lo dicho
-            if(this.indexNextWrite==0)
-                full=true;
             if (full) {
                 this.indexOldest = this.indexNextWrite;
             }
@@ -107,7 +90,6 @@ class CircularBuffer {
      * @return
      */
     float[] read(int posStartReading, int numDataToRead) {
-        //@duda debería avisar de si esta leyendo datos que aun no han sido escritos? 
         if (numDataToRead > this.capacity) {
             numDataToRead = this.capacity;
         }
@@ -147,7 +129,6 @@ class CircularBuffer {
     public int getCapacity() {
         return capacity;
     }
-    //@comentario nuevo metodo
     public int getSize() {
         if (full) {
             return capacity;

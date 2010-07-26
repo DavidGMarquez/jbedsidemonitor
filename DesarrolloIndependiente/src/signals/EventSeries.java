@@ -52,15 +52,11 @@ public class EventSeries extends Series {
     public String getUnits() {
         return units;
     }
-//@comentario este metodo sera más útil
-    //@duda creo que de esta forma estamos permitiendo a esa referencia escapa
-    //Creo que habría que devolver una copia del subSet y no el subSet en si
-    //@duda no necesitamos trabajar con un evento individualmente? (supongo que pude cogerse del subset..)
-    //Detallar que el from es inclusive y el to no
-    public SortedSet<Event> getEvent(long from, long to) {
-        Event eventFrom = new Event (from,"",null);
-        Event eventTo = new Event (to,"",null);
-        return events.subSet(eventFrom, eventTo);
+    
+    public SortedSet<Event> getEvents(long firstInstantToInclude, long lastInstantToInclude) {
+        Event eventFrom = new Event (firstInstantToInclude,"",null);
+        Event eventTo = new Event (lastInstantToInclude+1,"",null);
+        return new TreeSet<Event>(events.subSet(eventFrom, eventTo));
     }
     public int getNumberOfEvents() {
         return this.events.size();
@@ -75,8 +71,12 @@ public class EventSeries extends Series {
     }
 //@duda lo mismo que antes. No puede ser que haya dos eventos en el mismo isntante
     //y solo queramos tratar uno de ellos?
-    public boolean deleteEvent(long location) {
-        Event eventFrom = new Event (location,"",null);
-        return events.remove(eventFrom);
+    public boolean deleteEventsAtLocation(long location) {
+        return events.removeAll(this.getEvents(location, location));
     }
+
+    public boolean deleteEvent(Event eventToDelete) {
+        return events.remove(eventToDelete);
+    }
+    //@hacer borrar un rango, borrar por tipo, borrar todo
 }

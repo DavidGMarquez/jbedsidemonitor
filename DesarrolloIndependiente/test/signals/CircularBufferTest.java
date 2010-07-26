@@ -83,17 +83,15 @@ public class CircularBufferTest {
         assertEquals(0, instance.getIndexold());
     }
 
-    /**
-     * Test de escritura de 6 numeros en un array más pequeño
-     * El test falla ya que no tiene sentido escribir mas del tamaño del array
+    /** De escritura simple, justo al borde
      */
     @Test
     public void testWrite3() {
-        int sizetowrite = 6;
+        int sizetowrite = 5;
         float[] datatowrite = this.generateArray(sizetowrite);
         CircularBuffer instance = new CircularBuffer(5);
         boolean result = instance.write(datatowrite);
-        assertEquals(false, result);
+        assertEquals(true, result);
         assertEquals(0, instance.getIndexold());
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -228,6 +226,23 @@ public class CircularBufferTest {
     }
     @Test
     public void testDesbordar() {
+        CircularBuffer instance = new CircularBuffer(7);
+        float[] array1 = this.generateArray(7);
+        instance.write(array1);
+        CircularBuffer instance2 = new CircularBuffer(6);
+        try{
+        instance2.write(array1);
+        fail("Debería haber saltado la excepcion");}
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+                CircularBuffer instance3 = new CircularBuffer(3);
+        try{
+        instance3.write(array1);
+        fail("Debería haber saltado la excepcion");}
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 

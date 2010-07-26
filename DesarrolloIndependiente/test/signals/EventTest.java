@@ -46,7 +46,7 @@ public class EventTest {
      */
    @Test
     public void testCrear1() {
-        Event e=new Event(new Date().getTime(), "Standard", new HashMap<Object, Object>());
+        Event e=new Event(new Date().getTime(), "Standard", null);
         String prueba=e.getType();
         prueba=new String("Hola");
         assertEquals(e.getType(),"Standard");
@@ -54,18 +54,30 @@ public class EventTest {
 
         // TODO review the generated test code and remove the default call to fail.
     }
+   
    @Test
        public void testCrear2() {
-            HashMap<Object,Object> map=new HashMap<Object,Object>();
-            map.put("Hello", new Integer(1));
-            map.put("Hello2", new Integer(2));
-            map.put("Hello", new Integer(1));
+            HashMap<String,String> map=new HashMap<String,String>();
+            map.put("Hello", new Integer(1).toString());
+            map.put("Hello2", new Integer(2).toString());
+            map.put("Hello", new Integer(1).toString());
         Event e=new Event(new Date().getTime(), "Standard", map);
         assertEquals(e.getAttributes().size(), 2);
-        Map<Object, Object> mapcopy=e.getAttributes();
+        Map<String, String> mapcopy=e.getAttributes();
+            mapcopy.put("Hello2", new Integer(20).toString());
+            map.put("Hello2", new Integer(2000).toString());
+        Integer i=new Integer(Integer.parseInt((String)mapcopy.get("Hello2")));
+        System.out.println(i.intValue());
         mapcopy.remove("Hello2");
+        assertEquals(mapcopy.get("Hello2"), null);
+
+        
+
         assertEquals(mapcopy.size(), 1);
 assertEquals(e.getAttributes().size(), 2);
+        Integer i2=new Integer(Integer.parseInt((String)e.getAttributes().get("Hello2")));
+        System.out.println(i2.intValue());
+        assertEquals(i2.intValue(), 2);
  
         // TODO review the generated test code and remove the default call to fail.
     }

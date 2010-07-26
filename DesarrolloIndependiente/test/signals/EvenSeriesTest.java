@@ -24,9 +24,9 @@ import static org.junit.Assert.*;
  *
  * @author USUARIO
  */
-public class NoTemporalSeriesTest {
+public class EvenSeriesTest {
 
-    public NoTemporalSeriesTest() {
+    public EvenSeriesTest() {
     }
 
     @BeforeClass
@@ -82,7 +82,7 @@ public class NoTemporalSeriesTest {
         imputs.remove(0);
         System.out.println(NTS.getSeriesIsGeneratedFrom().get(0)+" "+imputs.get(0));
         try{
-        assertEquals( NTS.getEvent(0,0).size(), 0);
+        assertEquals( NTS.getEvents(0,0).size(), 0);
         assertEquals( NTS.getNumberOfEvents(), 0);
         }
         catch(Exception e)
@@ -103,34 +103,34 @@ public class NoTemporalSeriesTest {
         try {
             Thread.sleep(20);
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Event e1=new Event(new Date().getTime(), "A", new HashMap<Object,Object>());
+        Event e1=new Event(new Date().getTime(), "A", new HashMap<String,String>());
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e2=new Event(new Date().getTime(), "B", null);
         try {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e3=new Event(new Date().getTime(), "C", null);
         NTS.addEvent(e1);
         NTS.addEvent(e2);
         NTS.addEvent(e3);            System.out.println(e1.getMoment()+" "+e2.getMoment()+" "+e3.getMoment()+" "+(e1.getMoment()-e3.getMoment()));
-            System.out.println(NTS.getEvent(e1.getMoment(),e3.getMoment()).size());
-        assertEquals(e1,NTS.getEvent(e1.getMoment(),e3.getMoment()).first());
-        assertEquals(e2,NTS.getEvent(e1.getMoment(),e3.getMoment()).last());
+            System.out.println(NTS.getEvents(e1.getMoment(),e3.getMoment()).size());
+        assertEquals(e1,NTS.getEvents(e1.getMoment(),e3.getMoment()).first());
+        assertEquals(e3,NTS.getEvents(e1.getMoment(),e3.getMoment()).last());
         assertEquals(e1.getMoment(), NTS.getFirstevent());
         assertEquals(e3.getMoment(), NTS.getLastevent());
-        NTS.deleteEvent(e3.getMoment());
+        NTS.deleteEvent(e3);
         assertEquals(e2.getMoment(), NTS.getLastevent());
-        NTS.deleteEvent(e1.getMoment());
+        NTS.deleteEvent(e1);
         assertEquals(NTS.getFirstevent(), NTS.getLastevent());
         assertEquals(1,NTS.getNumberOfEvents());
     }
@@ -146,42 +146,42 @@ public class NoTemporalSeriesTest {
         try {
             Thread.sleep(20);
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Event e1=new Event(new Date().getTime(), "A", null);
         try {
             Thread.sleep(50);
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e2=new Event(new Date().getTime(), "B", null);
         try {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e3=new Event(new Date().getTime(), "C", null);
         try {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e4=new Event(new Date().getTime(), "A", null);
         try {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e5=new Event(new Date().getTime(), "B", null);
         try {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Event e6=new Event(new Date().getTime(), "C", null);
@@ -189,7 +189,7 @@ public class NoTemporalSeriesTest {
             Thread.sleep(50);
 
         } catch (InterruptedException ex) {
-            Logger.getLogger(NoTemporalSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         Event e7=new Event(new Date().getTime(), "D", null);
         NTS.addEvent(e1);
@@ -201,9 +201,48 @@ public class NoTemporalSeriesTest {
         NTS.addEvent(e7);
         assertEquals(NTS.getNumberOfEvents(), 7);
 
-        assertEquals(NTS.getEvent(e2.getMoment(), e6.getMoment()).size(),4);
-        NTS.getEvent(e2.getMoment(), e6.getMoment()).remove(e3);
-        assertEquals(NTS.getEvent(e2.getMoment(), e6.getMoment()).size(),4);
+        assertEquals(NTS.getEvents(e2.getMoment(), e6.getMoment()).size(),5);
+        NTS.getEvents(e2.getMoment(), e6.getMoment()).remove(e3);
+        assertEquals(NTS.getEvents(e2.getMoment(), e6.getMoment()).size(),5);
     }
+@Test
+              public void TestEventsSameTime(){
+        ArrayList<String> imputs=new ArrayList<String>();
+        imputs.add("Electro");
+        imputs.add("Oxigeno");
+        imputs.add(" Latidos " );
+        EventSeries NTS=new EventSeries("O2", "Simulador", new Date().getTime(), imputs, "mV");
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long time=new Date().getTime();
+        Event e1=new Event(time, "A", null);
+        Event e2=new Event(time, "A", null);
+        NTS.addEvent(e1);
+        NTS.addEvent(e2);
+        assertEquals(NTS.getNumberOfEvents(), 1);
+        NTS.deleteEvent(e1);
+        assertEquals(NTS.getNumberOfEvents(), 0);
+
+
+        EventSeries NTS2=new EventSeries("O2", "Simulador", new Date().getTime(), imputs, "mV");
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long time2=new Date().getTime();
+        Event e12=new Event(time2, "C", null);
+        Event e22=new Event(time2, "D", null);
+        NTS2.addEvent(e12);
+        NTS2.addEvent(e22);
+        assertEquals(NTS2.getNumberOfEvents(), 2);
+        NTS2.deleteEvent(e2);
+        assertEquals(NTS.getNumberOfEvents(), 0);
+        NTS2.deleteEvent(e12);
+        assertEquals(NTS2.getNumberOfEvents(), 1);
+}
 
 }
