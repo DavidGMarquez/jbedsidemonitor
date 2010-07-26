@@ -17,26 +17,28 @@ import java.util.Map;
  *
  * @author USUARIO
  */
-//@@comentario ahora implementa la clase Comparable y los eventos se ordenan de acuerdo con
+//@comentario ahora implementa la clase Comparable y los eventos se ordenan de acuerdo con
 //su localizacion
 public final class Event implements Comparable<Event> {
 
     private final long location;
     private final String type;
-    private final Map<Object, Object> attributes;
+    private final Map<String, String> attributes;
+    //@hacer cambiar a String String y buscar un metodo para copia, y comprobar en los test, y cambiar para que devuelva null en get
+    //@hacer habría que sobreescribir .hashCode
 
-    public Event(long location, String type, Map<Object, Object> attributes) {
+    public Event(long location, String type, Map<String, String> attributes) {
         this.location = location;
         this.type = type.trim();
-        //@duda añado esto para que me permita inicializar eventos sin atributos
         if(attributes!=null)
-        this.attributes = new HashMap<Object, Object>(attributes);
+
+        this.attributes = new HashMap<String, String>(attributes);
         else
             this.attributes=null;
     }
 
-    public Map<Object, Object> getAttributes() {
-        return new HashMap<Object, Object>(this.attributes);
+    public Map<String, String> getAttributes() {
+        return new HashMap<String, String>(this.attributes);
     }
 
     public long getMoment() {
@@ -48,7 +50,15 @@ public final class Event implements Comparable<Event> {
     }
 
     public int compareTo(Event o) {
+        //return ((int) (location - o.location)+(int) (type.hashCode()-o.type.hashCode()));
+        if(location-o.location==0)
+        {
+         return type.compareToIgnoreCase(o.type);
+        }
+        else
+        {
         return (int) (location - o.location);
+        }
     }
     //@duda supongo que esto será para luego ordenar
     //pero esta bien que digamso que dos eventos son iguales
@@ -58,6 +68,12 @@ public final class Event implements Comparable<Event> {
             return false;
         }
         Event e = (Event) o;
-        return e.location == location;
+        return e.location == location && e.type.equalsIgnoreCase(type);
+    }
+    public int hashCode(){
+        int result=17;
+        result=37*result+type.hashCode();
+        result=37*result+((int)(location^(location>>>32)));
+        return result;
     }
 }
