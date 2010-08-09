@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author USUARIO
  */
-public class Reader {
+public class ReaderFromMedicSim {
 
     private Socket Sock = null;
     private int Port = 3434;
@@ -29,16 +29,16 @@ public class Reader {
     private DataInputStream read = null;
     private DataOutputStream   write = null;
 
-    public Reader(int Port) {
+    public ReaderFromMedicSim(int Port) {
 
 
         this.Port = Port;
         try {
             this.Sock = new Socket("localhost", Port);
         } catch (UnknownHostException ex) {
-            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.read = null;
         this.write = null;
@@ -52,9 +52,9 @@ public class Reader {
                 read.close();
                 write.close();
                 Sock.close();
-                Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex1) {
-                Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex1);
             }
         } finally {
        
@@ -65,7 +65,7 @@ public class Reader {
         try {
             write.writeChar(S);
         } catch (IOException ex) {
-            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
             return false;
         }
@@ -76,10 +76,32 @@ public class Reader {
       public int Recieve() {
         try {
             return  read.read();
-        } catch (IOException ex) {
-            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
-
+        } catch (Exception ex) {
+            Logger.getLogger(ReaderFromMedicSim.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Fallo Leyendo");
         }
         return -1;
+      }
+      //Metodo Debug
+      //@borrar
+      public String RecieveString(){
+          String a=new String();
+          try{
+              char caracter=0;
+              while(caracter!=-1)
+              {
+           caracter=read.readChar();
+           char[] caracteres=new char[1];
+           caracteres[0]=caracter;
+             a=new String(a.concat(new String(caracteres)));
+
+              }
+
+
+          }
+          catch(Exception e){
+              System.out.println(e.getLocalizedMessage());
+          }
+          return a;
       }
 }

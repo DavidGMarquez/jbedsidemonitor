@@ -79,7 +79,7 @@ public class TimeSeries extends Series {
         return this.buffer.read(posSrc, sizetoread);
     }
 
-    boolean write(float[] datatowrite) {
+    public boolean write(float[] datatowrite) {
 
         try {
             return this.buffer.write(datatowrite);

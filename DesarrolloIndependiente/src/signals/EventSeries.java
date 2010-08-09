@@ -28,10 +28,6 @@ public class EventSeries extends Series {
         return new ArrayList<String>(seriesIsGeneratedFrom);
     }
 
-    //visto lo visto, creo que es preferible generar esta informacion Cada vez que se pida
-    //sera menos eficiente, pero es mucho más facil
-    //respecto a la cuenta del numero de eventos de cada tipo, no tengo claro
-    //que sea util Y no merece la pena ensuciar el codigo con ella. Si alguien lo necesita que lo calcule
     public Set<String> getEventTypes() {
         final HashSet<String> eventTypes = new HashSet<String>();
         for (Event event : events) {
@@ -69,8 +65,6 @@ public class EventSeries extends Series {
     public boolean addEvent(Event event) {
         return this.events.add(event);
     }
-//@duda lo mismo que antes. No puede ser que haya dos eventos en el mismo isntante
-    //y solo queramos tratar uno de ellos?
     public boolean deleteEventsAtLocation(long location) {
         return events.removeAll(this.getEvents(location, location));
     }
