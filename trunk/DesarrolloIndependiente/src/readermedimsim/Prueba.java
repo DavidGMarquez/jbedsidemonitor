@@ -16,7 +16,7 @@ public class Prueba {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Reader Lector = new Reader(3434);
+        ReaderFromMedicSim Lector = new ReaderFromMedicSim(3434);
         //Enviamos el comando C para recibir configuración
         if (Lector.Send('C') != true) {
             System.out.println("No enviado bien");
