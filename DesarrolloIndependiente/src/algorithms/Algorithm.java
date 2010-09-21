@@ -9,6 +9,14 @@ package algorithms;
  *
  * @author USUARIO
  */
-public class Algorithm {
+public interface Algorithm {
+    public String getIdentifier();
+    public AlgorithmReadSubscription getReadSubscription();
+    public String getIdentifierSignalToWrite();
+    public boolean execute(AlgorithmExecutionContext ExCon);
+
+     //  Hacer metodos de interfaz para acceder y para poder saber lo que quiere, señales, señales que escribe, cada caunto
+
+
 
 }

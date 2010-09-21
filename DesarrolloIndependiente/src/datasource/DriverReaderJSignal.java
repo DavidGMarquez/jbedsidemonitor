@@ -4,6 +4,7 @@
  */
 package datasource;
 
+import integration.GeneralManager;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,14 +24,16 @@ import signals.*;
  */
 public class DriverReaderJSignal implements Runnable{
 
-    SignalManager signalManager = SignalManager.getInstance();
+    SignalManager signalManager =null;
     ReaderFromMedicSim readerFromMedicSim = null;
+    GeneralManager generalManager=null;
     int sizeOfBufferToWrite=100;
     float[] bufferToWrite;
     int indexBufferToWrite=0;
 
-    public DriverReaderJSignal(SignalManager signalManager) {
-        this.signalManager = signalManager;
+    public DriverReaderJSignal() {
+        this.signalManager = SignalManager.getInstance();
+        this.generalManager=GeneralManager.getInstance();
         this.bufferToWrite=new float[sizeOfBufferToWrite];
         this.readerFromMedicSim = new ReaderFromMedicSim(3434);
         if (readerFromMedicSim.Send('C') != true) {
@@ -202,7 +205,11 @@ public class DriverReaderJSignal implements Runnable{
 
     private void createWriteOperation(float[] bufferToWriteCopy) {
         System.out.println("DEBUG creada operacion de copia");
-        this.signalManager.addWriteOperation(new WriteOperation(bufferToWriteCopy, null));
+/*        System.out.println(GeneralManager.getInstance());
+        System.out.println(generalManager);
+        generalManager=GeneralManager.getInstance();
+        System.out.println(generalManager);*/
+        this.generalManager.addWriteOperation(new WriteOperation(bufferToWriteCopy, null));
     }
 
 }
