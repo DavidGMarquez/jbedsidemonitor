@@ -2,12 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package signals;
+package threads;
 
+import vehicleclass.WriteOperation;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import integration.SignalManager;
 
 /**
  *  Algorimo

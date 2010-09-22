@@ -11,9 +11,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import signals.SignalManager;
+import integration.SignalManager;
 import signals.SignalManagerTest;
-import signals.ThreadWriteOperations;
+import threads.ThreadWriteOperations;
 import static org.junit.Assert.*;
 
 /**

@@ -23,7 +23,6 @@ public class TimeSeries extends Series {
     private CircularBuffer buffer;
     private float frequency;
     private String units;
-    private ReentrantReadWriteLock lock;
 
     /**
      * 
@@ -35,7 +34,6 @@ public class TimeSeries extends Series {
      */
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
         super(identifier, agent, origin);
-        this.lock=new ReentrantReadWriteLock();
         this.frequency = frequency;
         this.units = units.trim();
         if (3600 * 6 * this.frequency > 100000) {
@@ -92,33 +90,5 @@ public class TimeSeries extends Series {
         }
 
 
-    }
-    //@duda hago esto o pongo los bloqueos implicitos?
-    public void getReadLock()
-    {
-        //System.out.println(Thread.currentThread().getName()+"READ LOCK TRY");
-        this.lock.readLock().lock();
-        if(this.lock.isWriteLocked())
-            System.out.println("@@@@ERROR READ WITH WRITE @@@@");
-         //  System.out.println(Thread.currentThread().getName()+"READ LOCK ON");
-    }
-    public void releaseReadLock()
-    {
-        if(this.lock.isWriteLocked())
-            System.out.println("@@@@ERROR READ WITH WRITE @@@@");
-        this.lock.readLock().unlock();
-       // System.out.println(Thread.currentThread().getName()+"READ UNLOCK ");
-    }
-    public void getWriteLock()
-    {//System.out.println(Thread.currentThread().getName()+"WRITE LOCK TRY");
-        this.lock.writeLock().lock();
-
-        
-       // System.out.println(Thread.currentThread().getName()+"WRITE LOCK ON");
-    }
-    public void releaseWriteLock()
-    {
-        this.lock.writeLock().unlock();
-     //   System.out.println(Thread.currentThread().getName()+"WRITE UNLOCK ");
     }
 }

@@ -5,34 +5,30 @@
 
 package integration;
 
-import algorithms.AlgorithmManager;
 import datasource.DriverReaderJSignal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import signals.ReadOperation;
-import signals.SignalManager;
-import signals.ThreadReadOperations;
-import signals.ThreadWriteOperations;
-import signals.WriteOperation;
+import vehicleclass.ReadOperation;
+import threads.ThreadReadOperations;
+import threads.ThreadWriteOperations;
+import vehicleclass.WriteOperation;
 
 /**
  *
  * @author USUARIO
  */
-public class GeneralManager {
+public class ThreadManager {
     DriverReaderJSignal driverReaderJSignal=null;
     ThreadWriteOperations ThreadWriteOperations=null;
         ThreadReadOperations ThreadReadOperations=null;
 
 
-  private static final GeneralManager INSTANCE = new GeneralManager();
-    public GeneralManager() {
-        SignalManager signalManager=SignalManager.getInstance();
-        AlgorithmManager algorithmManager=AlgorithmManager.getInstance();
-     
+  private static final ThreadManager INSTANCE = new ThreadManager();
+    public ThreadManager() {
+       
     }
 
-    public static GeneralManager getInstance() {
+    public static ThreadManager getInstance() {
         return INSTANCE;
     }
     public void start(){

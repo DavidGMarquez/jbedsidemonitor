@@ -17,7 +17,7 @@ import java.util.Map;
 public class AlgorithmExecutionContext {
     private Map<String,float[]> signals=null;
 
-    public AlgorithmExecutionContext(Map<String,float[]> signalsSubscription,boolean onlyIfAllSignals) {
+    public AlgorithmExecutionContext(Map<String,float[]> signalsSubscription) {
             this.signals=new HashMap<String,float[]>(signals);
     }
     public float[] getDataOfSignal(String identifier){

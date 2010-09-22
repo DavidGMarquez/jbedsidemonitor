@@ -11,8 +11,8 @@ package algorithms;
  * @pendiente hacer esta clase inmutable
  */
 public class AlgorithmReadSignalSubscription {
-    int dataCounter;
-    int lastIndexRead;
+    private int dataCounter;
+    private int lastIndexRead;
 
     public AlgorithmReadSignalSubscription(int dataCounter, int lastIndexRead) {
         this.dataCounter = dataCounter;
