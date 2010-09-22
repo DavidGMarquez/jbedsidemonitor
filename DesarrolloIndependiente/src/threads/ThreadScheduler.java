@@ -2,17 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algorithms;
+package threads;
 
-import integration.GeneralManager;
-import signals.ReadOperation;
+import vehicleclass.ReadOperationOneSignal;
+import vehicleclass.WriteEvent;
+import algorithms.Algorithm;
+import integration.AlgorithmManager;
+import algorithms.AlgorithmReadSignalSubscription;
+import integration.ThreadManager;
+import vehicleclass.ReadOperation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import signals.SignalManager;
+import integration.SignalManager;
 
 /**
  *
@@ -22,7 +27,7 @@ public class ThreadScheduler implements Runnable {
 
     public SignalManager signalManager;
     public AlgorithmManager algorithmManager;
-    public GeneralManager generalManager;
+    public ThreadManager generalManager;
     private LinkedBlockingQueue<WriteEvent> writeEvents;
     private Map<String, Map<String, AlgorithmReadSignalSubscription>> signalsDataCountersForAlgorithms = null;
 
@@ -30,7 +35,7 @@ public class ThreadScheduler implements Runnable {
         writeEvents = new LinkedBlockingQueue<WriteEvent>();
         this.signalManager = SignalManager.getInstance();
         this.algorithmManager = AlgorithmManager.getInstance();
-        this.generalManager=GeneralManager.getInstance();
+        this.generalManager=ThreadManager.getInstance();
         this.signalsDataCountersForAlgorithms = new HashMap<String, Map<String, AlgorithmReadSignalSubscription>>();
     }
 
@@ -78,7 +83,7 @@ public class ThreadScheduler implements Runnable {
                     ifNotReadOperationSuscriptionData = new AlgorithmReadSignalSubscription(ifNotReadOperationSuscriptionData.getDataCounter() + writeEvent.getSignalsDataWrited().get(auxiliarIdentifier).intValue(), ifNotReadOperationSuscriptionData.getLastIndexRead());
                     int auxiliarSuscriptionQuantity = algorithmManager.getAlgorithm(algorithmIdentifiers.get(i)).getReadSubscription().getSignalSubscription(auxiliarIdentifier).intValue();
                     AlgorithmReadSignalSubscription ifReadOperationSuscriptionData = new AlgorithmReadSignalSubscription(ifNotReadOperationSuscriptionData);
-                    if (ifNotReadOperationSuscriptionData.dataCounter >= auxiliarSuscriptionQuantity) {
+                    if (ifNotReadOperationSuscriptionData.getDataCounter() >= auxiliarSuscriptionQuantity) {
                         readOperation.addReadOperationOneSignal(new ReadOperationOneSignal(auxiliarIdentifier, ifNotReadOperationSuscriptionData.getLastIndexRead(), auxiliarSuscriptionQuantity));
                         ifReadOperationSuscriptionData = new AlgorithmReadSignalSubscription(ifNotReadOperationSuscriptionData.getDataCounter() - auxiliarSuscriptionQuantity, ifNotReadOperationSuscriptionData.getLastIndexRead() + auxiliarSuscriptionQuantity);
                     }

@@ -2,12 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package signals;
+package threads;
 
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import vehicleclass.ReadOperation;
+import integration.SignalManager;
+import vehicleclass.ReadOperationOneSignal;
+import vehicleclass.TaskForAlgorithmToExecute;
 
 /**
 
@@ -39,11 +42,17 @@ public class ThreadReadOperations implements Runnable {
     }
     public void run() {
         ReadOperation readOperation;
+        ReadOperationOneSignal operationOneSignal = null;
+
         while (true) {
-            System.out.println("Bucle Thread");
             readOperation = this.getAndRemoveWriteOperation();
             if (readOperation != null) {
-                System.out.println("DEBUG ejecutada operacion de copia");
+                TaskForAlgorithmToExecute taskforAlgorithmToExecute= new TaskForAlgorithmToExecute(operationOneSignal.getIdentifier());
+                while(readOperation.getNumberOfReadOperationSignals()!=0)
+                {
+                    operationOneSignal=readOperation.getAndRemoveReadOperationOneSignal();
+                    taskforAlgorithmToExecute.addSignalData(operationOneSignal.getIdentifier(), signalManager.readFromTimeSeries(signalManager.getSignalIndex(operationOneSignal.getIdentifier()), operationOneSignal.getIndexToRead(),operationOneSignal.getQuantityToRead()));
+                }
                // signalManager.writeToTimeSeries(0, readOperation.getBufferToWrite());
 
             } else {

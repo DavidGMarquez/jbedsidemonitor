@@ -3,9 +3,8 @@
  * and open the template in the editor.
  */
 
-package signals;
+package vehicleclass;
 
-import algorithms.ReadOperationOneSignal;
 import java.util.ArrayList;
 
 /**

@@ -4,7 +4,7 @@
  */
 
 import datasource.DriverReaderJSignal;
-import integration.GeneralManager;
+import integration.ThreadManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -12,9 +12,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import signals.SignalManager;
+import integration.SignalManager;
 import signals.SignalManagerTest;
-import signals.ThreadWriteOperations;
+import threads.ThreadWriteOperations;
 import static org.junit.Assert.*;
 
 /**
@@ -44,7 +44,7 @@ public class TestIntegrationWithGeneral {
     @Test
     public void TestDriverReaderJSignal(){
 
-             GeneralManager generalManager=GeneralManager.getInstance();
+             ThreadManager generalManager=ThreadManager.getInstance();
              generalManager.start();
                 WriteToDisk WTD1=new WriteToDisk("OutputTestDriverReaderJSignal1.txt", SignalManager.getInstance());
          Thread threadWriteToDisk1=new Thread(WTD1,"threadWriteToDisk1");
