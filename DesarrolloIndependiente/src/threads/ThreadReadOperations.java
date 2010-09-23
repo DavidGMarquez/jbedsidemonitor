@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vehicleclass.ReadOperation;
-import integration.SignalManager;
+import signals.SignalManager;
 import vehicleclass.ReadOperationOneSignal;
 import vehicleclass.TaskForAlgorithmToExecute;
 
@@ -46,7 +46,7 @@ public class ThreadReadOperations implements Runnable {
 
         while (true) {
             readOperation = this.getAndRemoveWriteOperation();
-            if (readOperation != null) {
+            if (readOperation != null) {//@todo yo creo que nunca devuelve null
                 TaskForAlgorithmToExecute taskforAlgorithmToExecute= new TaskForAlgorithmToExecute(operationOneSignal.getIdentifier());
                 while(readOperation.getNumberOfReadOperationSignals()!=0)
                 {
@@ -57,7 +57,7 @@ public class ThreadReadOperations implements Runnable {
 
             } else {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(10);//idem
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ThreadReadOperations.class.getName()).log(Level.SEVERE, null, ex);
                 }

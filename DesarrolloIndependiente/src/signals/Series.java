@@ -4,6 +4,8 @@
  */
 package signals;
 
+import java.util.ArrayList;
+
 /**
  *  
  * @author USUARIO
@@ -12,13 +14,15 @@ public abstract class Series {
     //Parametros generales
 
     private String identifier;
-    private String agent = "simulated";//comentario así nunca nos vamos a olvidar
+    private String agent = "simulated";//así nunca nos vamos a olvidar
     private long origin;
+    private ArrayList<String> seriesIsGeneratedFrom;
 
     protected Series(String identifier,String agent,long timeinit)    {
         this.setIdentifier(identifier.trim());
         this.setAgent(agent.trim());
         this.setOrigin(timeinit);
+        this.seriesIsGeneratedFrom = new ArrayList<String>();
     }
 
     public String getIdentifier() {
@@ -49,5 +53,13 @@ public abstract class Series {
 
     private void setOrigin(long timeinit) {
         this.origin = timeinit;
+    }
+
+    public ArrayList<String> getSeriesIsGeneratedFrom() {
+        return new ArrayList<String>(seriesIsGeneratedFrom);
+    }
+
+       public void setSeriesIsGeneratedFrom(ArrayList<String> seriesIsGeneratedFrom) {
+        this.seriesIsGeneratedFrom = new ArrayList<String>(seriesIsGeneratedFrom);
     }
 }

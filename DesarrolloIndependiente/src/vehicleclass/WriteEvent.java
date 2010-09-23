@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  *
  * @author USUARIO
+ * @todo En principio, yo simplificaria; un evento de escritura para cada escritura en cada señal
  */
 public class WriteEvent {
      private Map<String,Integer> signalsDataWrited=null;

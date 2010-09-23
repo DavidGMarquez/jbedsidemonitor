@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import integration.SignalManager;
+import signals.SignalManager;
 
 /**
  *  Algorimo
@@ -51,7 +51,7 @@ public class ThreadWriteOperations implements Runnable {
         while (true) {
             System.out.println("Bucle Thread");
             WO = this.getAndRemoveWriteOperation();
-            if (WO != null) {
+            if (WO != null) {//@todo yo creo que nunca devuelve null
                 System.out.println("DEBUG ejecutada operacion de copia");
                 signalManager.writeToTimeSeries(0, WO.getBufferToWrite());
 

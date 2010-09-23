@@ -13,19 +13,13 @@ public class EventSeries extends Series {
 
     //Parametros serie temporal
     private SortedSet<Event> events;//@comentario utiliza la coleccion adecuada para cada trabajo
-    private ArrayList<String> seriesIsGeneratedFrom;
     private String units;
 
     public EventSeries(String identifier, String agent, long timeinit, ArrayList<String> imputs, String units) {
         super(identifier, agent, timeinit);
-        this.seriesIsGeneratedFrom = new ArrayList<String>(imputs);
+        super.setSeriesIsGeneratedFrom(new ArrayList<String>(imputs));
         this.units = units.trim();
         this.events = new TreeSet<Event>();
-    }
-
-
-    public ArrayList<String> getSeriesIsGeneratedFrom() {
-        return new ArrayList<String>(seriesIsGeneratedFrom);
     }
 
     public Set<String> getEventTypes() {
@@ -38,11 +32,11 @@ public class EventSeries extends Series {
 
     public long getFirstevent() {
 
-        return events.first().getMoment();
+        return events.first().getLocation();
     }
 
     public long getLastevent() {
-        return events.last().getMoment();
+        return events.last().getLocation();
     }
 
     public String getUnits() {

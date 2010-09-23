@@ -13,7 +13,7 @@ package vehicleclass;
 public class ReadOperationOneSignal {
     String identifier;
     int indexToRead;
-            int quantityToRead;
+    int quantityToRead;
 
     public ReadOperationOneSignal(String identifier, int indexToRead, int quantityToRead) {
         this.identifier = identifier;

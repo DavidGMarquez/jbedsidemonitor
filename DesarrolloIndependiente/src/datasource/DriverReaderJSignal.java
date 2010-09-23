@@ -4,7 +4,7 @@
  */
 package datasource;
 
-import integration.SignalManager;
+import signals.SignalManager;
 import vehicleclass.WriteOperation;
 import integration.ThreadManager;
 import java.io.FileWriter;
