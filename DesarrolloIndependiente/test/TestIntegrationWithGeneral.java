@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import integration.SignalManager;
+import signals.SignalManager;
 import signals.SignalManagerTest;
 import threads.ThreadWriteOperations;
 import static org.junit.Assert.*;

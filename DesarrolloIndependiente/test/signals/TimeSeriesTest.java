@@ -65,19 +65,19 @@ public class TimeSeriesTest {
         float[] datatowrite = null;
         datatowrite = this.generateArray(75000);
         assertEquals(TS.getIndexNewsample(), -1);
-        assertEquals(TS.getIndexOldsample(), -1);
+        assertEquals(TS.getIndexOldestsample(), -1);
         assertEquals(TS.getSamplescounter(), 0);
         System.out.println(datatowrite.length);
         System.out.println(TS.getCapacity());
         TS.write(datatowrite);
         assertEquals(TS.getIndexNewsample(), 74999);
-        assertEquals(TS.getIndexOldsample(), 0);
+        assertEquals(TS.getIndexOldestsample(), 0);
         assertEquals(TS.getSamplescounter(), 75000);
         assertEquals(compareArray(TS.read(0, 75000), datatowrite, 75000), true);
         datatowrite = this.generateArray(75000);
         TS.write(datatowrite);
         assertEquals(TS.getIndexNewsample(), 49999);
-        assertEquals(TS.getIndexOldsample(), 50000);
+        assertEquals(TS.getIndexOldestsample(), 50000);
         assertEquals(TS.getSamplescounter(), 100000);
         assertEquals(compareArray(TS.read(75000, 75000), datatowrite, 75000), true);
     }
