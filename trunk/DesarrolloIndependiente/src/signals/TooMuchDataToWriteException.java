@@ -10,10 +10,10 @@ package signals;
  * @author USUARIO
  */
 class TooMuchDataToWriteException extends RuntimeException{
-    String message;
-    String identifier;
-    long bufferCapacity;
-    long sizeToWrite;
+    private String message;
+    private String identifier;
+    private long bufferCapacity;
+    private long sizeToWrite;
 
     public TooMuchDataToWriteException(String message) {
         super(message);

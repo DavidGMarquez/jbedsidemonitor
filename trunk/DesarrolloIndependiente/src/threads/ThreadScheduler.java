@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import integration.SignalManager;
+import signals.SignalManager;
 
 /**
  *

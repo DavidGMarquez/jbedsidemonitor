@@ -33,11 +33,11 @@ public final class Event implements Comparable<Event> {
             this.attributes=null;
     }
 
-    public Map<String, String> getAttributes() {
+    public Map<String, String> getCopyOfAttributes() {
         return new HashMap<String, String>(this.attributes);
     }
 
-    public long getMoment() {
+    public long getLocation() {
         return location;
     }
 
@@ -46,12 +46,10 @@ public final class Event implements Comparable<Event> {
     }
 
     public int compareTo(Event o) {
-        if(location-o.location==0)
-        {
+        if(location-o.location==0){
          return type.compareToIgnoreCase(o.type);
         }
-        else
-        {
+        else{
         return (int) (location - o.location);
         }
     }

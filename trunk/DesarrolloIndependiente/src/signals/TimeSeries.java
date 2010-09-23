@@ -21,23 +21,17 @@ public class TimeSeries extends Series {
     //Parametros serie temporal
 
     private CircularBuffer buffer;
+    private final int defaultBufferSize = 100000;
     private float frequency;
     private String units;
 
-    /**
-     * 
-     * 
-     * @param identifier
-     * @param agent
-     * @param frequency
-     * @param units
-     */
+
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
         super(identifier, agent, origin);
         this.frequency = frequency;
         this.units = units.trim();
-        if (3600 * 6 * this.frequency > 100000) {
-            this.buffer = new CircularBuffer(100000);
+        if (3600 * 6 * this.frequency > defaultBufferSize) {
+            this.buffer = new CircularBuffer(defaultBufferSize);
         } else {
             this.buffer = new CircularBuffer((int)Math.ceil(3600 * 6*this.frequency));
         }
@@ -65,7 +59,7 @@ public class TimeSeries extends Series {
      * Indice de la muestra mas antigua
      * @return -1 si el buffer esta vacio en otro caso el indice
      */
-    public int getIndexOldsample() {
+    public int getIndexOldestsample() {
         if(buffer.isEmpty()) return -1;
         return buffer.getIndexold();
     }
