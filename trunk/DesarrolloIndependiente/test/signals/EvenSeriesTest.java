@@ -122,14 +122,14 @@ public class EvenSeriesTest {
         Event e3=new Event(new Date().getTime(), "C", null);
         NTS.addEvent(e1);
         NTS.addEvent(e2);
-        NTS.addEvent(e3);            System.out.println(e1.getMoment()+" "+e2.getMoment()+" "+e3.getMoment()+" "+(e1.getMoment()-e3.getMoment()));
-            System.out.println(NTS.getEvents(e1.getMoment(),e3.getMoment()).size());
-        assertEquals(e1,NTS.getEvents(e1.getMoment(),e3.getMoment()).first());
-        assertEquals(e3,NTS.getEvents(e1.getMoment(),e3.getMoment()).last());
-        assertEquals(e1.getMoment(), NTS.getFirstevent());
-        assertEquals(e3.getMoment(), NTS.getLastevent());
+        NTS.addEvent(e3);            System.out.println(e1.getLocation()+" "+e2.getLocation()+" "+e3.getLocation()+" "+(e1.getLocation()-e3.getLocation()));
+            System.out.println(NTS.getEvents(e1.getLocation(),e3.getLocation()).size());
+        assertEquals(e1,NTS.getEvents(e1.getLocation(),e3.getLocation()).first());
+        assertEquals(e3,NTS.getEvents(e1.getLocation(),e3.getLocation()).last());
+        assertEquals(e1.getLocation(), NTS.getFirstevent());
+        assertEquals(e3.getLocation(), NTS.getLastevent());
         NTS.deleteEvent(e3);
-        assertEquals(e2.getMoment(), NTS.getLastevent());
+        assertEquals(e2.getLocation(), NTS.getLastevent());
         NTS.deleteEvent(e1);
         assertEquals(NTS.getFirstevent(), NTS.getLastevent());
         assertEquals(1,NTS.getNumberOfEvents());
@@ -201,9 +201,9 @@ public class EvenSeriesTest {
         NTS.addEvent(e7);
         assertEquals(NTS.getNumberOfEvents(), 7);
 
-        assertEquals(NTS.getEvents(e2.getMoment(), e6.getMoment()).size(),5);
-        NTS.getEvents(e2.getMoment(), e6.getMoment()).remove(e3);
-        assertEquals(NTS.getEvents(e2.getMoment(), e6.getMoment()).size(),5);
+        assertEquals(NTS.getEvents(e2.getLocation(), e6.getLocation()).size(),5);
+        NTS.getEvents(e2.getLocation(), e6.getLocation()).remove(e3);
+        assertEquals(NTS.getEvents(e2.getLocation(), e6.getLocation()).size(),5);
     }
 @Test
               public void TestEventsSameTime(){

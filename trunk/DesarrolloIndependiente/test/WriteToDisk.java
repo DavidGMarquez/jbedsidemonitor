@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-import integration.SignalManager;
+import signals.SignalManager;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;

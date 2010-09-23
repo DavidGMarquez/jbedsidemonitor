@@ -42,7 +42,7 @@ public class EventTest {
     }
 
     /**
-     * Test of getAttributes method, of class Event.
+     * Test of getCopyOfAttributes method, of class Event.
      */
    @Test
     public void testCrear1() {
@@ -50,7 +50,7 @@ public class EventTest {
         String prueba=e.getType();
         prueba=new String("Hola");
         assertEquals(e.getType(),"Standard");
-        assertEquals(new Date().getTime()>=e.getMoment(), true);
+        assertEquals(new Date().getTime()>=e.getLocation(), true);
 
         // TODO review the generated test code and remove the default call to fail.
     }
@@ -62,8 +62,8 @@ public class EventTest {
             map.put("Hello2", new Integer(2).toString());
             map.put("Hello", new Integer(1).toString());
         Event e=new Event(new Date().getTime(), "Standard", map);
-        assertEquals(e.getAttributes().size(), 2);
-        Map<String, String> mapcopy=e.getAttributes();
+        assertEquals(e.getCopyOfAttributes().size(), 2);
+        Map<String, String> mapcopy=e.getCopyOfAttributes();
             mapcopy.put("Hello2", new Integer(20).toString());
             map.put("Hello2", new Integer(2000).toString());
         Integer i=new Integer(Integer.parseInt((String)mapcopy.get("Hello2")));
@@ -74,8 +74,8 @@ public class EventTest {
         
 
         assertEquals(mapcopy.size(), 1);
-assertEquals(e.getAttributes().size(), 2);
-        Integer i2=new Integer(Integer.parseInt((String)e.getAttributes().get("Hello2")));
+assertEquals(e.getCopyOfAttributes().size(), 2);
+        Integer i2=new Integer(Integer.parseInt((String)e.getCopyOfAttributes().get("Hello2")));
         System.out.println(i2.intValue());
         assertEquals(i2.intValue(), 2);
  
