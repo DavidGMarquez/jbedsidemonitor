@@ -53,7 +53,7 @@ public class ThreadWriteOperations implements Runnable {
             WO = this.getAndRemoveWriteOperation();
             if (WO != null) {//@todo yo creo que nunca devuelve null
                 System.out.println("DEBUG ejecutada operacion de copia");
-                signalManager.writeToTimeSeries(0, WO.getBufferToWrite());
+                signalManager.writeToTimeSeries(WO.getIdentifier(), WO.getBufferToWrite());
 
             } else {
                 try {

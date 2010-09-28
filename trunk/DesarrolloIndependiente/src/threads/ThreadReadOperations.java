@@ -51,7 +51,7 @@ public class ThreadReadOperations implements Runnable {
                 while(readOperation.getNumberOfReadOperationSignals()!=0)
                 {
                     operationOneSignal=readOperation.getAndRemoveReadOperationOneSignal();
-                    taskforAlgorithmToExecute.addSignalData(operationOneSignal.getIdentifier(), signalManager.readFromTimeSeries(signalManager.getSignalIndex(operationOneSignal.getIdentifier()), operationOneSignal.getIndexToRead(),operationOneSignal.getQuantityToRead()));
+                    taskforAlgorithmToExecute.addSignalData(operationOneSignal.getIdentifier(), signalManager.readFromTimeSeries((operationOneSignal.getIdentifier()), operationOneSignal.getIndexToRead(),operationOneSignal.getQuantityToRead()));
                 }
                // signalManager.writeToTimeSeries(0, readOperation.getBufferToWrite());
 

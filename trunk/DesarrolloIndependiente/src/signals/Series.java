@@ -18,7 +18,7 @@ public abstract class Series {
     private long origin;
     private ArrayList<String> seriesIsGeneratedFrom;
 
-    protected Series(String identifier,String agent,long timeinit)    {
+    protected Series(String identifier, String agent, long timeinit) {
         this.setIdentifier(identifier.trim());
         this.setAgent(agent.trim());
         this.setOrigin(timeinit);
@@ -43,7 +43,7 @@ public abstract class Series {
     }
 
     private boolean setIdentifier(String identifier) {
-            this.identifier = identifier.trim();
+        this.identifier = identifier.trim();
         return true;
     }
 

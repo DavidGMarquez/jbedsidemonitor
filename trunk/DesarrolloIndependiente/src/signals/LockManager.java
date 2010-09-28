@@ -4,7 +4,9 @@
  */
 package signals;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -15,41 +17,35 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class LockManager {
 
     private static final LockManager INSTANCE = new LockManager();
-
-    private ArrayList<ReentrantReadWriteLock> signalsLocks;
+    private Map<String, ReentrantReadWriteLock> signalsLocks;
 
     public LockManager() {
-        signalsLocks = new ArrayList<ReentrantReadWriteLock>();
+        signalsLocks = new HashMap<String, ReentrantReadWriteLock>();
     }
 
     public static LockManager getInstance() {
         return INSTANCE;
     }
 
-    public boolean addLock() {
-        return signalsLocks.add(new ReentrantReadWriteLock());
-    }
-//no entiendo qué poltica desincronizacion vas a usar.
-    //tenemos que hablar de ese tema
-    public void addNLocks(int N) {
-        for (int i = 0; i < N; i++) {
-            this.addLock();
+    public boolean addLock(String identifier) {
+        if (signalsLocks.put(identifier, new ReentrantReadWriteLock()) == null) {
+            return true;
+        } else {
+            return false;
         }
     }
-    public int getNumberOfLocks(){
-        return this.signalsLocks.size();
+    public void getReadLock(String identifier) {
+        this.signalsLocks.get(identifier).readLock().lock();
+    }
+    public void releaseReadLock(String identifier) {
+        this.signalsLocks.get(identifier).readLock().unlock();
+    }
+    public void getWriteLock(String identifier) {
+        this.signalsLocks.get(identifier).writeLock().lock();
+    }
+    public void releaseWriteLock(String identifier) {
+        this.signalsLocks.get(identifier).writeLock().unlock();
     }
 
-    public void getReadLock(int index)    {
-        this.signalsLocks.get(index).readLock().lock();
-    }
-    public void releaseReadLock(int index){
-        this.signalsLocks.get(index).readLock().unlock();
-    }
-    public void getWriteLock(int index){
-        this.signalsLocks.get(index).writeLock().lock();
-    }
-    public void releaseWriteLock(int index){
-        this.signalsLocks.get(index).writeLock().unlock();
-    }
+
 }

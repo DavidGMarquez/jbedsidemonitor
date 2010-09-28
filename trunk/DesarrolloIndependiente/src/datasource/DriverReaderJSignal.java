@@ -4,18 +4,12 @@
  */
 package datasource;
 
-import signals.SignalManager;
 import vehicleclass.WriteOperation;
 import integration.ThreadManager;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import readermedimsim.ReaderFromMedicSim;
 import signals.*;
@@ -66,7 +60,10 @@ public class DriverReaderJSignal implements Runnable{
         }
         System.out.println("Configuration Read" + configurationBuffer);
         String buff = new String(configurationBuffer);
-        this.signalManager.addAllTimeSeries(processReadConfiguration(buff));
+        ArrayList<TimeSeries> signalsTimeSeries = processReadConfiguration(buff);
+        for(int i=0;i<signalsTimeSeries.size();i++){
+            this.signalManager.addTimeSeries(signalsTimeSeries.get(i));
+        }
     }
 
     public ArrayList<TimeSeries> processReadConfiguration(String bufferConfiguration) {
