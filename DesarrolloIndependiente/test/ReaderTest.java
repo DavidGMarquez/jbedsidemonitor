@@ -28,10 +28,11 @@ import static org.junit.Assert.*;
  */
 public class ReaderTest {
 
-    SignalManager signalManager=SignalManager.getInstance();
+    SignalManager signalManager = SignalManager.getInstance();
     ReaderFromMedicSim readerFromMedicSim = null;
-WriteToDisk WTD=null;
-    Thread threadWriteToDisk=null;
+    WriteToDisk WTD = null;
+    Thread threadWriteToDisk = null;
+
     public ReaderTest() {
         this.readerFromMedicSim = new ReaderFromMedicSim(3434);
         if (readerFromMedicSim.Send('C') != true) {
@@ -39,7 +40,7 @@ WriteToDisk WTD=null;
         }
         //System.out.println("Enviado bien petición configuración");
         int lengthOfConfiguration = -1;
-        
+
         int receivedByte = readerFromMedicSim.Recieve();
 
         //System.out.println("El 21 " + aux);
@@ -60,14 +61,14 @@ WriteToDisk WTD=null;
 
             }
         }
-        System.out.println("Configuration Read"+configurationBuffer);
-                String buff = new String(configurationBuffer);
+        System.out.println("Configuration Read" + configurationBuffer);
+        String buff = new String(configurationBuffer);
         this.signalManager.addAllTimeSeries(processReadConfiguration(buff));
 
         //System.out.println("Leido" + indexToRead);
        /* int num = indexToRead;
         for (indexToRead = 0; indexToRead < num; indexToRead++) {
-            System.out.print((char) configurationBuffer[indexToRead]);
+        System.out.print((char) configurationBuffer[indexToRead]);
         }*/
 
         //System.out.println("Fin");
@@ -92,8 +93,9 @@ WriteToDisk WTD=null;
     @After
     public void tearDown() {
     }
-    public ArrayList<TimeSeries> processReadConfiguration(String bufferConfiguration){
-        ArrayList<TimeSeries> signalsCreated=new ArrayList<TimeSeries>();
+
+    public ArrayList<TimeSeries> processReadConfiguration(String bufferConfiguration) {
+        ArrayList<TimeSeries> signalsCreated = new ArrayList<TimeSeries>();
         StringTokenizer separatorLine = new StringTokenizer(bufferConfiguration, "!");
         String comando;
         String dispositivo;
@@ -104,7 +106,7 @@ WriteToDisk WTD=null;
             String oneLineToProcess = new String(separatorLine.nextToken());
             String[] tokensOfOneLine = oneLineToProcess.split("_");
             for (int x = 0; x < tokensOfOneLine.length; x++) {
-               System.out.println(tokensOfOneLine[x]);
+                System.out.println(tokensOfOneLine[x]);
             }
             System.out.println("Line" + numberOfLine + ":" + oneLineToProcess);
             temporalIndexOfToken = 0;
@@ -129,11 +131,11 @@ WriteToDisk WTD=null;
             String description = null;
             int typeOfToken = 0;
             while (temporalIndexOfToken < tokensOfOneLine.length) {
-                System.out.println("Token:"+temporalIndexOfToken+":"+tokensOfOneLine[temporalIndexOfToken]);
+                System.out.println("Token:" + temporalIndexOfToken + ":" + tokensOfOneLine[temporalIndexOfToken]);
                 switch (typeOfToken) {
                     case 0: {
                         samplesframe = Integer.parseInt(tokensOfOneLine[temporalIndexOfToken]);
-                      //  System.out.println("Samples " + temporalIndexOfToken + ":" + samplesframe);
+                        //  System.out.println("Samples " + temporalIndexOfToken + ":" + samplesframe);
                     }
                     break;
                     case 1: {
@@ -175,15 +177,16 @@ WriteToDisk WTD=null;
         }
         //System.out.println("Fin Lectura");
         return signalsCreated;
-        
+
 
 
     }
+
     @Test
     public void TestLecturaOneSignalToFile() {
 
         WriteTimeSeriesInDisk();
-    //Abrimos un fichero para guardar las muestras leidas
+        //Abrimos un fichero para guardar las muestras leidas
         FileWriter fileOutput = null;
         PrintWriter pw = null;
         try {
@@ -211,7 +214,7 @@ WriteToDisk WTD=null;
         short shortValue;
         boolean firstByte = true;
 //
-      //int temporal21=readerFromMedicSim.Recieve();
+        //int temporal21=readerFromMedicSim.Recieve();
         //System.out.println("El 21" + temporal21);
         while ((oneByteRead = readerFromMedicSim.Recieve()) != -1) {
             numberOfBytesRead++;
@@ -223,9 +226,9 @@ WriteToDisk WTD=null;
                 temporalTwoBytesToShort.put(1, (byte) oneByteRead);
                 shortValue = temporalTwoBytesToShort.getShort(0);
                 pw.println(shortValue);
-                float floatValue[]=new float[1];
-                floatValue[0]=shortValue;
-                System.out.println("Recibo"+shortValue);
+                float floatValue[] = new float[1];
+                floatValue[0] = shortValue;
+                System.out.println("Recibo" + shortValue);
                 this.signalManager.writeToTimeSeries(0, floatValue);
                 firstByte = true;
 
@@ -252,11 +255,12 @@ WriteToDisk WTD=null;
 
         // TODO code application logic here
     }
- public void WriteTimeSeriesInDisk(){
-        WTD=new WriteToDisk("Output1.txt", signalManager);
-         threadWriteToDisk=new Thread(WTD,"threadWriteToDisk");
+
+    public void WriteTimeSeriesInDisk() {
+        WTD = new WriteToDisk("Output1.txt", signalManager);
+        threadWriteToDisk = new Thread(WTD, "threadWriteToDisk");
 
         threadWriteToDisk.start();
-        
+
     }
 }

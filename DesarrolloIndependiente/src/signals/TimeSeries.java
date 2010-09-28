@@ -37,6 +37,10 @@ public class TimeSeries extends Series {
         }
     }
 
+
+    
+
+
     public int getSamplescounter() {
         return buffer.getSize();
     }
