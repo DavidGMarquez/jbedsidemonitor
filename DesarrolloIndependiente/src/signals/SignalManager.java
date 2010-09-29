@@ -43,6 +43,16 @@ public class SignalManager {
         this.lockManager.addLock(TS.getIdentifier());
         return this.timeSeries.put(TS.getIdentifier(), TS);
     }
+        public EventSeries addEventSeries(EventSeries eventSeries) {
+        this.lockManager.addLock(eventSeries.getIdentifier());
+        return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
+    }
+
+            public void addWriterRunnable(WriterRunnable writerRunnable) {
+        this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+    }
+
+/////////A partir de aqui los métodos son discutibles
 
     public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
@@ -61,8 +71,10 @@ public class SignalManager {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
-
-    public void addWriterRunnable(WriterRunnable writerRunnable) {
-        this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+    public void writeEvent(String identifier, Event event) {
+        this.eventSeries.get(identifier).addEvent(event);
+    }
+    public ArrayList<Event> getEvents(String identifier){
+        return this.eventSeries.get(identifier).getEventsCopy();
     }
 }
