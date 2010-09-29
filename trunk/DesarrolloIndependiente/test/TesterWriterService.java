@@ -3,7 +3,9 @@
  * and open the template in the editor.
  */
 
-import datasource.DriverReaderJSignal;
+import java.util.ArrayList;
+import signals.EventSeriesWriterRunnable;
+import signals.EventSeries;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -11,11 +13,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import signals.Event;
 import signals.SignalManager;
-import signals.SignalManagerTest;
 import signals.TimeSeries;
 import signals.TimeSeriesWriterRunnable;
-import threads.ThreadWriteOperations;
 import static org.junit.Assert.*;
 
 /**
@@ -44,7 +45,7 @@ public class TesterWriterService {
     }
 
     @Test
-    public void TestDriverReaderJSignal() {
+    public void TestWriterTimeSeries() {
         SignalManager signalManager = SignalManager.getInstance();
         assertFalse(signalManager == null);
         signalManager.addTimeSeries(new TimeSeries("Signal 1", "Simulated", 1, 100, "mv"));
@@ -70,6 +71,38 @@ public class TesterWriterService {
         }
         assertArrayEquals(dataToWrite1, signalManager.readFromTimeSeries("Signal 1", 0, 10));
         assertArrayEquals(dataToWrite2, signalManager.readFromTimeSeries("Signal 2", 0, 100));
+    }
+
+    @Test
+    public void TestWriterEventSeries() {
+        SignalManager signalManager = SignalManager.getInstance();
+        assertFalse(signalManager == null);
+        signalManager.addEventSeries(new EventSeries("Signal 1", "Simulated", 1, new ArrayList<String>(), "mv"));
+        signalManager.addEventSeries(new EventSeries("Signal 2", "Simulated", 1, new ArrayList<String>(), "mv"));
+        EventSeriesWriterRunnable Writer1 = new EventSeriesWriterRunnable("Signal 1");
+        EventSeriesWriterRunnable Writer2 = new EventSeriesWriterRunnable("Signal 2");
+
+        Event e1 = new Event(1, "a", null);
+        Event e2 = new Event(2, "b", null);
+        Event e3 = new Event(3, "c", null);
+        Writer1.addEventToWrite(e1);
+        Writer2.addEventToWrite(e1);
+        Writer2.addEventToWrite(e2);
+        Writer2.addEventToWrite(e3);
+        assertEquals(0, signalManager.getEvents("Signal 1").size());
+        assertEquals(0, signalManager.getEvents("Signal 2").size());
+
+        signalManager.addWriterRunnable(Writer1);
+        signalManager.addWriterRunnable(Writer2);
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        assertEquals(1, signalManager.getEvents("Signal 1").size());
+        assertEquals(3, signalManager.getEvents("Signal 2").size());
+
     }
 
     private void SecuentialArray(float[] data) {
