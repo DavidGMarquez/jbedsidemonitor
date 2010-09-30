@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.HashMap;
@@ -10,8 +6,8 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- *@todo nuevamente, me parece Intuitivo implementar esto partir del
- * identificador de las señales.
+ *@todo Es necesario emplear una colección de datos con soporte a concurrencia
+ * o esta clase no es thread safe
  * @author USUARIO
  */
 public class LockManager {

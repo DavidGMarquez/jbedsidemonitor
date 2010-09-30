@@ -10,10 +10,8 @@ import java.util.Map;
 
 /** Singleton Facade
  *
- * @todo  En la API esta clase debería permitir identificar las señales por
- *  Su nombre y no por el índice. Es mas facil de usar Y no se expone
- *  un detalle de implementación. Por otro lado, la clase se construye más fácil
- * usando hasmaps en vez de ArrayList. Así no hay que iterar para encontrar la señal.
+ * @todo Usa colecciones concurrentes por los motivos ya comentados
+ * en otra clase
  *
  * @author USUARIO
  */
@@ -35,13 +33,14 @@ public class SignalManager {
     public static SignalManager getInstance() {
         return INSTANCE;
     }
-    //@duda quizas haya que hacer una copia de TS
+    //@duda quizas haya que hacer una copia de ts
+    //@¿no es inmutable? Si lo es, no hace falta
 
     //@todo no anhadir, crear
     //@pendiente crear constructor de copia y hacerlo
-    public TimeSeries addTimeSeries(TimeSeries TS) {
-        this.lockManager.addLock(TS.getIdentifier());
-        return this.timeSeries.put(TS.getIdentifier(), TS);
+    public TimeSeries addTimeSeries(TimeSeries ts) {
+        this.lockManager.addLock(ts.getIdentifier());
+        return this.timeSeries.put(ts.getIdentifier(), ts);
     }
         public EventSeries addEventSeries(EventSeries eventSeries) {
         this.lockManager.addLock(eventSeries.getIdentifier());

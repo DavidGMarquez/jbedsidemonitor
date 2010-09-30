@@ -1,14 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.ArrayList;
 
 /**
- *
- * @author USUARIO
+ *@todo Esta clase debe ser más general; además de permitir añadir eventos
+ * debería permitir borrarlos. Por otro lado, como comentario menor, tienes
+ * una tendencia bastante grande emplear ArrayList. Por detrás, esta estructura
+ * tiene un array, lo que quiere decir que los cambios de tamaño pueden ser
+ * bastante costosos. Si no necesitas acceso aleatorio, polo general y siempre
+ * preferible un LinkedList
  */
 public class EventSeriesWriterRunnable extends WriterRunnable {
 
@@ -26,8 +26,7 @@ public class EventSeriesWriterRunnable extends WriterRunnable {
         }
     }
 
-    public void addEventToWrite(Event e)
-    {
+    public void addEventToWrite(Event e){
         this.eventsToWrite.add(e);
     }
 }
