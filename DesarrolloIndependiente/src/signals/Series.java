@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.ArrayList;
@@ -11,10 +7,9 @@ import java.util.ArrayList;
  * @author USUARIO
  */
 public abstract class Series {
-    //Parametros generales
 
     private String identifier;
-    private String agent = "simulated";//así nunca nos vamos a olvidar
+    private String agent = "simulated";
     private long origin;
     private ArrayList<String> seriesIsGeneratedFrom;
 
