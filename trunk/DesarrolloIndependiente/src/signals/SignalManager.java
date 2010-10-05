@@ -5,8 +5,8 @@
 package signals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /** Singleton Facade
  *
@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class SignalManager {
 
-    private Map<String, TimeSeries> timeSeries;//@todo hashmap
-    private Map<String, EventSeries> eventSeries;//@todo hashmap
+    private ConcurrentMap<String, TimeSeries> timeSeries;
+    private ConcurrentMap<String, EventSeries> eventSeries;
     private LockManager lockManager;
     private ExecutorServiceWriter executorServiceWriter;
     private CompletionExecutorServiceReader completionExecutorServiceReader;
@@ -26,10 +26,10 @@ public class SignalManager {
 
     private SignalManager() {
         lockManager = LockManager.getInstance();
-        timeSeries = new HashMap<String, TimeSeries>();
-        eventSeries = new HashMap<String, EventSeries>();
+        timeSeries = new ConcurrentHashMap<String, TimeSeries>();
+        eventSeries = new ConcurrentHashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
-        completionExecutorServiceReader=new CompletionExecutorServiceReader();
+        completionExecutorServiceReader = new CompletionExecutorServiceReader();
     }
 
     public static SignalManager getInstance() {
@@ -44,20 +44,26 @@ public class SignalManager {
         this.lockManager.addLock(ts.getIdentifier());
         return this.timeSeries.put(ts.getIdentifier(), ts);
     }
-        public EventSeries addEventSeries(EventSeries eventSeries) {
+
+    public EventSeries addEventSeries(EventSeries eventSeries) {
         this.lockManager.addLock(eventSeries.getIdentifier());
         return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
     }
 
-            public void addWriterRunnable(WriterRunnable writerRunnable) {
+    public void addWriterRunnable(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
-            public void addReaderCallable(ReaderCallable readerCallable){
-                this.completionExecutorServiceReader.executeReaderRunnable(readerCallable);
-                
-            }
+
+    public void addReaderCallable(ReaderCallable readerCallable) {
+        this.completionExecutorServiceReader.executeReaderRunnable(readerCallable);
+
+    }
 
 /////////A partir de aqui los métodos son discutibles
+    public void initiateThread() {
+        Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
+        threadCompletionService.start();
+    }
 
     public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
@@ -76,10 +82,12 @@ public class SignalManager {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
+
     public void addEventToEventSeries(String identifier, Event event) {
         this.eventSeries.get(identifier).addEvent(event);
     }
-    public ArrayList<Event> getEvents(String identifier){
+
+    public ArrayList<Event> getEvents(String identifier) {
         return this.eventSeries.get(identifier).getEventsCopy();
     }
 }
