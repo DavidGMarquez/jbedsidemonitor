@@ -1,6 +1,7 @@
 package signals;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *@todo Esta clase debe ser más general; además de permitir añadir eventos
@@ -9,14 +10,16 @@ import java.util.ArrayList;
  * tiene un array, lo que quiere decir que los cambios de tamaño pueden ser
  * bastante costosos. Si no necesitas acceso aleatorio, polo general y siempre
  * preferible un LinkedList
+ * //duda con borrarlos te refieres a que la operación de escritura en el eventSeries pueda borrar eventos
+ * o que se puedan borrar de el almacen este temporal de eventsToWrite
  */
 public class EventSeriesWriterRunnable extends WriterRunnable {
 
     public EventSeriesWriterRunnable(String identifier) {
         super(identifier);
-        eventsToWrite=new ArrayList<Event>();
+        eventsToWrite=new LinkedList<Event>();
     }
-    private ArrayList<Event> eventsToWrite;
+    private LinkedList<Event> eventsToWrite;
 
     @Override
     void write() {
@@ -29,4 +32,5 @@ public class EventSeriesWriterRunnable extends WriterRunnable {
     public void addEventToWrite(Event e){
         this.eventsToWrite.add(e);
     }
+
 }

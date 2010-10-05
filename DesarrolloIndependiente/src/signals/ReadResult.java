@@ -9,7 +9,7 @@ package signals;
  *
  * @author USUARIO
  */
-class ReadResult {
+class ReadResult{
    private String identifierSignal;
     private String identifierOwner;
     private float[] data;

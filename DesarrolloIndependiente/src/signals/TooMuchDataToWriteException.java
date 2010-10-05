@@ -29,4 +29,17 @@ class TooMuchDataToWriteException extends RuntimeException{
 
     }
 
+
+    public long getBufferCapacity() {
+        return bufferCapacity;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public long getSizeToWrite() {
+        return sizeToWrite;
+    }
+
 }

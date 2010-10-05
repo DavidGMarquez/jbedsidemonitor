@@ -13,7 +13,10 @@ public class TimeSeriesWriterRunnable extends WriterRunnable {
         signalManager.writeToTimeSeries(identifier, dataToWrite);
     }
 //@todo Realiza una copia defensiva
+    //Asi valdria?
     public void setDataToWrite(float[] dataToWrite) {
-        this.dataToWrite = dataToWrite;
+     float[] copy=new float[dataToWrite.length];
+        System.arraycopy(dataToWrite, 0, copy, 0, dataToWrite.length);
+        this.dataToWrite = (dataToWrite);
     }
 }
