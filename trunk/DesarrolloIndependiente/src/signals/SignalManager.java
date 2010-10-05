@@ -21,6 +21,7 @@ public class SignalManager {
     private Map<String, EventSeries> eventSeries;//@todo hashmap
     private LockManager lockManager;
     private ExecutorServiceWriter executorServiceWriter;
+    private CompletionExecutorServiceReader completionExecutorServiceReader;
     private static final SignalManager INSTANCE = new SignalManager();
 
     private SignalManager() {
@@ -28,6 +29,7 @@ public class SignalManager {
         timeSeries = new HashMap<String, TimeSeries>();
         eventSeries = new HashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
+        completionExecutorServiceReader=new CompletionExecutorServiceReader();
     }
 
     public static SignalManager getInstance() {
@@ -50,6 +52,10 @@ public class SignalManager {
             public void addWriterRunnable(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
+            public void addReaderCallable(ReaderCallable readerCallable){
+                this.completionExecutorServiceReader.executeReaderRunnable(readerCallable);
+                
+            }
 
 /////////A partir de aqui los métodos son discutibles
 
@@ -70,7 +76,7 @@ public class SignalManager {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
-    public void writeEvent(String identifier, Event event) {
+    public void addEventToEventSeries(String identifier, Event event) {
         this.eventSeries.get(identifier).addEvent(event);
     }
     public ArrayList<Event> getEvents(String identifier){

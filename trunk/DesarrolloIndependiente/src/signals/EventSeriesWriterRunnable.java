@@ -22,7 +22,7 @@ public class EventSeriesWriterRunnable extends WriterRunnable {
     void write() {
         SignalManager signalManager = SignalManager.getInstance();
         for (int i = 0; i < eventsToWrite.size(); i++) {
-            signalManager.writeEvent(this.identifier,eventsToWrite.get(i));
+            signalManager.addEventToEventSeries(this.identifier,eventsToWrite.get(i));
         }
     }
 
