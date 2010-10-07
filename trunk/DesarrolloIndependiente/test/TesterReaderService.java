@@ -63,8 +63,8 @@ public class TesterReaderService {
         writer1.setDataToWrite(dataToWrite1);
         writer2.setDataToWrite(dataToWrite2);
 
-        signalManager.addWriterRunnable(writer1);
-        signalManager.addWriterRunnable(writer2);
+        signalManager.encueWriteOperation(writer1);
+        signalManager.encueWriteOperation(writer2);
 
         try {
             Thread.sleep(3000);
@@ -81,8 +81,8 @@ public class TesterReaderService {
         TimeSeriesReaderCallable reader2= new TimeSeriesReaderCallable("Signal 2", "Algorithm 1");
         reader2.setPosInitToRead(0);;
         reader2.setSizeToRead(100);
-        signalManager.addReaderCallable(reader1);
-        signalManager.addReaderCallable(reader2);
+        signalManager.encueReadOperation(reader1);
+        signalManager.encueReadOperation(reader2);
         System.out.println("Comparar 1");
          printArray(dataToWrite1);
          System.out.println("Comparar 2");

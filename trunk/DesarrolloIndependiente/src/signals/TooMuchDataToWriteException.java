@@ -1,14 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package signals;
 
-/**
- *
- * @author USUARIO
- */
+
 class TooMuchDataToWriteException extends RuntimeException{
     private String message;
     private String identifier;

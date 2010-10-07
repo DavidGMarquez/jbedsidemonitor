@@ -61,8 +61,8 @@ public class TesterWriterService {
         Writer1.setDataToWrite(dataToWrite1);
         Writer2.setDataToWrite(dataToWrite2);
 
-        signalManager.addWriterRunnable(Writer1);
-        signalManager.addWriterRunnable(Writer2);
+        signalManager.encueWriteOperation(Writer1);
+        signalManager.encueWriteOperation(Writer2);
 
         try {
             Thread.sleep(3000);
@@ -92,8 +92,8 @@ public class TesterWriterService {
         assertEquals(0, signalManager.getEvents("Signal 1").size());
         assertEquals(0, signalManager.getEvents("Signal 2").size());
 
-        signalManager.addWriterRunnable(Writer1);
-        signalManager.addWriterRunnable(Writer2);
+        signalManager.encueWriteOperation(Writer1);
+        signalManager.encueWriteOperation(Writer2);
 
         try {
             Thread.sleep(3000);

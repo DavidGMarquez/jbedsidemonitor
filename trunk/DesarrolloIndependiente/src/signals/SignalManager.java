@@ -10,10 +10,6 @@ import java.util.concurrent.ConcurrentMap;
 
 /** Singleton Facade
  *
- * @todo Usa colecciones concurrentes por los motivos ya comentados
- * en otra clase
- *
- * @author USUARIO
  */
 public class SignalManager {
 
@@ -35,11 +31,7 @@ public class SignalManager {
     public static SignalManager getInstance() {
         return INSTANCE;
     }
-    //@duda quizas haya que hacer una copia de ts
-    //@¿no es inmutable? Si lo es, no hace falta
-
-    //@todo no anhadir, crear
-    //@pendiente crear constructor de copia y hacerlo
+    
     public TimeSeries addTimeSeries(TimeSeries ts) {
         this.lockManager.addLock(ts.getIdentifier());
         return this.timeSeries.put(ts.getIdentifier(), ts);
@@ -50,16 +42,18 @@ public class SignalManager {
         return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
     }
 
-    public void addWriterRunnable(WriterRunnable writerRunnable) {
+    public void encueWriteOperation(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
 
-    public void addReaderCallable(ReaderCallable readerCallable) {
+    public void encueReadOperation(ReaderCallable readerCallable) {
         this.completionExecutorServiceReader.executeReaderRunnable(readerCallable);
 
     }
 
 /////////A partir de aqui los métodos son discutibles
+
+    //@todo ¿para que es este metodo? No alcanza a ver que esto haga nada útil
     public void initiateThread() {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
         threadCompletionService.start();

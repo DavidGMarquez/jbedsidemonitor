@@ -1,18 +1,9 @@
 package signals;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- *@todo Es necesario emplear una colección de datos con soporte a concurrencia
- * o esta clase no es thread safe
- * //Cambiado a ConcurrentHashMap
- * @author USUARIO
- */
 public class LockManager {
 
     private static final LockManager INSTANCE = new LockManager();
