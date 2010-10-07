@@ -1,16 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.concurrent.Callable;
-import signals.ReadResult;
 
-/**
- *
- * @author USUARIO
- */
 abstract class ReaderCallable implements Callable<ReadResult> {
 
     protected String identifierSignal;
@@ -28,8 +19,16 @@ abstract class ReaderCallable implements Callable<ReadResult> {
         this.lockManager.getReadLock(identifierSignal);
         this.read();
         this.lockManager.releaseReadLock(identifierSignal);
-        return this.readResult;
+        return this.getReadResult();
     }
 
     abstract void read();
+
+    /**
+     *De algún modo habra que sacar el resultado de aquí
+     * y borra este tipo de comentarios despu!s de leerlos
+     */
+    public ReadResult getReadResult() {
+        return readResult;
+    }
 }

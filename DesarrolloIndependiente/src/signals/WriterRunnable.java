@@ -1,7 +1,5 @@
 package signals;
 
-import signals.LockManager;
-
 abstract class WriterRunnable implements Runnable {
 
     protected String identifier;
