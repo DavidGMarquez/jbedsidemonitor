@@ -23,8 +23,9 @@ public class TimeSeriesReaderCallable extends ReaderCallable {
     @Override
     void read() {
         SignalManager signalManager = SignalManager.getInstance();
-        this.readResult = new ReadResult(identifierSignal, identifierOwner,
-                signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead));
+        this.readResult = new ReadResult(identifierOwner);
+        this.readResult.addReadResultTimeSeries(new ReadResultOneTimeSeries(identifierSignal, signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead), posInitToRead));
+
     }
 
     public void setPosInitToRead(int posInitToRead) {

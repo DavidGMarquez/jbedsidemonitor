@@ -5,6 +5,8 @@
 package signals;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,7 +33,9 @@ public class SignalManager {
     public static SignalManager getInstance() {
         return INSTANCE;
     }
-    
+    //@pendiente si es necesario hacer una copia del objeto ya que es mutable
+    //Comentario hasta que se haga para que no se olvide copia defensiva
+
     public TimeSeries addTimeSeries(TimeSeries ts) {
         this.lockManager.addLock(ts.getIdentifier());
         return this.timeSeries.put(ts.getIdentifier(), ts);
@@ -41,6 +45,7 @@ public class SignalManager {
         this.lockManager.addLock(eventSeries.getIdentifier());
         return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
     }
+
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
@@ -52,18 +57,18 @@ public class SignalManager {
     }
 
 /////////A partir de aqui los métodos son discutibles
-
     //@todo ¿para que es este metodo? No alcanza a ver que esto haga nada útil
-    public void initiateThread() {
+    //@pendiente es para iniciar el thread, me daba warnings si lo hacía desde el constructor directamente.
+     void initiateThread() {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
         threadCompletionService.start();
     }
 
-    public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+     float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
     }
 
-    public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
+     float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
             float result[] = this.timeSeries.get(identifier).read(indexLastRead, (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) + 1 % this.timeSeries.get(identifier).getCapacity());
             return result;
@@ -72,16 +77,23 @@ public class SignalManager {
         }
     }
 
-    public boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
+     boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
 
-    public void addEventToEventSeries(String identifier, Event event) {
+     void addEventToEventSeries(String identifier, Event event) {
         this.eventSeries.get(identifier).addEvent(event);
     }
+     boolean deleteEventToEventSeries(String identifier,Event event){
+         return this.eventSeries.get(identifier).deleteEvent(event);
+     }
 
-    public ArrayList<Event> getEvents(String identifier) {
+     ArrayList<Event> getEvents(String identifier) {
         return this.eventSeries.get(identifier).getEventsCopy();
+    }
+
+    SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
+        return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
     }
 }

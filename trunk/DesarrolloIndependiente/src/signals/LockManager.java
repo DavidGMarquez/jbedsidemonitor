@@ -24,18 +24,20 @@ public class LockManager {
             return false;
         }
     }
+
     public void getReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().lock();
     }
+
     public void releaseReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().unlock();
     }
+
     public void getWriteLock(String identifier) {
         this.signalsLocks.get(identifier).writeLock().lock();
     }
+
     public void releaseWriteLock(String identifier) {
         this.signalsLocks.get(identifier).writeLock().unlock();
     }
-
-
 }

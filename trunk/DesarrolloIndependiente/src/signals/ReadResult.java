@@ -2,37 +2,43 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package signals;
+
+import java.util.LinkedList;
 
 /**
  *
  * @author USUARIO
  */
-class ReadResult{
-   private String identifierSignal;
+class ReadResult {
+
     private String identifierOwner;
-    private float[] data;
+    private LinkedList<ReadResultOneEventSeries> readResultsEventSeries;
+    private LinkedList<ReadResultOneTimeSeries> readResultsTimeSeries;
 
-    public ReadResult(String identifierSignal, String identifierOwner, float[] data) {
-        this.identifierSignal = identifierSignal;
+    public ReadResult(String identifierOwner) {
         this.identifierOwner = identifierOwner;
-        this.data = data;
-    }
-
-    public float[] getData() {
-        return data;
+        readResultsEventSeries = new LinkedList<ReadResultOneEventSeries>();
+        readResultsTimeSeries = new LinkedList<ReadResultOneTimeSeries>();
     }
 
     public String getIdentifierOwner() {
         return identifierOwner;
     }
 
-    public String getIdentifierSignal() {
-        return identifierSignal;
+    public LinkedList<ReadResultOneEventSeries> getReadResultsEventSeries() {
+        return readResultsEventSeries;
     }
 
+    public LinkedList<ReadResultOneTimeSeries> getReadResultsTimeSeries() {
+        return readResultsTimeSeries;
+    }
 
+    public void addReadResultTimeSeries(ReadResultOneTimeSeries readResultOneTimeSeries) {
+        this.readResultsTimeSeries.add(readResultOneTimeSeries);
+    }
 
-
+    public void addReadResultEventSeries(ReadResultOneEventSeries readResultOneEventSeries) {
+        this.readResultsEventSeries.add(readResultOneEventSeries);
+    }
 }

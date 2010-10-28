@@ -12,13 +12,14 @@ import java.util.concurrent.Executors;
  * @author USUARIO
  */
 public class ExecutorServiceWriter {
-private final ExecutorService executorService;
+
+    private final ExecutorService executorService;
+
     public ExecutorServiceWriter() {
-        executorService=Executors.newCachedThreadPool();
+        executorService = Executors.newCachedThreadPool();
     }
 
-    
-    public void executeWriterRunnable(WriterRunnable writerRunnable){
+    public void executeWriterRunnable(WriterRunnable writerRunnable) {
         this.executorService.execute(writerRunnable);
     }
 }

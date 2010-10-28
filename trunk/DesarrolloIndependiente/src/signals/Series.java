@@ -54,7 +54,7 @@ public abstract class Series {
         return new ArrayList<String>(seriesIsGeneratedFrom);
     }
 
-       public void setSeriesIsGeneratedFrom(ArrayList<String> seriesIsGeneratedFrom) {
+    public void setSeriesIsGeneratedFrom(ArrayList<String> seriesIsGeneratedFrom) {
         this.seriesIsGeneratedFrom = new ArrayList<String>(seriesIsGeneratedFrom);
     }
 }

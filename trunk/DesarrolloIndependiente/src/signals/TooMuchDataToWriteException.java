@@ -1,7 +1,7 @@
 package signals;
 
+class TooMuchDataToWriteException extends RuntimeException {
 
-class TooMuchDataToWriteException extends RuntimeException{
     private String message;
     private String identifier;
     private long bufferCapacity;
@@ -9,18 +9,17 @@ class TooMuchDataToWriteException extends RuntimeException{
 
     public TooMuchDataToWriteException(String message) {
         super(message);
-        this.message=new String(message);
+        this.message = new String(message);
     }
 
-    TooMuchDataToWriteException(TooMuchDataToWriteException e, String identifier,long bufferCapacity,long sizeToWrite) {
-        super(e.message+" Signal:"+identifier);
-        this.message=new String(e.message);
-        this.identifier=new String(identifier);
-        this.bufferCapacity=bufferCapacity;
-        this.sizeToWrite=sizeToWrite;
+    TooMuchDataToWriteException(TooMuchDataToWriteException e, String identifier, long bufferCapacity, long sizeToWrite) {
+        super(e.message + " Signal:" + identifier);
+        this.message = new String(e.message);
+        this.identifier = new String(identifier);
+        this.bufferCapacity = bufferCapacity;
+        this.sizeToWrite = sizeToWrite;
 
     }
-
 
     public long getBufferCapacity() {
         return bufferCapacity;
@@ -33,5 +32,4 @@ class TooMuchDataToWriteException extends RuntimeException{
     public long getSizeToWrite() {
         return sizeToWrite;
     }
-
 }

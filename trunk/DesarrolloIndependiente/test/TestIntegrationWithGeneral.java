@@ -4,7 +4,7 @@
  */
 
 import datasource.DriverReaderJSignal;
-import integration.ThreadManager;
+import zclasesParaBORRAR.ThreadManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import signals.SignalManager;
 import signals.SignalManagerTest;
-import threads.ThreadWriteOperations;
+import zclasesParaBORRAR.ThreadWriteOperations;
 import static org.junit.Assert.*;
 
 /**

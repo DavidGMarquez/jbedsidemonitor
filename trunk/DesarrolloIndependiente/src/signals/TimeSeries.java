@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * frequency tiene la frecuencia de muestreo de la señal (Hz)
  * units es una cadena de texto que contiene las unidades del parámetro representado por la serie temporal
  *
- 
+
  * @author USUARIO
  */
 public class TimeSeries extends Series {
@@ -25,7 +25,6 @@ public class TimeSeries extends Series {
     private float frequency;
     private String units;
 
-
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
         super(identifier, agent, origin);
         this.frequency = frequency;
@@ -33,13 +32,9 @@ public class TimeSeries extends Series {
         if (3600 * 6 * this.frequency > defaultBufferSize) {
             this.buffer = new CircularBuffer(defaultBufferSize);
         } else {
-            this.buffer = new CircularBuffer((int)Math.ceil(3600 * 6*this.frequency));
+            this.buffer = new CircularBuffer((int) Math.ceil(3600 * 6 * this.frequency));
         }
     }
-
-
-    
-
 
     public int getSamplescounter() {
         return buffer.getSize();
@@ -53,10 +48,12 @@ public class TimeSeries extends Series {
      * Devuelve la muestra más nueva
      * @return -1 si el buffer esta vacio en otro caso el indice
      */
-    //Aqui estos métodos no me quedan muy claros
+ 
     public int getIndexNewsample() {
-        if(buffer.isEmpty()) return -1;
-        return (buffer.getIndexNextWrite()-1)%this.getCapacity();
+        if (buffer.isEmpty()) {
+            return -1;
+        }
+        return (buffer.getIndexNextWrite() - 1) % this.getCapacity();
     }
 
     /**
@@ -64,14 +61,17 @@ public class TimeSeries extends Series {
      * @return -1 si el buffer esta vacio en otro caso el indice
      */
     public int getIndexOldestsample() {
-        if(buffer.isEmpty()) return -1;
+        if (buffer.isEmpty()) {
+            return -1;
+        }
         return buffer.getIndexold();
     }
 
     public String getUnits() {
         return units;
     }
-    public int getCapacity(){
+
+    public int getCapacity() {
         return this.buffer.getCapacity();
     }
 
@@ -84,7 +84,7 @@ public class TimeSeries extends Series {
         try {
             return this.buffer.write(datatowrite);
         } catch (TooMuchDataToWriteException e) {
-            throw new TooMuchDataToWriteException(e,this.getIdentifier(),this.getCapacity(),datatowrite.length);
+            throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
         }
 
 
