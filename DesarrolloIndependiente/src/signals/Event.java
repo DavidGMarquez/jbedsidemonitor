@@ -26,11 +26,11 @@ public final class Event implements Comparable<Event> {
     public Event(long location, String type, Map<String, String> attributes) {
         this.location = location;
         this.type = type.trim();
-        if(attributes!=null)
-
-        this.attributes = new HashMap<String, String>(attributes);
-        else
-            this.attributes=null;
+        if (attributes != null) {
+            this.attributes = new HashMap<String, String>(attributes);
+        } else {
+            this.attributes = null;
+        }
     }
 
     public Map<String, String> getCopyOfAttributes() {
@@ -46,11 +46,10 @@ public final class Event implements Comparable<Event> {
     }
 
     public int compareTo(Event o) {
-        if(location-o.location==0){
-         return type.compareToIgnoreCase(o.type);
-        }
-        else{
-        return (int) (location - o.location);
+        if (location - o.location == 0) {
+            return type.compareToIgnoreCase(o.type);
+        } else {
+            return (int) (location - o.location);
         }
     }
 
@@ -61,10 +60,11 @@ public final class Event implements Comparable<Event> {
         Event e = (Event) o;
         return e.location == location && e.type.equalsIgnoreCase(type);
     }
-    public int hashCode(){
-        int result=17;
-        result=37*result+type.hashCode();
-        result=37*result+((int)(location^(location>>>32)));
+
+    public int hashCode() {
+        int result = 17;
+        result = 37 * result + type.hashCode();
+        result = 37 * result + ((int) (location ^ (location >>> 32)));
         return result;
     }
 }

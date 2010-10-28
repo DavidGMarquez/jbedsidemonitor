@@ -6,7 +6,7 @@ abstract class WriterRunnable implements Runnable {
     protected LockManager lockManager;
 
     public WriterRunnable(String identifier) {
-        this.identifier=identifier;
+        this.identifier = identifier;
         this.lockManager = LockManager.getInstance();
     }
 

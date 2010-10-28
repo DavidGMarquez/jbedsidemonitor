@@ -12,7 +12,7 @@ import java.util.*;
 public class EventSeries extends Series {
 
     //Parametros serie temporal
-    private SortedSet<Event> events;//@comentario utiliza la coleccion adecuada para cada trabajo
+    private SortedSet<Event> events;
     private String units;
 
     public EventSeries(String identifier, String agent, long timeinit, ArrayList<String> imputs, String units) {
@@ -42,12 +42,13 @@ public class EventSeries extends Series {
     public String getUnits() {
         return units;
     }
-    
+
     public SortedSet<Event> getEvents(long firstInstantToInclude, long lastInstantToInclude) {
-        Event eventFrom = new Event (firstInstantToInclude,"",null);
-        Event eventTo = new Event (lastInstantToInclude+1,"",null);
+        Event eventFrom = new Event(firstInstantToInclude, "", null);
+        Event eventTo = new Event(lastInstantToInclude + 1, "", null);
         return new TreeSet<Event>(events.subSet(eventFrom, eventTo));
     }
+
     public int getNumberOfEvents() {
         return this.events.size();
     }
@@ -59,6 +60,7 @@ public class EventSeries extends Series {
     public boolean addEvent(Event event) {
         return this.events.add(event);
     }
+
     public boolean deleteEventsAtLocation(long location) {
         return events.removeAll(this.getEvents(location, location));
     }

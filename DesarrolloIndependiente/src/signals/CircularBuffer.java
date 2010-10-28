@@ -19,7 +19,7 @@ class CircularBuffer {
     private int capacity;
     private float data[];
     private boolean full;
-   
+
     /**
      * Crea un buffer con el tamaño por defecto asignado
      */
@@ -28,6 +28,7 @@ class CircularBuffer {
     }
     //@pendiente:  para que no escape la refencia durante la construcción a la
     //hora de ser concurrente habría que hacer el constructor mediante un metodo static
+
     /**
      * Crea un buffer circular con el tamaño que indique capacity
      * @param capacity
@@ -114,21 +115,27 @@ class CircularBuffer {
         }
         return read(indexNextWrite - 1, 1)[0];
     }
+
     public int getIndexold() {
         return indexOldest;
     }
+
     public boolean isFull() {
         return full;
     }
+
     public boolean isEmpty() {
         return (!full) && indexNextWrite == 0;
     }
+
     public int getIndexNextWrite() {
         return indexNextWrite;
     }
+
     public int getCapacity() {
         return capacity;
     }
+
     public int getSize() {
         if (full) {
             return capacity;

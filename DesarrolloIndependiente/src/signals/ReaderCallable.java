@@ -9,9 +9,9 @@ abstract class ReaderCallable implements Callable<ReadResult> {
     protected LockManager lockManager;
     protected ReadResult readResult;
 
-    public ReaderCallable(String identifierSignal,String identifierOwner) {
-        this.identifierSignal=identifierSignal;
-        this.identifierOwner=identifierOwner;
+    public ReaderCallable(String identifierSignal, String identifierOwner) {
+        this.identifierSignal = identifierSignal;
+        this.identifierOwner = identifierOwner;
         this.lockManager = LockManager.getInstance();
     }
 

@@ -4,8 +4,8 @@
  */
 package datasource;
 
-import vehicleclass.WriteOperation;
-import integration.ThreadManager;
+import zclasesParaBORRAR.WriteOperation;
+import zclasesParaBORRAR.ThreadManager;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
