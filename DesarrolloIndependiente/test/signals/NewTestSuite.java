@@ -17,8 +17,8 @@ import org.junit.runners.Suite;
  * @author USUARIO
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({signals.CircularBufferTest.class,signals.TimeSeriesTest.class,signals.EventTest.class,signals.EvenSeriesTest.class})
-public class ZTestSuite {
+@Suite.SuiteClasses({signals.EvenSeriesTest.class,signals.CircularBufferTest.class,signals.TesterWriterService.class,signals.TimeSeriesTest.class,signals.SignalManagerTest.class,signals.TesterReaderService.class,signals.EventTest.class})
+public class NewTestSuite {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
