@@ -1,8 +1,11 @@
+package pendientes;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
+import pendientes.TestIntegration;
 import datasource.DriverReaderJSignal;
 import zclasesParaBORRAR.ThreadManager;
 import java.util.logging.Level;

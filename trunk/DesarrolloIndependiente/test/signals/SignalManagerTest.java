@@ -6,6 +6,7 @@
 package signals;
 
 import java.util.ArrayList;
+import java.util.SortedSet;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class SignalManagerTest {
         assertEquals(aaa, signalManager);
         // TODO review the generated test code and remove the default call to fail.
     }
-    
 
 
-}
+
+    }

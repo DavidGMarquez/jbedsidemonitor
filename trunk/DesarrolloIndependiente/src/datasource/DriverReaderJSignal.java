@@ -4,8 +4,7 @@
  */
 package datasource;
 
-import zclasesParaBORRAR.WriteOperation;
-import zclasesParaBORRAR.ThreadManager;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -22,14 +21,13 @@ public class DriverReaderJSignal implements Runnable{
 
     SignalManager signalManager =null;
     ReaderFromMedicSim readerFromMedicSim = null;
-    ThreadManager generalManager=null;
+  
     int sizeOfBufferToWrite=100;
     float[] bufferToWrite;
     int indexBufferToWrite=0;
 
     public DriverReaderJSignal() {
         this.signalManager = SignalManager.getInstance();
-        this.generalManager=ThreadManager.getInstance();
         this.bufferToWrite=new float[sizeOfBufferToWrite];
         this.readerFromMedicSim = new ReaderFromMedicSim(3434);
         if (readerFromMedicSim.Send('C') != true) {
@@ -208,7 +206,7 @@ public class DriverReaderJSignal implements Runnable{
         System.out.println(generalManager);
         generalManager=ThreadManager.getInstance();
         System.out.println(generalManager);*/
-        this.generalManager.addWriteOperation(new WriteOperation(bufferToWriteCopy, null));
+       // this.generalManager.addWriteOperation(new WriteOperation(bufferToWriteCopy, null));
     }
 
 }
