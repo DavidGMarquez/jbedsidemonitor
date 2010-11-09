@@ -45,6 +45,7 @@ public final class Event implements Comparable<Event> {
         return type;
     }
 
+    @Override
     public int compareTo(Event o) {
         if (location - o.location == 0) {
             return type.compareToIgnoreCase(o.type);
@@ -53,6 +54,7 @@ public final class Event implements Comparable<Event> {
         }
     }
 
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Event)) {
             return false;
@@ -61,6 +63,7 @@ public final class Event implements Comparable<Event> {
         return e.location == location && e.type.equalsIgnoreCase(type);
     }
 
+    @Override
     public int hashCode() {
         int result = 17;
         result = 37 * result + type.hashCode();

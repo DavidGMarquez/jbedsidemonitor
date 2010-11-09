@@ -1,10 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
-
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Representa una serie temporal.
@@ -14,8 +8,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * frequency tiene la frecuencia de muestreo de la señal (Hz)
  * units es una cadena de texto que contiene las unidades del parámetro representado por la serie temporal
  *
-
- * @author USUARIO
  */
 public class TimeSeries extends Series {
     //Parametros serie temporal
@@ -86,7 +78,5 @@ public class TimeSeries extends Series {
         } catch (TooMuchDataToWriteException e) {
             throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
         }
-
-
     }
 }

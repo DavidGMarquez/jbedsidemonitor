@@ -23,9 +23,11 @@ public class EventSeriesReaderCallable extends ReaderCallable {
 
     @Override
     void read() {
-        SignalManager signalManager = SignalManager.getInstance();
-        this.readResult = new ReadResult(identifierOwner);
-        this.readResult.addReadResultEventSeries(new ReadResultOneEventSeries(identifierSignal, new LinkedList<Event>( signalManager.readFromEventSeriesFromTo(identifierSignal, firstInstantToInclude, lastInstantToInclude))));
+        SignalManager signalManager = SignalManager.getInstance();        
+        this.readResult.addReadResultEventSeries(new ReadResultOneEventSeries(identifierSignal,
+                new LinkedList<Event>(
+                signalManager.readFromEventSeriesFromTo(identifierSignal,
+                firstInstantToInclude, lastInstantToInclude))));
 
     }
 

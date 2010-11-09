@@ -28,6 +28,7 @@ public class CompletionExecutorServiceReader implements Runnable {
         this.executorCompletionService.submit(readerRunnable);
     }
 
+    @Override
     public void run() {
         while (true) {
             System.out.println("Run");
@@ -36,7 +37,7 @@ public class CompletionExecutorServiceReader implements Runnable {
                 ReadResult readResult = futureReadResult.get();
                 //@debug borrar esto incluir lo que hay que hacer con el result
                 System.out.println("Operacion Lectura Completada");
-                
+
             } catch (ExecutionException ex) {
                 Logger.getLogger(CompletionExecutorServiceReader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {

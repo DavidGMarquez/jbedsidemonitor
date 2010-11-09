@@ -5,6 +5,12 @@ public class TimeSeriesWriterRunnable extends WriterRunnable {
     public TimeSeriesWriterRunnable(String identifier) {
         super(identifier);
     }
+
+    public TimeSeriesWriterRunnable(String identifier, float[] dataToWrite) {
+         this(identifier);
+        copyArray(dataToWrite);
+    }
+
     private float[] dataToWrite;
 
     @Override
@@ -14,6 +20,10 @@ public class TimeSeriesWriterRunnable extends WriterRunnable {
     }
 
     public void setDataToWrite(float[] dataToWrite) {
+        copyArray(dataToWrite);
+    }
+
+    private void copyArray(float[] dataToWrite) {
         float[] copy = new float[dataToWrite.length];
         System.arraycopy(dataToWrite, 0, copy, 0, dataToWrite.length);
         this.dataToWrite = copy;
