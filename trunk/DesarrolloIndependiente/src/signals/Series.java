@@ -2,10 +2,6 @@ package signals;
 
 import java.util.ArrayList;
 
-/**
- *  
- * @author USUARIO
- */
 public abstract class Series {
 
     private String identifier;

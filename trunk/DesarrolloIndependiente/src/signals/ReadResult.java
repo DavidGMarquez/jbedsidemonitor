@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.LinkedList;
-
 /**
  *
- * @author USUARIO
+ * @comentario: mismo comentario que para ReadResultOneTimeSeries
  */
 class ReadResult {
 

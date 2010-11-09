@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.*;
 
-/**
- * @author USUARIO
- */
 public class EventSeries extends Series {
 
     //Parametros serie temporal

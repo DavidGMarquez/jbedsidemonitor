@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 
 abstract class ReaderCallable implements Callable<ReadResult> {
 
-    protected String identifierSignal;
+    protected String identifierSignal;//lista de identificadores
     protected String identifierOwner;
     protected LockManager lockManager;
     protected ReadResult readResult;
@@ -13,9 +13,11 @@ abstract class ReaderCallable implements Callable<ReadResult> {
         this.identifierSignal = identifierSignal;
         this.identifierOwner = identifierOwner;
         this.lockManager = LockManager.getInstance();
+        this.readResult = new ReadResult(identifierOwner);
     }
 
-    public ReadResult call() {
+    @Override
+    public ReadResult call() {//dar soporte a lectura de mltiples senhales
         this.lockManager.getReadLock(identifierSignal);
         this.read();
         this.lockManager.releaseReadLock(identifierSignal);
@@ -24,10 +26,6 @@ abstract class ReaderCallable implements Callable<ReadResult> {
 
     abstract void read();
 
-    /**
-     *De algún modo habra que sacar el resultado de aquí
-     * y borra este tipo de comentarios despu!s de leerlos
-     */
     public ReadResult getReadResult() {
         return readResult;
     }
