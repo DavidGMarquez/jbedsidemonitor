@@ -41,26 +41,10 @@ public class EvenSeriesTest {
     @Test
     public void TesAddEvent1() {
         EventSeries evenSeries = generateStandardTestEventSeries();
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Event e1 = new Event(new Date().getTime(), "A", new HashMap<String, String>());
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e2 = new Event(new Date().getTime(), "B", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e3 = new Event(new Date().getTime(), "C", null);
+        long timeOfFirstEvent=new Date().getTime();
+        Event e1 = new Event(timeOfFirstEvent, "A", new HashMap<String, String>());
+        Event e2 = new Event(timeOfFirstEvent+50, "B", null);
+        Event e3 = new Event(timeOfFirstEvent+100, "C", null);
         evenSeries.addEvent(e1);
         evenSeries.addEvent(e2);
         evenSeries.addEvent(e3);
@@ -80,55 +64,14 @@ public class EvenSeriesTest {
     @Test
     public void TesDeleteAddEvent() {
         EventSeries evenSeries = generateStandardTestEventSeries();
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Event e1 = new Event(new Date().getTime(), "A", null);
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e2 = new Event(new Date().getTime(), "B", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e3 = new Event(new Date().getTime(), "C", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e4 = new Event(new Date().getTime(), "A", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e5 = new Event(new Date().getTime(), "B", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        Event e6 = new Event(new Date().getTime(), "C", null);
-        try {
-            Thread.sleep(50);
-
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Event e7 = new Event(new Date().getTime(), "D", null);
+          long timeOfFirstEvent=new Date().getTime();
+        Event e1 = new Event(timeOfFirstEvent, "A", null);
+        Event e2 = new Event(timeOfFirstEvent+50, "B", null);
+        Event e3 = new Event(timeOfFirstEvent+100, "C", null);
+        Event e4 = new Event(timeOfFirstEvent+150, "A", null);
+        Event e5 = new Event(timeOfFirstEvent+200, "B", null);
+        Event e6 = new Event(timeOfFirstEvent+250, "C", null);
+        Event e7 = new Event(timeOfFirstEvent+300, "D", null);
         evenSeries.addEvent(e1);
         evenSeries.addEvent(e2);
         evenSeries.addEvent(e3);
@@ -137,7 +80,6 @@ public class EvenSeriesTest {
         evenSeries.addEvent(e6);
         evenSeries.addEvent(e7);
         assertEquals(evenSeries.getNumberOfEvents(), 7);
-
         assertEquals(evenSeries.getEvents(e2.getLocation(), e6.getLocation()).size(), 5);
         evenSeries.getEvents(e2.getLocation(), e6.getLocation()).remove(e3);
         assertEquals(evenSeries.getEvents(e2.getLocation(), e6.getLocation()).size(), 5);
@@ -146,30 +88,18 @@ public class EvenSeriesTest {
     @Test
     public void TestEventsSameTime() {
         EventSeries evenSeries = generateStandardTestEventSeries();
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        long time = new Date().getTime();
-        Event e1 = new Event(time, "A", null);
-        Event e2 = new Event(time, "A", null);
+        long timeOfFirstEvent = new Date().getTime();
+        Event e1 = new Event(timeOfFirstEvent, "A", null);
+        Event e2 = new Event(timeOfFirstEvent, "A", null);
         evenSeries.addEvent(e1);
         evenSeries.addEvent(e2);
         assertEquals(evenSeries.getNumberOfEvents(), 1);
         evenSeries.deleteEvent(e1);
         assertEquals(evenSeries.getNumberOfEvents(), 0);
-
-
         EventSeries evenSeries2 = generateStandardTestEventSeries();
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        long time2 = new Date().getTime();
-        Event e12 = new Event(time2, "C", null);
-        Event e22 = new Event(time2, "D", null);
+        long timeOfFirstEvent2 = new Date().getTime();
+        Event e12 = new Event(timeOfFirstEvent2, "C", null);
+        Event e22 = new Event(timeOfFirstEvent2, "D", null);
         evenSeries2.addEvent(e12);
         evenSeries2.addEvent(e22);
         assertEquals(evenSeries2.getNumberOfEvents(), 2);
@@ -182,22 +112,17 @@ public class EvenSeriesTest {
     @Test
     public void deleteEventsSameTime() {
         EventSeries evenSeries = generateStandardTestEventSeries();
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EvenSeriesTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        long time = new Date().getTime();
-        Event e1 = new Event(time, "A", null);
-        Event e2 = new Event(time, "A", null);
-        Event e3 = new Event(time, "B", null);
-        Event e4 = new Event(time, "D", null);
+        long timeOfFirstEvent = new Date().getTime();
+        Event e1 = new Event(timeOfFirstEvent, "A", null);
+        Event e2 = new Event(timeOfFirstEvent, "A", null);
+        Event e3 = new Event(timeOfFirstEvent, "B", null);
+        Event e4 = new Event(timeOfFirstEvent, "D", null);
         evenSeries.addEvent(e1);
         evenSeries.addEvent(e2);
         evenSeries.addEvent(e3);
         evenSeries.addEvent(e4);
         assertEquals(evenSeries.getNumberOfEvents(), 3);
-        evenSeries.deleteEventsAtLocation(time);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent);
         assertEquals(evenSeries.getNumberOfEvents(), 0);
         evenSeries.addEvent(e1);
         evenSeries.addEvent(e3);
@@ -208,23 +133,23 @@ public class EvenSeriesTest {
         evenSeries.addEvent(e4);
         assertEquals(evenSeries.getNumberOfEvents(), 3);
         assertEquals(evenSeries.getEventTypes().size(), 3);
-        Event e11 = new Event(time + 2, "A", null);
-        Event e22 = new Event(time + 1, "A", null);
-        Event e33 = new Event(time + 2, "B", null);
-        Event e44 = new Event(time + 1, "D", null);
+        Event e11 = new Event(timeOfFirstEvent + 2, "A", null);
+        Event e22 = new Event(timeOfFirstEvent + 1, "A", null);
+        Event e33 = new Event(timeOfFirstEvent + 2, "B", null);
+        Event e44 = new Event(timeOfFirstEvent + 1, "D", null);
         evenSeries.addEvent(e11);
         evenSeries.addEvent(e22);
         evenSeries.addEvent(e33);
         evenSeries.addEvent(e44);
         assertEquals(evenSeries.getNumberOfEvents(), 7);
         assertEquals(evenSeries.getEventTypes().size(), 3);
-        evenSeries.deleteEventsAtLocation(time + 2);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent + 2);
         assertEquals(evenSeries.getNumberOfEvents(), 5);
         assertEquals(evenSeries.getEventTypes().size(), 3);
         evenSeries.deleteEvent(e3);
         assertEquals(evenSeries.getNumberOfEvents(), 4);
         assertEquals(evenSeries.getEventTypes().size(), 2);
-        evenSeries.deleteEventsAtLocation(time);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent);
         assertEquals(evenSeries.getNumberOfEvents(), 2);
         assertEquals(evenSeries.getEventTypes().size(), 2);
         evenSeries.deleteEvent(e44);
@@ -233,9 +158,9 @@ public class EvenSeriesTest {
         evenSeries.addEvent(e11);
         assertEquals(evenSeries.getNumberOfEvents(), 2);
         assertEquals(evenSeries.getEventTypes().size(), 1);
-        evenSeries.deleteEventsAtLocation(time);
-        evenSeries.deleteEventsAtLocation(time + 1);
-        evenSeries.deleteEventsAtLocation(time + 2);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent + 1);
+        evenSeries.deleteEventsAtLocation(timeOfFirstEvent + 2);
         assertEquals(evenSeries.getNumberOfEvents(), 0);
         assertEquals(evenSeries.getEventTypes().size(), 0);
     }

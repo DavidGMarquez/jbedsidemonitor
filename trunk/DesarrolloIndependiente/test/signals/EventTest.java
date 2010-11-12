@@ -10,9 +10,7 @@ public class EventTest {
 
     @Test
     public void simpleConstructor() {
-        Event event = new Event(new Date().getTime(), "Standard", null);
-        String prueba = event.getType();
-        prueba = new String("Hola");
+        Event event = new Event(new Date().getTime(), "Standard", null);      
         assertEquals(event.getType(), "Standard");
         assertEquals(new Date().getTime() >= event.getLocation(), true);
     }
@@ -29,6 +27,7 @@ public class EventTest {
         mapcopy.put("Hello2", new Integer(20).toString());
         map.put("Hello2", new Integer(2000).toString());
         Integer i = new Integer(Integer.parseInt((String) mapcopy.get("Hello2")));
+        assertEquals(i.intValue(), 20);
         mapcopy.remove("Hello2");
         assertEquals(mapcopy.get("Hello2"), null);
         assertEquals(mapcopy.size(), 1);

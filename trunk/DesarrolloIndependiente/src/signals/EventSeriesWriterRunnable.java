@@ -16,7 +16,7 @@ public class EventSeriesWriterRunnable extends WriterRunnable {
     @Override
     void write() {
         SignalManager signalManager = SignalManager.getInstance();
-        for (Event event : eventsToWrite) {
+        for (Event event : eventsToDelete) {
             signalManager.deleteEventToEventSeries(this.identifier, event);
         }
         for (Event event : eventsToWrite) {
