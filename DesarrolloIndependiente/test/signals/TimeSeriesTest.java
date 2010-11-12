@@ -62,7 +62,6 @@ public class TimeSeriesTest {
         assertEquals(ts.getIndexOldestsample(), 0);
         assertEquals(ts.getSamplescounter(), 100);
         assertEquals(TestUtilities.compareArray(ts.read(0, 100), dataToWrite, 100), true);
-
         assertEquals(ts.read(0, 1)[0], 0, 0.001);
         assertEquals(ts.read(2, 1)[0], 2, 0.001);
         assertEquals(ts.read(66, 1)[0], 66, 0.001);

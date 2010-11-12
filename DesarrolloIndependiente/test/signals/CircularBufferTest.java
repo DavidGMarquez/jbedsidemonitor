@@ -13,7 +13,7 @@ public class CircularBufferTest {
         CircularBuffer bufferWithAcapacityOff10000 = new CircularBuffer();
         assertEquals(10000, bufferWithAcapacityOff10000.getCapacity());
         CircularBuffer bufferWithAcapacityOff10 = new CircularBuffer(10);
-        assertEquals(10, bufferWithAcapacityOff10000.getCapacity());
+        assertEquals(10, bufferWithAcapacityOff10.getCapacity());
     }
 
     @Test
@@ -22,8 +22,8 @@ public class CircularBufferTest {
         CircularBuffer buffer = new CircularBuffer(5);
         boolean result = buffer.write(dataToWrite);
         assertEquals(true, result);
-        assertEquals(true, TestUtilities.compareArray(buffer.read(0, buffer.getSize()), dataToWrite,
-                dataToWrite.length));
+        assertEquals(true, TestUtilities.compareArray(
+                buffer.read(0, buffer.getSize()), dataToWrite, dataToWrite.length));
         assertEquals(0, buffer.getIndexold());
     }
 
@@ -48,28 +48,27 @@ public class CircularBufferTest {
         assertEquals(true, result);
         result = buffer.write(dataToWrite);
         assertEquals(true, result);
-        assertEquals(true, TestUtilities.compareArray(buffer.read(0, buffer.getSize()), dataToWrite, sizetowrite));
+        assertEquals(true, TestUtilities.compareArray(
+                buffer.read(0, buffer.getSize()), dataToWrite, sizetowrite));
         assertEquals(0, buffer.getIndexold());
     }
 
     @Test
     public void testWriteSeveralTimesAndCheckData() {
-        int sizeToWrite = 4;
         float[] dataToWrite = {1, 2, 3, 4};
         CircularBuffer buffer = new CircularBuffer(5);
         boolean result = buffer.write(dataToWrite);
         assertEquals(0, buffer.getIndexold());
         result = buffer.write(dataToWrite);
-
         assertEquals(true, result);
-
         float[] datacompare = {2, 3, 4, 4, 1};
-        assertEquals(true, TestUtilities.compareArray(buffer.read(0, buffer.getSize()), datacompare, buffer.read(0, buffer.getSize()).length));
+        assertEquals(true, TestUtilities.compareArray(buffer.read(0,
+                buffer.getSize()), datacompare, buffer.read(0, buffer.getSize()).length));
         assertEquals(3, buffer.getIndexold());
         float[] datacompare2 = {3, 4, 4, 1, 2};
         result = buffer.write(dataToWrite);
-        assertEquals(true, TestUtilities.compareArray(buffer.read(0, buffer.getSize()), datacompare2, buffer.read(0, buffer.getSize()).length));
-
+        assertEquals(true, TestUtilities.compareArray(buffer.read(0,
+                buffer.getSize()), datacompare2, buffer.read(0, buffer.getSize()).length));
         assertEquals(true, result);
         assertEquals(2, buffer.getIndexold());
     }
@@ -82,12 +81,10 @@ public class CircularBufferTest {
         assertEquals(true, result);
         assertEquals(0, buffer.getIndexold());
         assertEquals(998, buffer.getLastData(), 0.1);
-
         result = buffer.write(dataToWrite);
         assertEquals(true, result);
         assertEquals(998, buffer.getIndexold());
         assertEquals(998, buffer.getLastData(), 0.1);
-
         dataToWrite = TestUtilities.generateArrayWithConsecutiveIntegers(-2, 5);
         result = buffer.write(dataToWrite);
         assertEquals(true, result);
@@ -116,7 +113,6 @@ public class CircularBufferTest {
         float[] array3 = TestUtilities.generateArray(5);
         buffer.write(array1);
         assertEquals(0, buffer.getIndexold());
-
         assertEquals(true, TestUtilities.compareArray(array1, buffer.read(0, 5), 5));
         buffer.write(array2);
         assertEquals(1, buffer.getIndexold());
@@ -134,23 +130,19 @@ public class CircularBufferTest {
         float[] array3 = {31, 32, 33};
         instance.write(array1);
         assertEquals(0, instance.getIndexold());
-
         assertEquals(true, TestUtilities.compareArray(array1, instance.read(0, 7), 7));
         instance.write(array1);
         assertEquals(5, instance.getIndexold());
-
         assertEquals(false, TestUtilities.compareArray(array1, instance.read(0, 7), 7));
         float[] result1 = {13, 14, 15, 16, 17, 16, 17, 11, 12};
         assertEquals(true, TestUtilities.compareArray(instance.read(0, 7), result1, 7));
         instance.write(array3);
         assertEquals(8, instance.getIndexold());
-
         assertEquals(false, TestUtilities.compareArray(array1, instance.read(0, 7), 7));
         float[] result2 = {13, 14, 15, 16, 17, 31, 32, 33, 12};
         assertEquals(true, TestUtilities.compareArray(result2, instance.read(0, 9), 9));
         instance.write(array2);
         assertEquals(4, instance.getIndexold());
-
         float[] result3 = {22, 23, 24, 25, 17, 31, 32, 33, 21};
         assertEquals(true, TestUtilities.compareArray(result3, instance.read(0, 9), 9));
         instance.write(array1);
@@ -161,7 +153,6 @@ public class CircularBufferTest {
         float[] result5 = {16, 17, 21, 22, 23, 24, 25, 14, 15};
         assertEquals(true, TestUtilities.compareArray(result5, instance.read(0, 9), 9));
         assertEquals(7, instance.getIndexold());
-
         instance.write(array1);
         float[] result6 = {13, 14, 15, 16, 17, 24, 25, 11, 12};
         assertEquals(true, TestUtilities.compareArray(result6, instance.read(0, 9), 9));

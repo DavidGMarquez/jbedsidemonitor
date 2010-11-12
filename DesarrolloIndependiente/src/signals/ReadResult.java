@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * @comentario: mismo comentario que para ReadResultOneTimeSeries
  */
 class ReadResult {
-
+    
     private String identifierOwner;
     private LinkedList<ReadResultOneEventSeries> readResultsEventSeries;
     private LinkedList<ReadResultOneTimeSeries> readResultsTimeSeries;
