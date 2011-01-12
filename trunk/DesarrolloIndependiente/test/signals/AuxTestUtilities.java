@@ -3,7 +3,7 @@ package signals;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class TestUtilities {
+public class AuxTestUtilities {
 
     public static void showArray(float[] array) {
         System.out.println("-");

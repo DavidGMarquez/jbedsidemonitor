@@ -23,9 +23,9 @@ public class TesterReaderService {
         TimeSeriesWriterRunnable writer1 = new TimeSeriesWriterRunnable("Signal 1");
         TimeSeriesWriterRunnable writer2 = new TimeSeriesWriterRunnable("Signal 2");
         float[] dataToWrite1 = new float[10];
-        TestUtilities.secuentialArray(dataToWrite1);
+        AuxTestUtilities.secuentialArray(dataToWrite1);
         float[] dataToWrite2 = new float[100];
-        TestUtilities.secuentialArray(dataToWrite2);
+        AuxTestUtilities.secuentialArray(dataToWrite2);
         writer1.setDataToWrite(dataToWrite1);
         writer2.setDataToWrite(dataToWrite2);
         signalManager.encueWriteOperation(writer1);
@@ -35,9 +35,9 @@ public class TesterReaderService {
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        assertTrue(TestUtilities.compareArray(dataToWrite1,
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite1,
                 signalManager.readFromTimeSeries("Signal 1", 0, 10), dataToWrite1.length));
-        assertTrue(TestUtilities.compareArray(dataToWrite2,
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite2,
                 signalManager.readFromTimeSeries("Signal 2", 0, 100), dataToWrite2.length));
         TimeSeriesReaderCallable reader1 = new TimeSeriesReaderCallable("Signal 1", "Algorithm 1");
         reader1.setPosInitToRead(0);
@@ -53,9 +53,9 @@ public class TesterReaderService {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println("Comparar 1");
-        TestUtilities.printArray(dataToWrite1);
+        AuxTestUtilities.printArray(dataToWrite1);
         System.out.println("Comparar 2");
-        TestUtilities.printArray(dataToWrite2);
+        AuxTestUtilities.printArray(dataToWrite2);
     }
 
     @Test
@@ -68,13 +68,13 @@ public class TesterReaderService {
         EventSeriesWriterRunnable writer1 = new EventSeriesWriterRunnable("Events1");
         EventSeriesWriterRunnable writer2 = new EventSeriesWriterRunnable("Events2");
         LinkedList<Event> events1 = new LinkedList<Event>();
-        TestUtilities.eventosAleatorios(events1, 20, 1000, 300);
+        AuxTestUtilities.eventosAleatorios(events1, 20, 1000, 300);
         LinkedList<Event> events2 = new LinkedList<Event>();
-        TestUtilities.eventosAleatorios(events2, 10, 9900, 130);
+        AuxTestUtilities.eventosAleatorios(events2, 10, 9900, 130);
         for (int i = 0; i < events1.size(); i++) {
             writer1.addEventToWrite(events1.get(i));
         }
-        TestUtilities.imprimirEventos(events1);
+        AuxTestUtilities.imprimirEventos(events1);
         for (int i = 0; i < events2.size(); i++) {
             writer2.addEventToWrite(events2.get(i));
         }
@@ -84,9 +84,9 @@ public class TesterReaderService {
             Thread.sleep(30);
         } catch (InterruptedException ex) {
         }
-        assertTrue(TestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEvents("Events1"))));
-        assertTrue(TestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
-        assertTrue(TestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEvents("Events2"))));
+        assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEvents("Events1"))));
+        assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
+        assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEvents("Events2"))));
         EventSeriesReaderCallable reader1 = new EventSeriesReaderCallable("Events1", "Agente1");
         reader1.setFirstInstantToInclude(1000);
         reader1.setLastInstantToInclude(1300);

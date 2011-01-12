@@ -40,4 +40,7 @@ public class LockManager {
     public void releaseWriteLock(String identifier) {
         this.signalsLocks.get(identifier).writeLock().unlock();
     }
+    public boolean tryWriteLock(String identifier){
+        return this.signalsLocks.get(identifier).writeLock().tryLock();
+    }
 }

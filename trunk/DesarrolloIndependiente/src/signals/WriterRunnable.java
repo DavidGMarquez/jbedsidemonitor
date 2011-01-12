@@ -17,4 +17,8 @@ abstract class WriterRunnable implements Runnable {
     }
 
     abstract void write();
+
+    public String getIdentifier() {
+        return identifier;
+    }
 }

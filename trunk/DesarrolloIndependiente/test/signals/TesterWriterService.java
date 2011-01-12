@@ -20,9 +20,9 @@ public class TesterWriterService {
         TimeSeriesWriterRunnable Writer1 = new TimeSeriesWriterRunnable("Signal 1");
         TimeSeriesWriterRunnable Writer2 = new TimeSeriesWriterRunnable("Signal 2");
         float[] dataToWrite1 = new float[10];
-        TestUtilities.SecuentialArray(dataToWrite1);
+        AuxTestUtilities.SecuentialArray(dataToWrite1);
         float[] dataToWrite2 = new float[100];
-        TestUtilities.SecuentialArray(dataToWrite2);
+        AuxTestUtilities.SecuentialArray(dataToWrite2);
         Writer1.setDataToWrite(dataToWrite1);
         Writer2.setDataToWrite(dataToWrite2);
         signalManager.encueWriteOperation(Writer1);
@@ -32,8 +32,8 @@ public class TesterWriterService {
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        assertTrue(TestUtilities.compareArray(dataToWrite1, signalManager.readFromTimeSeries("Signal 1", 0, 10), dataToWrite1.length));
-        assertTrue(TestUtilities.compareArray(dataToWrite2, signalManager.readFromTimeSeries("Signal 2", 0, 100), dataToWrite2.length));
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite1, signalManager.readFromTimeSeries("Signal 1", 0, 10), dataToWrite1.length));
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite2, signalManager.readFromTimeSeries("Signal 2", 0, 100), dataToWrite2.length));
     }
 
     @Test
