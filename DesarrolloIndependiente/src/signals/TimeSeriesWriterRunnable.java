@@ -1,6 +1,6 @@
 package signals;
 
-public class TimeSeriesWriterRunnable extends WriterRunnable {
+public class TimeSeriesWriterRunnable extends WriterRunnableOneSignal {
 
     public TimeSeriesWriterRunnable(String identifier) {
         super(identifier);

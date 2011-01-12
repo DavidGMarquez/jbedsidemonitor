@@ -2,7 +2,7 @@ package signals;
 
 import java.util.LinkedList;
 
-public class EventSeriesWriterRunnable extends WriterRunnable {
+public class EventSeriesWriterRunnable extends WriterRunnableOneSignal {
 
     public EventSeriesWriterRunnable(String identifier) {
         super(identifier);

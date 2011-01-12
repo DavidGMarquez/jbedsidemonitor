@@ -2,21 +2,20 @@ package signals;
 
 import java.util.LinkedList;
 
-class WriterRunnableMultiSignal implements Runnable {
+class WriterRunnableMultiSignal extends WriterRunnable {
     //@pendiente habría que convertir WriterRunnable en una única interfaz para todo
 
     //@pendiente posibilidad de convertir las dos listas en una sola
-    private LinkedList<EventSeriesWriterRunnable> writeEventSeriesrunnables;
-    private LinkedList<TimeSeriesWriterRunnable> writeTimeSeriesrunnables;
+    private LinkedList<WriterRunnableOneSignal> writerRunnables;
     protected LockManager lockManager;
 
     public WriterRunnableMultiSignal() {
 
-        writeEventSeriesrunnables = new LinkedList<EventSeriesWriterRunnable>();
-        writeTimeSeriesrunnables = new LinkedList<TimeSeriesWriterRunnable>();
+        writerRunnables = new LinkedList<WriterRunnableOneSignal>();
         this.lockManager = LockManager.getInstance();
     }
 
+    @Override
     public void run() {
         this.getLocks();
         //@pendiente aqui habría que ver la estrategia para si no se pueden obtener los locks
@@ -26,17 +25,12 @@ class WriterRunnableMultiSignal implements Runnable {
 
     public boolean getLocks() {
         LinkedList<String> locksTemporal = new LinkedList<String>();
-        for (EventSeriesWriterRunnable eventSeriesWriterRunnable : writeEventSeriesrunnables) {
-            if (this.lockManager.tryWriteLock(eventSeriesWriterRunnable.getIdentifier()) == true) {
-                locksTemporal.add(eventSeriesWriterRunnable.getIdentifier());
+        for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
+            if (this.lockManager.tryWriteLock(writerRunnableOneSignal.getIdentifier()) == true) {
+                locksTemporal.add(writerRunnableOneSignal.getIdentifier());
             }
         }
-        for (TimeSeriesWriterRunnable timeSeriesWriterRunnable : writeTimeSeriesrunnables) {
-            if (this.lockManager.tryWriteLock(timeSeriesWriterRunnable.getIdentifier()) == true) {
-                locksTemporal.add(timeSeriesWriterRunnable.getIdentifier());
-            }
-        }
-        if (locksTemporal.size() == (writeEventSeriesrunnables.size() + writeTimeSeriesrunnables.size())) {
+        if (locksTemporal.size() == writerRunnables.size()) {
             return true;
         } else {
             for (String identifierSignal : locksTemporal) {
@@ -44,26 +38,17 @@ class WriterRunnableMultiSignal implements Runnable {
             }
             return false;
         }
-
-
     }
 
     public void releaseLocks() {
-        for (EventSeriesWriterRunnable eventSeriesWriterRunnable : writeEventSeriesrunnables) {
-            this.lockManager.releaseReadLock(eventSeriesWriterRunnable.getIdentifier());
-        }
-        for (TimeSeriesWriterRunnable timeSeriesWriterRunnable : writeTimeSeriesrunnables) {
-            this.lockManager.releaseReadLock(timeSeriesWriterRunnable.getIdentifier());
+        for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
+            this.lockManager.releaseReadLock(writerRunnableOneSignal.getIdentifier());
         }
     }
 
     public void write() {
-        for (EventSeriesWriterRunnable eventSeriesWriterRunnable : writeEventSeriesrunnables) {
-            eventSeriesWriterRunnable.write();
-
-        }
-        for (TimeSeriesWriterRunnable timeSeriesWriterRunnable : writeTimeSeriesrunnables) {
-            timeSeriesWriterRunnable.write();
+        for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
+            writerRunnableOneSignal.write();
         }
     }
 }
