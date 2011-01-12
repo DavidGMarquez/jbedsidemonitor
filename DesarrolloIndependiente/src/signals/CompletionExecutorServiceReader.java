@@ -23,9 +23,9 @@ public class CompletionExecutorServiceReader implements Runnable {
         executorCompletionService = new ExecutorCompletionService(Executors.newCachedThreadPool());
     }
 
-    public void executeReaderRunnable(ReaderCallable readerRunnable) {
-        System.out.println("Submit Runnable");
-        this.executorCompletionService.submit(readerRunnable);
+    public void executeReaderCallable(ReaderCallable readerCallable) {
+        System.out.println("Submit Callable");
+        this.executorCompletionService.submit(readerCallable);
     }
 
     @Override

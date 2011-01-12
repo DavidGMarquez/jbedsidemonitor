@@ -22,9 +22,9 @@ public class TimeSeriesTest {
     public void basicWriting() {
         TimeSeries ts = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 1, "mV");
         float[] dataToWrite = null;
-        dataToWrite = TestUtilities.generateArray(3000);
+        dataToWrite = AuxTestUtilities.generateArray(3000);
         ts.write(dataToWrite);
-        assertEquals(TestUtilities.compareArray(ts.read(0, 3000), dataToWrite, 3000), true);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(0, 3000), dataToWrite, 3000), true);
         assertEquals(1 * 3600 * 6, ts.getCapacity(), 0.0001);
     }
 
@@ -32,7 +32,7 @@ public class TimeSeriesTest {
     public void writingRandomNumbers() {
         TimeSeries ts = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 10, "mV");
         float[] dataToWrite = null;
-        dataToWrite = TestUtilities.generateArray(75000);
+        dataToWrite = AuxTestUtilities.generateArray(75000);
         assertEquals(ts.getIndexNewsample(), -1);
         assertEquals(ts.getIndexOldestsample(), -1);
         assertEquals(ts.getSamplescounter(), 0);
@@ -40,20 +40,20 @@ public class TimeSeriesTest {
         assertEquals(ts.getIndexNewsample(), 74999);
         assertEquals(ts.getIndexOldestsample(), 0);
         assertEquals(ts.getSamplescounter(), 75000);
-        assertEquals(TestUtilities.compareArray(ts.read(0, 75000), dataToWrite, 75000), true);
-        dataToWrite = TestUtilities.generateArray(75000);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(0, 75000), dataToWrite, 75000), true);
+        dataToWrite = AuxTestUtilities.generateArray(75000);
         ts.write(dataToWrite);
         assertEquals(ts.getIndexNewsample(), 49999);
         assertEquals(ts.getIndexOldestsample(), 50000);
         assertEquals(ts.getSamplescounter(), 100000);
-        assertEquals(TestUtilities.compareArray(ts.read(75000, 75000), dataToWrite, 75000), true);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(75000, 75000), dataToWrite, 75000), true);
     }
 
     @Test
     public void writing() {
         TimeSeries ts = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 10, "mV");
         float[] dataToWrite = null;
-        dataToWrite = TestUtilities.generateArrayWithConsecutiveIntegers(0, 100);
+        dataToWrite = AuxTestUtilities.generateArrayWithConsecutiveIntegers(0, 100);
         assertEquals(ts.getIndexNewsample(), -1);
         assertEquals(ts.getIndexOldestsample(), -1);
         assertEquals(ts.getSamplescounter(), 0);
@@ -61,7 +61,7 @@ public class TimeSeriesTest {
         assertEquals(ts.getIndexNewsample(), 99);
         assertEquals(ts.getIndexOldestsample(), 0);
         assertEquals(ts.getSamplescounter(), 100);
-        assertEquals(TestUtilities.compareArray(ts.read(0, 100), dataToWrite, 100), true);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(0, 100), dataToWrite, 100), true);
         assertEquals(ts.read(0, 1)[0], 0, 0.001);
         assertEquals(ts.read(2, 1)[0], 2, 0.001);
         assertEquals(ts.read(66, 1)[0], 66, 0.001);
@@ -73,7 +73,7 @@ public class TimeSeriesTest {
         TimeSeries ts = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 10, "mV");
         float[] dataToWrite = null;
         try {
-            dataToWrite = TestUtilities.generateArray(100001);
+            dataToWrite = AuxTestUtilities.generateArray(100001);
             ts.write(dataToWrite);
             fail("Deberia haber fallado");
         } catch (TooMuchDataToWriteException e) {

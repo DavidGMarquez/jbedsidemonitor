@@ -42,29 +42,29 @@ public class SignalManager {
         return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
     }
 
-
     public void encueWriteOperation(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
 
     public void encueReadOperation(ReaderCallable readerCallable) {
-        this.completionExecutorServiceReader.executeReaderRunnable(readerCallable);
+        this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
 
     }
 
 /////////A partir de aqui los métodos son discutibles
+    // Estan puesto public para los test
     //@todo ¿para que es este metodo? No alcanza a ver que esto haga nada útil
     //@pendiente es para iniciar el thread, me daba warnings si lo hacía desde el constructor directamente.
-     void initiateThread() {
+    void initiateThread() {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
         threadCompletionService.start();
     }
 
-     float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+    float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
     }
 
-     float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
+    float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
             float result[] = this.timeSeries.get(identifier).read(indexLastRead, (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) + 1 % this.timeSeries.get(identifier).getCapacity());
             return result;
@@ -73,23 +73,24 @@ public class SignalManager {
         }
     }
 
-     boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
+    boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
 
-     void addEventToEventSeries(String identifier, Event event) {
+    void addEventToEventSeries(String identifier, Event event) {
         this.eventSeries.get(identifier).addEvent(event);
     }
-     boolean deleteEventToEventSeries(String identifier,Event event){
-         return this.eventSeries.get(identifier).deleteEvent(event);
-     }
 
-     ArrayList<Event> getEvents(String identifier) {
+    boolean deleteEventToEventSeries(String identifier, Event event) {
+        return this.eventSeries.get(identifier).deleteEvent(event);
+    }
+
+    ArrayList<Event> getEvents(String identifier) {
         return this.eventSeries.get(identifier).getEventsCopy();
     }
 
-     SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
+    SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
         return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
     }
 }

@@ -15,7 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import signals.SignalManager;
 import signals.SignalManagerTest;
-import zclasesParaBORRAR.ThreadWriteOperations;
 import static org.junit.Assert.*;
 
 /**

@@ -27,7 +27,8 @@ public class EventSeriesWriterRunnable extends WriterRunnable {
     public void addEventToWrite(Event e) {
         this.eventsToWrite.add(e);
     }
-    public void addEventToDelete(Event e){
+
+    public void addEventToDelete(Event e) {
         this.eventsToDelete.add(e);
     }
 }
