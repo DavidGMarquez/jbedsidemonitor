@@ -65,4 +65,48 @@ public class TesterWriterService {
         assertEquals(3, signalManager.getEvents("Signal 2").size());
 
     }
+
+    @Test
+    public void TestMultiWriter() {
+        SignalManager signalManager = SignalManager.getInstance();
+        assertFalse(signalManager == null);
+        signalManager.addTimeSeries(new TimeSeries("Signal 1Time", "Simulated", 1, 100, "mv"));
+        signalManager.addTimeSeries(new TimeSeries("Signal 2Time", "Simulated", 1, 100, "mv"));
+        signalManager.addEventSeries(new EventSeries("Signal 1Event", "Simulated", 1, new ArrayList<String>(), "mv"));
+        signalManager.addEventSeries(new EventSeries("Signal 2Event", "Simulated", 1, new ArrayList<String>(), "mv"));
+        WriterRunnableMultiSignal writerRunnableMultiSignal = new WriterRunnableMultiSignal();
+        TimeSeriesWriterRunnable writer1T = new TimeSeriesWriterRunnable("Signal 1Time");
+        TimeSeriesWriterRunnable writer2T = new TimeSeriesWriterRunnable("Signal 2Time");
+        EventSeriesWriterRunnable writer1E = new EventSeriesWriterRunnable("Signal 1Event");
+        EventSeriesWriterRunnable writer2E = new EventSeriesWriterRunnable("Signal 2Event");
+        float[] dataToWrite1 = new float[10];
+        AuxTestUtilities.SecuentialArray(dataToWrite1);
+        float[] dataToWrite2 = new float[100];
+        AuxTestUtilities.SecuentialArray(dataToWrite2);
+        writer1T.setDataToWrite(dataToWrite1);
+        writer2T.setDataToWrite(dataToWrite2);
+        Event e1 = new Event(1, "a", null);
+        Event e2 = new Event(2, "b", null);
+        Event e3 = new Event(3, "c", null);
+        writer1E.addEventToWrite(e1);
+        writer2E.addEventToWrite(e1);
+        writer2E.addEventToWrite(e2);
+        writer2E.addEventToWrite(e3);
+        writerRunnableMultiSignal.addWriterRunnableOneSignal(writer1T);
+        writerRunnableMultiSignal.addWriterRunnableOneSignal(writer2T);
+        writerRunnableMultiSignal.addWriterRunnableOneSignal(writer1E);
+        writerRunnableMultiSignal.addWriterRunnableOneSignal(writer2E);
+        assertEquals(0, signalManager.getEvents("Signal 1Event").size());
+        assertEquals(0, signalManager.getEvents("Signal 2Event").size());
+        signalManager.encueWriteOperation(writerRunnableMultiSignal);
+        try {
+            Thread.sleep(30);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite1, signalManager.readFromTimeSeries("Signal 1Time", 0, 10), dataToWrite1.length));
+        assertTrue(AuxTestUtilities.compareArray(dataToWrite2, signalManager.readFromTimeSeries("Signal 2Time", 0, 100), dataToWrite2.length));
+        assertEquals(1, signalManager.getEvents("Signal 1Event").size());
+        assertEquals(3, signalManager.getEvents("Signal 2Event").size());
+    }
 }
