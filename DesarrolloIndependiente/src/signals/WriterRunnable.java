@@ -14,9 +14,9 @@ abstract class WriterRunnable implements Runnable {
         this.releaseLocks();
     }
 
-    abstract boolean getLocks();
+    protected abstract boolean getLocks();
 
-    abstract void write();
+    protected abstract void write();
 
-    abstract void releaseLocks();
+    protected abstract void releaseLocks();
 }

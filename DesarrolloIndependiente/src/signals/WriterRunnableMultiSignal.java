@@ -3,9 +3,7 @@ package signals;
 import java.util.LinkedList;
 
 class WriterRunnableMultiSignal extends WriterRunnable {
-    //@pendiente habría que convertir WriterRunnable en una única interfaz para todo
 
-    //@pendiente posibilidad de convertir las dos listas en una sola
     protected LinkedList<WriterRunnableOneSignal> writerRunnables;
     protected LockManager lockManager;
 
@@ -23,14 +21,14 @@ class WriterRunnableMultiSignal extends WriterRunnable {
         this.releaseLocks();
     }
 
-    public boolean getLocks() {
+    protected boolean getLocks() {
         LinkedList<String> locksTemporal = new LinkedList<String>();
         for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
             if (this.lockManager.tryWriteLock(writerRunnableOneSignal.getIdentifier()) == true) {
                 locksTemporal.add(writerRunnableOneSignal.getIdentifier());
+            } else {
+                break;
             }
- else{
-     break;}
         }
         if (locksTemporal.size() == writerRunnables.size()) {
             return true;
@@ -41,19 +39,20 @@ class WriterRunnableMultiSignal extends WriterRunnable {
             return false;
         }
     }
-    public void write() {
+
+    protected void write() {
         for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
             writerRunnableOneSignal.write();
         }
     }
-    public void releaseLocks() {
+
+    protected void releaseLocks() {
         for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
             this.lockManager.releaseReadLock(writerRunnableOneSignal.getIdentifier());
         }
     }
-    public void addWriterRunnableOneSignal(WriterRunnableOneSignal writerRunnableOneSignal)
-    {
+
+    public void addWriterRunnableOneSignal(WriterRunnableOneSignal writerRunnableOneSignal) {
         this.writerRunnables.add(writerRunnableOneSignal);
     }
-
 }

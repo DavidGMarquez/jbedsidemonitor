@@ -13,9 +13,7 @@ abstract class WriterRunnableOneSignal extends WriterRunnable {
         return true;
     }
 
-    abstract void write();
-
-    protected void releaseLocks() {
+   protected void releaseLocks() {
         this.lockManager.releaseWriteLock(identifier);
     }
 

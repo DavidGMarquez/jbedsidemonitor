@@ -37,11 +37,6 @@ public class AuxTestUtilities {
         }
         return array;
     }
-    public static void SecuentialArray(float[] data) {
-        for (int i = 0; i < data.length; i++) {
-            data[i] = i;
-        }
-    }
 
     public static void printArray(float[] readFromTimeSeries) {
         for (int i = 0; i < readFromTimeSeries.length; i++) {

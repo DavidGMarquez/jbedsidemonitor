@@ -33,6 +33,10 @@ public class LockManager {
         this.signalsLocks.get(identifier).readLock().unlock();
     }
 
+    public boolean tryReadLock(String identifier) {
+        return this.signalsLocks.get(identifier).readLock().tryLock();
+    }
+
     public void getWriteLock(String identifier) {
         this.signalsLocks.get(identifier).writeLock().lock();
     }
@@ -40,7 +44,8 @@ public class LockManager {
     public void releaseWriteLock(String identifier) {
         this.signalsLocks.get(identifier).writeLock().unlock();
     }
-    public boolean tryWriteLock(String identifier){
+
+    public boolean tryWriteLock(String identifier) {
         return this.signalsLocks.get(identifier).writeLock().tryLock();
     }
 }

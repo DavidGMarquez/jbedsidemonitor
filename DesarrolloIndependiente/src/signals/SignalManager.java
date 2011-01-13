@@ -46,7 +46,7 @@ public class SignalManager {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
 
-    public void encueReadOperation(ReaderCallable readerCallable) {
+    public void encueReadOperation(ReaderCallableOneSignal readerCallable) {
         this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
 
     }

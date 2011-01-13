@@ -20,8 +20,8 @@ public class TesterReaderService {
         assertFalse(signalManager == null);
         signalManager.addTimeSeries(new TimeSeries("Signal 1", "Simulated", 1, 100, "mv"));
         signalManager.addTimeSeries(new TimeSeries("Signal 2", "Simulated", 1, 100, "mv"));
-        TimeSeriesWriterRunnable writer1 = new TimeSeriesWriterRunnable("Signal 1");
-        TimeSeriesWriterRunnable writer2 = new TimeSeriesWriterRunnable("Signal 2");
+        WriterRunnableTimeSeries writer1 = new WriterRunnableTimeSeries("Signal 1");
+        WriterRunnableTimeSeries writer2 = new WriterRunnableTimeSeries("Signal 2");
         float[] dataToWrite1 = new float[10];
         AuxTestUtilities.secuentialArray(dataToWrite1);
         float[] dataToWrite2 = new float[100];
@@ -39,10 +39,10 @@ public class TesterReaderService {
                 signalManager.readFromTimeSeries("Signal 1", 0, 10), dataToWrite1.length));
         assertTrue(AuxTestUtilities.compareArray(dataToWrite2,
                 signalManager.readFromTimeSeries("Signal 2", 0, 100), dataToWrite2.length));
-        TimeSeriesReaderCallable reader1 = new TimeSeriesReaderCallable("Signal 1", "Algorithm 1");
+        ReaderCallableTimeSeries reader1 = new ReaderCallableTimeSeries("Signal 1", "Algorithm 1");
         reader1.setPosInitToRead(0);
         reader1.setSizeToRead(10);
-        TimeSeriesReaderCallable reader2 = new TimeSeriesReaderCallable("Signal 2", "Algorithm 1");
+        ReaderCallableTimeSeries reader2 = new ReaderCallableTimeSeries("Signal 2", "Algorithm 1");
         reader2.setPosInitToRead(0);
         reader2.setSizeToRead(100);
         signalManager.encueReadOperation(reader1);
@@ -65,8 +65,8 @@ public class TesterReaderService {
         assertFalse(signalManager == null);
         signalManager.addEventSeries(new EventSeries("Events1", "Agente1", 100, new ArrayList<String>(), "mv"));
         signalManager.addEventSeries(new EventSeries("Events2", "Agente2", 100, new ArrayList<String>(), "mv"));
-        EventSeriesWriterRunnable writer1 = new EventSeriesWriterRunnable("Events1");
-        EventSeriesWriterRunnable writer2 = new EventSeriesWriterRunnable("Events2");
+        WriterRunnableEventSeries writer1 = new WriterRunnableEventSeries("Events1");
+        WriterRunnableEventSeries writer2 = new WriterRunnableEventSeries("Events2");
         LinkedList<Event> events1 = new LinkedList<Event>();
         AuxTestUtilities.eventosAleatorios(events1, 20, 1000, 300);
         LinkedList<Event> events2 = new LinkedList<Event>();
@@ -87,15 +87,15 @@ public class TesterReaderService {
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEvents("Events1"))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEvents("Events2"))));
-        EventSeriesReaderCallable reader1 = new EventSeriesReaderCallable("Events1", "Agente1");
+        ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Agente1");
         reader1.setFirstInstantToInclude(1000);
         reader1.setLastInstantToInclude(1300);
-        EventSeriesReaderCallable reader2 = new EventSeriesReaderCallable("Events2", "Agente2");
+        ReaderCallableEventSeries reader2 = new ReaderCallableEventSeries("Events2", "Agente2");
         reader2.setFirstInstantToInclude(9900);
         reader2.setLastInstantToInclude(9900 + 130);
         signalManager.encueReadOperation(reader1);
         signalManager.encueReadOperation(reader2);
-        EventSeriesWriterRunnable writer3 = new EventSeriesWriterRunnable("Events1");
+        WriterRunnableEventSeries writer3 = new WriterRunnableEventSeries("Events1");
         for (int i = 0; i < events1.size(); i++) {
             writer3.addEventToDelete(events1.get(i));
         }
@@ -108,7 +108,7 @@ public class TesterReaderService {
         System.out.println(signalManager.getEvents("Events1").size());
         assertEquals(0, signalManager.getEvents("Events1").size());
 
-        EventSeriesReaderCallable reader3 = new EventSeriesReaderCallable("Events1", "Agente1");
+        ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Agente1");
         reader3.setFirstInstantToInclude(1000);
         reader3.setLastInstantToInclude(1300);
         signalManager.encueReadOperation(reader3);
