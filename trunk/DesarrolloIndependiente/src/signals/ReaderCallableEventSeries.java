@@ -12,22 +12,23 @@ import signals.SignalManager;
  *
  * @author USUARIO
  */
-public class EventSeriesReaderCallable extends ReaderCallable {
+public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
 
     private long firstInstantToInclude;
     private long lastInstantToInclude;
 
-    public EventSeriesReaderCallable(String identifierSignal, String identifierOwner) {
+    public ReaderCallableEventSeries(String identifierSignal, String identifierOwner) {
         super(identifierSignal, identifierOwner);
     }
 
     @Override
-    void read() {
-        SignalManager signalManager = SignalManager.getInstance();        
-        this.readResult.addReadResultEventSeries(new ReadResultOneEventSeries(identifierSignal,
+    protected ReadResult read() {
+        SignalManager signalManager = SignalManager.getInstance();
+        this.readResult = new ReadResultEventSeries(identifierOwner, identifierSignal,
                 new LinkedList<Event>(
                 signalManager.readFromEventSeriesFromTo(identifierSignal,
-                firstInstantToInclude, lastInstantToInclude))));
+                firstInstantToInclude, lastInstantToInclude)));
+        return readResult;
 
     }
 
@@ -46,7 +47,4 @@ public class EventSeriesReaderCallable extends ReaderCallable {
     public long getLastInstantToInclude() {
         return lastInstantToInclude;
     }
-
-
-
 }

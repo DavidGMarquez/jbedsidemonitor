@@ -11,21 +11,21 @@ import signals.SignalManager;
  *
  * @author USUARIO
  */
-public class TimeSeriesReaderCallable extends ReaderCallable {
+public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
 
     private int posInitToRead;
     private int sizeToRead;
 
-    public TimeSeriesReaderCallable(String identifierSignal, String identifierOwner) {
+    public ReaderCallableTimeSeries(String identifierSignal, String identifierOwner) {
         super(identifierSignal, identifierOwner);
     }
 
     @Override
-    void read() {
+    protected ReadResult read() {
         SignalManager signalManager = SignalManager.getInstance();
-        this.readResult.addReadResultTimeSeries(new ReadResultOneTimeSeries(identifierSignal,
-                signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead), posInitToRead));
-
+        this.readResult = new ReadResultTimeSeries(identifierOwner, identifierSignal,
+                signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead), posInitToRead);
+        return readResult;
     }
 
     public void setPosInitToRead(int posInitToRead) {

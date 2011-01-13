@@ -2,9 +2,9 @@ package signals;
 
 import java.util.LinkedList;
 
-public class EventSeriesWriterRunnable extends WriterRunnableOneSignal {
+public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
 
-    public EventSeriesWriterRunnable(String identifier) {
+    public WriterRunnableEventSeries(String identifier) {
         super(identifier);
         eventsToWrite = new LinkedList<Event>();
         eventsToDelete = new LinkedList<Event>();
@@ -14,7 +14,7 @@ public class EventSeriesWriterRunnable extends WriterRunnableOneSignal {
     private LinkedList<Event> eventsToWrite;
 
     @Override
-    void write() {
+    protected void write() {
         SignalManager signalManager = SignalManager.getInstance();
         for (Event event : eventsToDelete) {
             signalManager.deleteEventToEventSeries(this.identifier, event);

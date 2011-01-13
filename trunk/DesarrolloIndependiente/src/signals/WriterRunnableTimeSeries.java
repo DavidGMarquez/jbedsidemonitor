@@ -1,12 +1,12 @@
 package signals;
 
-public class TimeSeriesWriterRunnable extends WriterRunnableOneSignal {
+public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
 
-    public TimeSeriesWriterRunnable(String identifier) {
+    public WriterRunnableTimeSeries(String identifier) {
         super(identifier);
     }
 
-    public TimeSeriesWriterRunnable(String identifier, float[] dataToWrite) {
+    public WriterRunnableTimeSeries(String identifier, float[] dataToWrite) {
          this(identifier);
         copyArray(dataToWrite);
     }
@@ -14,7 +14,7 @@ public class TimeSeriesWriterRunnable extends WriterRunnableOneSignal {
     private float[] dataToWrite;
 
     @Override
-    void write() {
+    protected void write() {
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.writeToTimeSeries(identifier, dataToWrite);
     }

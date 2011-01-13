@@ -23,7 +23,7 @@ public class CompletionExecutorServiceReader implements Runnable {
         executorCompletionService = new ExecutorCompletionService(Executors.newCachedThreadPool());
     }
 
-    public void executeReaderCallable(ReaderCallable readerCallable) {
+    public void executeReaderCallable(ReaderCallableOneSignal readerCallable) {
         System.out.println("Submit Callable");
         this.executorCompletionService.submit(readerCallable);
     }
