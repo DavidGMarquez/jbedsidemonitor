@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.concurrent.ExecutionException;
@@ -11,10 +7,6 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author USUARIO
- */
 public class CompletionExecutorServiceReader implements Runnable {
 
     private ExecutorCompletionService executorCompletionService;

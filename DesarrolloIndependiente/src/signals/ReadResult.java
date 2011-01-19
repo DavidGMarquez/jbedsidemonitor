@@ -1,10 +1,5 @@
 package signals;
 
-import java.util.LinkedList;
-/**
- *
- *
- */
 abstract class ReadResult {
     
     protected String identifierOwner;

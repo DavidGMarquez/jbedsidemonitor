@@ -2,9 +2,6 @@ package signals;
 
 import java.util.LinkedList;
 
-/**
- *
- */
 class ReadResultMultiSignal extends ReadResult {
 
     private LinkedList<ReadResultOneSignal> readResults;

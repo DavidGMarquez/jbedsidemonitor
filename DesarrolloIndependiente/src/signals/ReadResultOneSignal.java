@@ -1,11 +1,5 @@
 package signals;
 
-import java.util.LinkedList;
-
-/**
- *
- *
- */
 abstract class ReadResultOneSignal extends ReadResult {
     protected String identifierSignal;
 
