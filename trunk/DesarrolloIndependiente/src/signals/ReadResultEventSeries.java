@@ -2,8 +2,6 @@ package signals;
 
 import java.util.LinkedList;
 
-/**
- */
 class ReadResultEventSeries extends ReadResultOneSignal{
 
     private LinkedList<Event> eventsRead;

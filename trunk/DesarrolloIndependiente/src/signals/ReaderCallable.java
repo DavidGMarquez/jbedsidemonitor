@@ -16,7 +16,7 @@ abstract class ReaderCallable implements Callable<ReadResult> {
 
     @Override
     public ReadResult call() {
-        this.getLocks();
+        this.getLocks(); //@comentario ¿Y si esto falla?
         this.read();
         this.releaseLocks();
         return this.getReadResult();

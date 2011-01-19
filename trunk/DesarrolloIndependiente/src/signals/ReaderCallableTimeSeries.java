@@ -1,16 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
-import signals.WriterRunnable;
-import signals.SignalManager;
-
-/**
- *
- * @author USUARIO
- */
 public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
 
     private int posInitToRead;

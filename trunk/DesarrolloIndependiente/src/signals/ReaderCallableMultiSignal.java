@@ -13,7 +13,7 @@ class ReaderCallableMultiSignal extends ReaderCallable {
 
     @Override
     public ReadResult call() {//dar soporte a lectura de mltiples senhales
-        this.getLocks();
+        this.getLocks();  //@comentario ¿Y hay que hacer algo para ello?
         this.read();
         this.releaseLocks();
         return this.getReadResult();
@@ -33,7 +33,7 @@ class ReaderCallableMultiSignal extends ReaderCallable {
     protected boolean getLocks() {
         LinkedList<String> locksTemporal = new LinkedList<String>();
         for (ReaderCallableOneSignal readerCallableOneSignal : readerCallables) {
-            if (this.lockManager.tryReadLock(readerCallableOneSignal.getIdentifierSignal()) == true) {
+            if (this.lockManager.tryReadLock(readerCallableOneSignal.getIdentifierSignal())) {
                 locksTemporal.add(readerCallableOneSignal.getIdentifierSignal());
             } else {
                 break;
