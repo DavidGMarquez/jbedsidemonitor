@@ -10,6 +10,12 @@ package algorithms;
  * @author USUARIO
  */
 public interface Algorithm {
+    //Nuevos
+    public AlgorithmNotifyPolice getNotifyPolice();
+
+
+
+    //Antiguos
     public String getIdentifier();
     public AlgorithmReadSubscription getReadSubscription();
     public String getIdentifierSignalToWrite();
