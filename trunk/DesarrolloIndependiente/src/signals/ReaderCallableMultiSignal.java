@@ -13,7 +13,10 @@ class ReaderCallableMultiSignal extends ReaderCallable {
 
     @Override
     public ReadResult call() {//dar soporte a lectura de mltiples senhales
-        this.getLocks();  //@comentario ¿Y hay que hacer algo para ello?
+        this.getLocks();
+        //Hacer un wait//@comentario ¿Y hay que hacer algo para ello?
+        //Mirar que ocurre si hace un CompletionServide un wait
+        //Thread.sleep(millis);
         this.read();
         this.releaseLocks();
         return this.getReadResult();
