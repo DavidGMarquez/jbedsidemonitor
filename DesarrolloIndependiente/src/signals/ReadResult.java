@@ -1,6 +1,6 @@
 package signals;
 
-abstract class ReadResult {
+public abstract class ReadResult {
     
     protected String identifierOwner;
   

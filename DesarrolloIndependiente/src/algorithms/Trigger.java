@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import signals.ReaderCallable;
 
 /**
  *
@@ -76,5 +77,11 @@ public class Trigger {
         for (EventSeriesTrigger eventSeriesTrigger : valuesEventSeriesTrigger) {
             eventSeriesTrigger.reset();
         }
+    }
+
+    //Este método debería ser bloqueante con el de añadir datos para que no puedan ocurrir los dos
+    //al mismo tiempo en el algoritmo, con un syncronized o algo por el estilo
+    public ReaderCallable getReaderCallableAndReset() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
