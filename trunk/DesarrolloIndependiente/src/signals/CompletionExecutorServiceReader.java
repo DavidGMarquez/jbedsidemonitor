@@ -1,5 +1,6 @@
 package signals;
 
+import algorithms.AlgorithmManager;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
@@ -15,7 +16,7 @@ public class CompletionExecutorServiceReader implements Runnable {
         executorCompletionService = new ExecutorCompletionService(Executors.newCachedThreadPool());
     }
 
-    public void executeReaderCallable(ReaderCallableOneSignal readerCallable) {
+    public void executeReaderCallable(ReaderCallable readerCallable) {
         System.out.println("Submit Callable");
         this.executorCompletionService.submit(readerCallable);
     }
@@ -28,6 +29,7 @@ public class CompletionExecutorServiceReader implements Runnable {
                 Future<ReadResult> futureReadResult = executorCompletionService.take();
                 ReadResult readResult = futureReadResult.get();
                 //@debug borrar esto incluir lo que hay que hacer con el result
+                AlgorithmManager.getInstance().processData(readResult);
                 System.out.println("Operacion Lectura Completada");
 
             } catch (ExecutionException ex) {

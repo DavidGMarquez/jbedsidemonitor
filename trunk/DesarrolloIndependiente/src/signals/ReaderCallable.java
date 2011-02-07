@@ -2,7 +2,7 @@ package signals;
 
 import java.util.concurrent.Callable;
 
-abstract class ReaderCallable implements Callable<ReadResult> {
+public abstract  class ReaderCallable implements Callable<ReadResult> {
 
     protected String identifierOwner;
     protected LockManager lockManager;

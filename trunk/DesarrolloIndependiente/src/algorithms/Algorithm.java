@@ -5,6 +5,8 @@
 
 package algorithms;
 
+import signals.ReadResult;
+
 /**
  *
  * @author USUARIO
@@ -19,7 +21,7 @@ public interface Algorithm {
     public String getIdentifier();
     public AlgorithmReadSubscription getReadSubscription();
     public String getIdentifierSignalToWrite();
-    public boolean execute(AlgorithmExecutionContext ExCon);
+    public boolean execute(ReadResult readResult);
 
      //  Hacer metodos de interfaz para acceder y para poder saber lo que quiere, señales, señales que escribe, cada caunto
 
