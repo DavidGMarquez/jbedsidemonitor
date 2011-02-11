@@ -2,7 +2,7 @@ package signals;
 
 import java.util.LinkedList;
 
-class ReaderCallableMultiSignal extends ReaderCallable {
+public class ReaderCallableMultiSignal extends ReaderCallable {
 
     protected LinkedList<ReaderCallableOneSignal> readerCallables;
 
@@ -58,5 +58,8 @@ class ReaderCallableMultiSignal extends ReaderCallable {
          for (ReaderCallableOneSignal readerCallableOneSignal : readerCallables) {
              this.lockManager.releaseReadLock(readerCallableOneSignal.getIdentifierSignal());
          }
+    }
+    public boolean addReaderCallableOneSignal(ReaderCallableOneSignal readerCallableOneSignal){
+        return this.readerCallables.add(readerCallableOneSignal);
     }
 }
