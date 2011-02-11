@@ -1,19 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package algorithms;
 
 import java.util.LinkedList;
 import signals.Event;
 
 /**
- *
- * @author USUARIO
+ * Must Be Immutable
  */
 public class ResultEventSeriesWriter {
-        protected String identifier;
+
+    protected String identifier;
     private LinkedList<Event> eventsToDelete;
     private LinkedList<Event> eventsToWrite;
 
@@ -31,15 +26,7 @@ public class ResultEventSeriesWriter {
         return eventsToWrite;
     }
 
-
-
-
-
-
-
     public String getIdentifier() {
         return identifier;
     }
-
-
 }

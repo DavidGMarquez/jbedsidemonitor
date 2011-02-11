@@ -1,26 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
-/**
- *
- * @author USUARIO
- */
 class EventSeriesTrigger {
-//Practicamente las mismas dudas que para la de Tiempo
-    //Cuando contamos eventos nuevos... como afectan los que se eliminan?
+    //Practicamente las mismas dudas que para la de Tiempo
+
+        private String identifierSignal;
     private long newEventCount;
     private long lastEventReported;
     private long theshold;
 
     public EventSeriesTrigger(long theshold) {
         this.theshold = theshold;
-        this.reset();
+        this.newEventCount = 0;
+        this.lastEventReported = 0;
     }
 
     public void update(ResultEventSeriesWriter resultEventSeriesWriter) {
+        //Cuando contamos eventos nuevos... como afectan los que se eliminan?
+        this.newEventCount += resultEventSeriesWriter.getEventsToWrite().size();
     }
 
     public boolean trigger() {
@@ -32,7 +28,11 @@ class EventSeriesTrigger {
     }
 
     public void reset() {
+        this.lastEventReported += newEventCount;
         this.newEventCount = 0;
-        this.lastEventReported = 0;
+    }
+
+    public String getIdentifierSignal() {
+        return identifierSignal;
     }
 }
