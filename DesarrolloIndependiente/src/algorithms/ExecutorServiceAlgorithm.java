@@ -12,8 +12,7 @@ public class ExecutorServiceAlgorithm {
         executorService = Executors.newCachedThreadPool();
     }
 
-    public void executeWriterRunnable(Algorithm algorithm,ReadResult readResult) {
-
+    public void executeAlgorithmReadResult(Algorithm algorithm,ReadResult readResult) {
         this.executorService.execute(new AlgorithmRunner(algorithm,readResult));
     }
 }
