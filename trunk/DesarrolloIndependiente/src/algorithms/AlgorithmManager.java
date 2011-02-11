@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
-import algorithms.Algorithm;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,7 +9,6 @@ import signals.ReaderCallable;
 
 /**
  * Singlenton
- * @author USUARIO
  */
 public class AlgorithmManager {
 
@@ -29,14 +22,14 @@ public class AlgorithmManager {
         return INSTANCE;
     }
 
-    //Mejor asi o inicialar ya todo?
+    //Mejor asi o cargar directamente los algoritmos en el constructor?
     private AlgorithmManager() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
         this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
-        this.executorServiceAlgorithm= new ExecutorServiceAlgorithm();
+        this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
-    //habría que comprobar los identificadores y hacer copia probablemente
+    //habría que comprobar los identificadores y hacer copia probablemente para que no coincidan
 
     public Algorithm addAlgorithm(Algorithm algorithm) {
         this.addTrigger(algorithm);
@@ -95,27 +88,28 @@ public class AlgorithmManager {
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             if (triggerAlgorithm.trigger()) {
-                //Crear la operación de lectura y reiniciar el trigger
-
                 //Este siguiente método debería ser bloqueante y reiniciar el Trigger
-                ReaderCallable readerCallable=triggerAlgorithm.getReaderCallableAndReset();
+                ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableAndReset();
+
+
+
+
                 //No se si mover el CompletionReader aqui o dejarlo en el signalManager
+                //supongo que tiene más sentido en el SignalManager
+
+
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
     }
+
     public void processData(ReadResult readResult) {
-        Algorithm algorithm=this.algorithmsByName.get(readResult.getIdentifierOwner());
-
-
-        //@pendiente aqui habría que llamar al executorService para ejecutarlo.
+        Algorithm algorithm = this.algorithmsByName.get(readResult.getIdentifierOwner());
+        //Aqui no se si habría que hacer algo mas
         this.encueAlgorithmReadResultOperation(algorithm, readResult);
-
-        //Necesitamos otro nuevo ya que esta vez solo es de de ejecución por lo tanto podría tenerlo esta misma clase
-
-        
     }
-    private void encueAlgorithmReadResultOperation(Algorithm algorithm,ReadResult readResult) {
+
+    private void encueAlgorithmReadResultOperation(Algorithm algorithm, ReadResult readResult) {
         this.executorServiceAlgorithm.executeAlgorithmReadResult(algorithm, readResult);
     }
 

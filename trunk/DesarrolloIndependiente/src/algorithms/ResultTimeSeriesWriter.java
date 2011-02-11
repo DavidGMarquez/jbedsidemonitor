@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package algorithms;
 
 /**
- *
- * @author USUARIO
+ * Must Be Immutable
  */
 public class ResultTimeSeriesWriter {
+
     protected String identifier;
     private float[] dataToWrite;
 
@@ -18,9 +13,6 @@ public class ResultTimeSeriesWriter {
         this.dataToWrite = dataToWrite;
     }
 
-
-
-
     public float[] getDataToWrite() {
         return dataToWrite;
     }
@@ -28,6 +20,4 @@ public class ResultTimeSeriesWriter {
     public String getIdentifier() {
         return identifier;
     }
-
-
 }
