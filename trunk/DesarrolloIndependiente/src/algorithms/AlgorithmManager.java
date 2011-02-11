@@ -22,7 +22,7 @@ public class AlgorithmManager {
     private Map<String, Algorithm> algorithmsByName;
     private Map<String, LinkedList<String>> algorithmsNameBySignalName;
     private Map<String, Trigger> triggersByAlgorithmName;
-     private ExecutorServiceAlgorithm executorServiceAlgorithm;
+    private ExecutorServiceAlgorithm executorServiceAlgorithm;
     private static final AlgorithmManager INSTANCE = new AlgorithmManager();
 
     public static AlgorithmManager getInstance() {
@@ -34,6 +34,7 @@ public class AlgorithmManager {
         this.algorithmsByName = new HashMap<String, Algorithm>();
         this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
+        this.executorServiceAlgorithm= new ExecutorServiceAlgorithm();
     }
     //habría que comprobar los identificadores y hacer copia probablemente
 
@@ -102,20 +103,23 @@ public class AlgorithmManager {
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
-
-
     }
     public void processData(ReadResult readResult) {
         Algorithm algorithm=this.algorithmsByName.get(readResult.getIdentifierOwner());
 
+
         //@pendiente aqui habría que llamar al executorService para ejecutarlo.
+        this.encueAlgorithmReadResultOperation(algorithm, readResult);
+
         //Necesitamos otro nuevo ya que esta vez solo es de de ejecución por lo tanto podría tenerlo esta misma clase
 
         
     }
+    private void encueAlgorithmReadResultOperation(Algorithm algorithm,ReadResult readResult) {
+        this.executorServiceAlgorithm.executeAlgorithmReadResult(algorithm, readResult);
+    }
+
     public Algorithm getAlgorithm(String name) {
         return this.algorithmsByName.get(name);
     }
-
-
 }
