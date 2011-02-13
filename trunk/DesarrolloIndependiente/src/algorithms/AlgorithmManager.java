@@ -30,6 +30,8 @@ public class AlgorithmManager {
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
     //habría que comprobar los identificadores y hacer copia probablemente para que no coincidan
+    //@comentario no entiendo qué quieres decir con hacer copia, pero si habría que comprobar los identificadores
+    //y si estan repetidos simplemente podemos lanzar una excepcion
 
     public Algorithm addAlgorithm(Algorithm algorithm) {
         this.addTrigger(algorithm);
@@ -62,7 +64,7 @@ public class AlgorithmManager {
             this.algorithmsNameBySignalName.put(eventSeriesName, algorithmNames);
         }
     }
-
+//@comentario cada vez que se termina una lectura SignalManager debería notificar (llamar a este metodo)
     public void notifyNewData(ResultEventSeriesWriter resultEventSeriesWriter) {
         String signalName = resultEventSeriesWriter.getIdentifier();
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
@@ -72,7 +74,7 @@ public class AlgorithmManager {
             this.checkTriggers();
         }
     }
-
+//@comentario ¿para que dos métodos? ¿no nos podemos arreglar con uno que reciba un ReadResult?
     public void notifyNewData(ResultTimeSeriesWriter resultTimeSeriesWriter) {
         String signalName = resultTimeSeriesWriter.getIdentifier();
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
@@ -96,7 +98,7 @@ public class AlgorithmManager {
 
                 //No se si mover el CompletionReader aqui o dejarlo en el signalManager
                 //supongo que tiene más sentido en el SignalManager
-
+                //@comentario no entiendo para qu quieres moverlo
 
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
@@ -105,7 +107,11 @@ public class AlgorithmManager {
 
     public void processData(ReadResult readResult) {
         Algorithm algorithm = this.algorithmsByName.get(readResult.getIdentifierOwner());
+//@comentario al ejecutar los test del paquete signals se generan NullPointerExceptions
+//porque algorithm siempre vale null aqui
+        
         //Aqui no se si habría que hacer algo mas
+        //@comentario en principio no hay que hacer nada más.
         this.encueAlgorithmReadResultOperation(algorithm, readResult);
     }
 

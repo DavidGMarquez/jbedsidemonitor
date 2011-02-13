@@ -8,6 +8,8 @@ public class AlgorithmDefaultImplementation implements Algorithm {
     private String identifierSignalToWrite;
     private AlgorithmNotifyPolice algorithmNotifyPolice;
 
+    //@comentario proporciona otro constructor al cual no sea necesario pasarle una AlgorithmNotifyPolice
+    //y emplea una política de notificacion por defecto que estara definida dentro de esta misma clase
     public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
         this.identifier = identifier;
         this.identifierSignalToWrite = identifierSignalToWrite;
@@ -32,4 +34,6 @@ public class AlgorithmDefaultImplementation implements Algorithm {
         //Implementar aqui
     }
     //@duda habría que hacer algún método para permitir al algoritmo decir cuando quiere grabar algo
+    //@comentario al menos por lo de ahora no, suponemos que en el metodo execute el que implementa el algoritmo
+    //hace lo que sea necesario
 }
