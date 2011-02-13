@@ -14,9 +14,9 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     @Override
     public ReadResult call() {//dar soporte a lectura de mltiples senhales
         this.getLocks();
-        //Hacer un wait//@comentario ¿Y hay que hacer algo para ello?
-        //Mirar que ocurre si hace un CompletionServide un wait
-        //Thread.sleep(millis);
+        //@comentario lo que aquí queda por gestionar es qu pasa si getLocks () nos devuelve falso y por tanto
+        //no podemos realizar la lectura en este momento. Lo que yo propongo es "esperar", por ejemplo haciendo un
+        //Thread.sleep(millis) 
         this.read();
         this.releaseLocks();
         return this.getReadResult();

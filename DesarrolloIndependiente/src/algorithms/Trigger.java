@@ -33,17 +33,21 @@ public class Trigger {
         }
 
     }
-    //Syncronized
 
     public synchronized void notifyNewData(ResultEventSeriesWriter resultEventSeriesWriter) {
         this.eventSeriesTriggers.get(resultEventSeriesWriter.getIdentifier()).update(resultEventSeriesWriter);
     }
-    //Syncronized
 
     public synchronized void notifyNewData(ResultTimeSeriesWriter resultTimeSeriesWriter) {
         this.timeSeriesTriggers.get(resultTimeSeriesWriter.getIdentifier()).update(resultTimeSeriesWriter);
     }
-
+//@comentario a mi modo de verlo, para no emplear sintonización aqui tenemos que garantizar que cada uno de los
+    //trigger individuales es thread safe. Cosa que ahora no se hace. Quizás podriamos emplear cada objeto tipo
+    //Trigger como lock  para todos los objetos TimeSeriesTrigget y EventSeriesTrigger que contiene,
+    //y así nos ahorramos el trabajo de hacerlos thread safe. En cualquier caso, tal y como esta este método
+    //puede haber problemas de concurrencia con este metodo y cualquier otro metodo de esta clase
+    //(los objetos TimeSeriesTrigget y EventSeriesTrigger están confinados en esta clase) que modifique
+    //alguna instancia de TimeSeriesTrigget o de EventSeriesTrigger
     public boolean trigger() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
@@ -65,7 +69,13 @@ public class Trigger {
     }
 
     //Tiene sentido que resetee todo? o solo debería resetear los triggers?
-    private void reset() {
+    //@comentario: respecto a tu pregunta ¿estás reseteando algo más que los triggers? Yo no veo que
+    //resetees nada más
+    //@comentario he añadido la palabra synchronized. Tal y como ten%as el codigo, siempre que se llama a este método
+    //se ha cogido un lock sobre this, y como se trata de un lock reentrante, este synchronized
+    //no está cambiando nada. Pero prefiero que esté ahi porque si el dÝa de mañana se te da por llamar a
+    //este método desde otro sitio y no a quienes el lock adecuado tienes un problema de concurrencia
+    private synchronized void reset() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
             timeSeriesTrigger.reset();
@@ -82,8 +92,8 @@ public class Trigger {
         this.reset();
         return readerCallable;
     }
-
-    private ReaderCallable getReaderCallable() {
+//@comentario mismo comentario que para el metodo reset
+    private synchronized ReaderCallable getReaderCallable() {
 
 
         ///PENDIENTE DE TERMINAR
