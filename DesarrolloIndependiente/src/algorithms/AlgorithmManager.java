@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import signals.ReadResult;
 import signals.ReaderCallable;
+import signals.WriterRunnableEventSeries;
+import signals.WriterRunnableTimeSeries;
 
 /**
  * Singlenton
@@ -22,16 +24,15 @@ public class AlgorithmManager {
         return INSTANCE;
     }
 
-    //Mejor asi o cargar directamente los algoritmos en el constructor?
     private AlgorithmManager() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
         this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
-    //habría que comprobar los identificadores y hacer copia probablemente para que no coincidan
-    //@comentario no entiendo qué quieres decir con hacer copia, pero si habría que comprobar los identificadores
-    //y si estan repetidos simplemente podemos lanzar una excepcion
+
+    //@pendiente comprobar que los identificadores no se repitan y lanzar
+    //excepción si es necesario.
 
     public Algorithm addAlgorithm(Algorithm algorithm) {
         this.addTrigger(algorithm);
@@ -65,22 +66,22 @@ public class AlgorithmManager {
         }
     }
 //@comentario cada vez que se termina una lectura SignalManager debería notificar (llamar a este metodo)
-    public void notifyNewData(ResultEventSeriesWriter resultEventSeriesWriter) {
-        String signalName = resultEventSeriesWriter.getIdentifier();
+    public void notifyNewData(WriterRunnableEventSeries writerRunnableEventSeries) {
+        String signalName = writerRunnableEventSeries.getIdentifier();
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
         for (String algorithmName : algorithmNames) {
             Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-            algorithmTrigger.notifyNewData(resultEventSeriesWriter);
+            algorithmTrigger.notifyNewData(writerRunnableEventSeries);
             this.checkTriggers();
         }
     }
 //@comentario ¿para que dos métodos? ¿no nos podemos arreglar con uno que reciba un ReadResult?
-    public void notifyNewData(ResultTimeSeriesWriter resultTimeSeriesWriter) {
-        String signalName = resultTimeSeriesWriter.getIdentifier();
+    public void notifyNewData(WriterRunnableTimeSeries writerRunnableTimeSeries) {
+        String signalName = writerRunnableTimeSeries.getIdentifier();
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
         for (String algorithmName : algorithmNames) {
             Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-            algorithmTrigger.notifyNewData(resultTimeSeriesWriter);
+            algorithmTrigger.notifyNewData(writerRunnableTimeSeries);
             this.checkTriggers();
         }
     }
@@ -90,17 +91,8 @@ public class AlgorithmManager {
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             if (triggerAlgorithm.trigger()) {
-                //Este siguiente método debería ser bloqueante y reiniciar el Trigger
                 ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableAndReset();
-
-
-
-
-                //No se si mover el CompletionReader aqui o dejarlo en el signalManager
-                //supongo que tiene más sentido en el SignalManager
-                //@comentario no entiendo para qu quieres moverlo
-
-                signals.SignalManager.getInstance().encueReadOperation(readerCallable);
+                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
     }
@@ -109,9 +101,7 @@ public class AlgorithmManager {
         Algorithm algorithm = this.algorithmsByName.get(readResult.getIdentifierOwner());
 //@comentario al ejecutar los test del paquete signals se generan NullPointerExceptions
 //porque algorithm siempre vale null aqui
-        
-        //Aqui no se si habría que hacer algo mas
-        //@comentario en principio no hay que hacer nada más.
+//@pendiente revisar esto
         this.encueAlgorithmReadResultOperation(algorithm, readResult);
     }
 

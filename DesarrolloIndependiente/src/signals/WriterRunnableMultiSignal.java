@@ -2,7 +2,7 @@ package signals;
 
 import java.util.LinkedList;
 
-class WriterRunnableMultiSignal extends WriterRunnable {
+public class WriterRunnableMultiSignal extends WriterRunnable {
 
     protected LinkedList<WriterRunnableOneSignal> writerRunnables;
     protected LockManager lockManager;

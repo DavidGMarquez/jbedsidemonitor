@@ -1,8 +1,8 @@
 package algorithms;
 
-class EventSeriesTrigger {
-    //Practicamente las mismas dudas que para la de Tiempo
+import signals.WriterRunnableEventSeries;
 
+class EventSeriesTrigger {
     private String identifierSignal;
     private long newEventCount;
     private long lastEventReported;
@@ -10,7 +10,7 @@ class EventSeriesTrigger {
 
         //@comentario es necesario determinar qué poltica de concurrencia sigue esta clase. Para simplificar las cosas
     //el mantener las instancias de esta clase confinadas dentro de Trigger nos puede ayudar
-
+    //@pendiente sincronizar esta clase para que se pueda usar en entornos multihilo.
 
     public EventSeriesTrigger(long theshold) {
         this.theshold = theshold;
@@ -18,9 +18,9 @@ class EventSeriesTrigger {
         this.lastEventReported = 0;
     }
 
-    public void update(ResultEventSeriesWriter resultEventSeriesWriter) {
+    public void update(WriterRunnableEventSeries writerRunnableEventSeries) {
         //Cuando contamos eventos nuevos... como afectan los que se eliminan?
-        this.newEventCount += resultEventSeriesWriter.getEventsToWrite().size();
+        this.newEventCount += writerRunnableEventSeries.getEventsToWrite().size();
     }
 
     public boolean trigger() {

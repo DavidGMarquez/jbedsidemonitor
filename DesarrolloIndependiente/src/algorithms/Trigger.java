@@ -7,14 +7,15 @@ import java.util.Set;
 import signals.ReaderCallable;
 import signals.ReaderCallableMultiSignal;
 import signals.ReaderCallableTimeSeries;
+import signals.WriterRunnableEventSeries;
+import signals.WriterRunnableTimeSeries;
 
 public class Trigger {
 
     private String identifierAlgorithm;
     private Map<String, TimeSeriesTrigger> timeSeriesTriggers;
-    private Map<String, EventSeriesTrigger> eventSeriesTriggers;
-    //1 All 2 Only one
-    private int notifyPolice;
+    private Map<String, EventSeriesTrigger> eventSeriesTriggers;       
+    private AlgorithmNotifyPoliceEnum notifyPolice;
 
     Trigger(AlgorithmNotifyPolice algorithmNotifyPolice) {
         this.timeSeriesTriggers = new HashMap<String, TimeSeriesTrigger>();
@@ -34,12 +35,12 @@ public class Trigger {
 
     }
 
-    public synchronized void notifyNewData(ResultEventSeriesWriter resultEventSeriesWriter) {
-        this.eventSeriesTriggers.get(resultEventSeriesWriter.getIdentifier()).update(resultEventSeriesWriter);
+    public synchronized void notifyNewData(WriterRunnableEventSeries writerRunnableEventSeries) {
+        this.eventSeriesTriggers.get(writerRunnableEventSeries.getIdentifier()).update(writerRunnableEventSeries);
     }
 
-    public synchronized void notifyNewData(ResultTimeSeriesWriter resultTimeSeriesWriter) {
-        this.timeSeriesTriggers.get(resultTimeSeriesWriter.getIdentifier()).update(resultTimeSeriesWriter);
+    public synchronized void notifyNewData(WriterRunnableTimeSeries writerRunnableTimeSeries) {
+        this.timeSeriesTriggers.get(writerRunnableTimeSeries.getIdentifier()).update(writerRunnableTimeSeries);
     }
 //@comentario a mi modo de verlo, para no emplear sintonización aqui tenemos que garantizar que cada uno de los
     //trigger individuales es thread safe. Cosa que ahora no se hace. Quizás podriamos emplear cada objeto tipo
@@ -51,17 +52,17 @@ public class Trigger {
     public boolean trigger() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
-            if (timeSeriesTrigger.trigger() && notifyPolice == 2) {
+            if (timeSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ONE)) {
                 return true;
-            } else if (!timeSeriesTrigger.trigger() && notifyPolice == 1) {
+            } else if (!timeSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ALL)) {
                 return false;
             }
         }
         Collection<EventSeriesTrigger> valuesEventSeriesTrigger = eventSeriesTriggers.values();
         for (EventSeriesTrigger eventSeriesTrigger : valuesEventSeriesTrigger) {
-            if (eventSeriesTrigger.trigger() && notifyPolice == 2) {
+            if (eventSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ONE)) {
                 return true;
-            } else if (!eventSeriesTrigger.trigger() && notifyPolice == 1) {
+            } else if (!eventSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ALL)) {
                 return false;
             }
         }

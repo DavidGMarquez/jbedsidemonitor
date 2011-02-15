@@ -31,4 +31,13 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
     public void addEventToDelete(Event e) {
         this.eventsToDelete.add(e);
     }
+
+    public LinkedList<Event> getEventsToDelete() {
+        return eventsToDelete;
+    }
+
+    public LinkedList<Event> getEventsToWrite() {
+        return eventsToWrite;
+    }
+    
 }
