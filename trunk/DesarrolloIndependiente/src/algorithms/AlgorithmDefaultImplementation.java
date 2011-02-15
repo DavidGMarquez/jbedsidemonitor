@@ -33,7 +33,4 @@ public class AlgorithmDefaultImplementation implements Algorithm {
         throw new UnsupportedOperationException("Not supported yet.");
         //Implementar aqui
     }
-    //@duda habría que hacer algún método para permitir al algoritmo decir cuando quiere grabar algo
-    //@comentario al menos por lo de ahora no, suponemos que en el metodo execute el que implementa el algoritmo
-    //hace lo que sea necesario
 }

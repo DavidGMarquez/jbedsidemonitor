@@ -1,6 +1,6 @@
 package signals;
 
-abstract class WriterRunnable implements Runnable {
+public abstract class WriterRunnable implements Runnable {
 
     protected LockManager lockManager;
 

@@ -1,17 +1,13 @@
 package algorithms;
 
-class TimeSeriesTrigger {
-    //Para acceder al tiempo tengo que poder acceder a la señal para saber
-    //la frecuencia, por eso lo he hecho en muestras provisionalmente
-    //@comentario yo no tengo claro que esto tenga que ser "provisional"; esta implementacion
-    //es perfectamente válida; que le pasen a esta clase el número de muestras en vez de el numero de milisegundos
+import signals.WriterRunnableTimeSeries;
 
+class TimeSeriesTrigger {
     //@comentario no se esta empleando sincronizacion y hace falta. Quizs podria emplearse como monitor
     //el propio objeto.
-
     //@comentario es necesario determinar qué politica de concurrencia sigue esta clase. Para simplificar las cosas
     //el mantener las instancias de esta clase confinadas dentro de Trigger nos puede ayudar
-
+    //@pendiente especificar políticas de sincronización para los Triggers individuales
     private String identifierSignal;
     private long lastSampleReported;
     private long newDataInMs;
@@ -23,8 +19,8 @@ class TimeSeriesTrigger {
         this.newDataInMs = 0;
     }
 
-    public void update(ResultTimeSeriesWriter resultTimeSeriesWriter) {
-        this.newDataInMs += resultTimeSeriesWriter.getDataToWrite().length;
+    public void update(WriterRunnableTimeSeries writerRunnableTimeSeries) {
+        this.newDataInMs += writerRunnableTimeSeries.getDataToWrite().length;
     }
 
     public boolean trigger() {

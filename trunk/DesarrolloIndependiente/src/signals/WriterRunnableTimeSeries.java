@@ -28,4 +28,9 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
         System.arraycopy(dataToWrite, 0, copy, 0, dataToWrite.length);
         this.dataToWrite = copy;
     }
+
+    public float[] getDataToWrite() {
+        return dataToWrite;
+    }
+
 }
