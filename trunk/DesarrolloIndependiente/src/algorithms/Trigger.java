@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import signals.ReaderCallable;
+import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableMultiSignal;
 import signals.ReaderCallableTimeSeries;
 import signals.WriterRunnableEventSeries;
@@ -14,7 +15,7 @@ public class Trigger {
 
     private String identifierAlgorithm;
     private Map<String, TimeSeriesTrigger> timeSeriesTriggers;
-    private Map<String, EventSeriesTrigger> eventSeriesTriggers;       
+    private Map<String, EventSeriesTrigger> eventSeriesTriggers;
     private AlgorithmNotifyPoliceEnum notifyPolice;
 
     Trigger(AlgorithmNotifyPolice algorithmNotifyPolice) {
@@ -49,6 +50,8 @@ public class Trigger {
     //puede haber problemas de concurrencia con este metodo y cualquier otro metodo de esta clase
     //(los objetos TimeSeriesTrigget y EventSeriesTrigger están confinados en esta clase) que modifique
     //alguna instancia de TimeSeriesTrigget o de EventSeriesTrigger
+    //@pendiente mirar el modelo de sincronización para esto
+
     public boolean trigger() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
@@ -72,10 +75,7 @@ public class Trigger {
     //Tiene sentido que resetee todo? o solo debería resetear los triggers?
     //@comentario: respecto a tu pregunta ¿estás reseteando algo más que los triggers? Yo no veo que
     //resetees nada más
-    //@comentario he añadido la palabra synchronized. Tal y como ten%as el codigo, siempre que se llama a este método
-    //se ha cogido un lock sobre this, y como se trata de un lock reentrante, este synchronized
-    //no está cambiando nada. Pero prefiero que esté ahi porque si el dÝa de mañana se te da por llamar a
-    //este método desde otro sitio y no a quienes el lock adecuado tienes un problema de concurrencia
+    //@respuesta me exprese mal. Quiero decir reseteo solo los triggers que estan con trigger() o todos?
     private synchronized void reset() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
@@ -87,37 +87,37 @@ public class Trigger {
         }
     }
 
-    //Syncrhonized
     public synchronized ReaderCallable getReaderCallableAndReset() {
         ReaderCallable readerCallable = this.getReaderCallable();
-        this.reset();
+        //Creo que el reset ya lo cubro al ir creando this.reset();
         return readerCallable;
     }
-//@comentario mismo comentario que para el metodo reset
+
     private synchronized ReaderCallable getReaderCallable() {
 
-
-        ///PENDIENTE DE TERMINAR
-
-        //HACIENDO ESTO ME HE DADO CUENTA DE QUE LA ESTRUCTURA
-        //DE LOS READER CALLABLES ES DEMASIADO COMPLEJA Y ANTINATURAL
-
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
+        //Si tenemos la modalidad de que actualice solo cuando este una sola señal lista,
+        //el número de señales será variable
 
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
             if (timeSeriesTrigger.trigger()) {
-                ReaderCallableTimeSeries readerCallableTimeSeries = 
-                 new ReaderCallableTimeSeries(timeSeriesTrigger.getIdentifierSignal(), 
+                ReaderCallableTimeSeries readerCallableTimeSeries =
+                        new ReaderCallableTimeSeries(timeSeriesTrigger.getIdentifierSignal(),
                         this.getIdentifierAlgorithm());
-
+                readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported());
+                readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewDataInMs());
                 timeSeriesTrigger.reset();
             }
         }
         Collection<EventSeriesTrigger> valuesEventSeriesTrigger = eventSeriesTriggers.values();
         for (EventSeriesTrigger eventSeriesTrigger : valuesEventSeriesTrigger) {
             if (eventSeriesTrigger.trigger()) {
-
+                ReaderCallableEventSeries readerCallableEventSeries =
+                        new ReaderCallableEventSeries(eventSeriesTrigger.getIdentifierSignal(),
+                        this.getIdentifierAlgorithm());
+                readerCallableEventSeries.setFirstInstantToInclude(eventSeriesTrigger.getLastEventReported());
+                readerCallableEventSeries.setLastInstantToInclude(eventSeriesTrigger.getNewEventCount());
                 eventSeriesTrigger.reset();
             }
         }
