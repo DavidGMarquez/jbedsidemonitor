@@ -3,7 +3,7 @@ package algorithms;
 import signals.ReadResult;
 
 public interface Algorithm {
-
+    //@pendiente revisar si falta algo de la especificación de la memoria inicial.
     public String getIdentifier();
 
     public String getIdentifierSignalToWrite();

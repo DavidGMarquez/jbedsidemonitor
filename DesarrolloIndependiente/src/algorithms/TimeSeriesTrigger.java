@@ -9,11 +9,11 @@ class TimeSeriesTrigger {
     //el mantener las instancias de esta clase confinadas dentro de Trigger nos puede ayudar
     //@pendiente especificar políticas de sincronización para los Triggers individuales
     private String identifierSignal;
-    private long lastSampleReported;
-    private long newDataInMs;
-    private long theshold;
+    private int lastSampleReported;
+    private int newDataInMs;
+    private int theshold;
 
-    public TimeSeriesTrigger(long theshold) {
+    public TimeSeriesTrigger(int theshold) {
         this.theshold = theshold;
         this.lastSampleReported = 0;
         this.newDataInMs = 0;
@@ -39,4 +39,17 @@ class TimeSeriesTrigger {
     public String getIdentifierSignal() {
         return identifierSignal;
     }
+
+    public int getLastSampleReported() {
+        return lastSampleReported;
+    }
+
+    public int getNewDataInMs() {
+        return newDataInMs;
+    }
+
+    public int getTheshold() {
+        return theshold;
+    }
+
 }

@@ -7,17 +7,17 @@ import java.util.Map;
  */
 public class AlgorithmNotifyPolice {
 
-    protected Map<String, Long> timeSeriesTheshold;
-    protected Map<String, Long> eventSeriesTheshold;
+    protected Map<String, Integer> timeSeriesTheshold;
+    protected Map<String, Integer> eventSeriesTheshold;
     private AlgorithmNotifyPoliceEnum notifyPolice;
 
-    public AlgorithmNotifyPolice(Map<String, Long> timeSeriesTheshold, Map<String, Long> eventSeriesTheshold, AlgorithmNotifyPoliceEnum notifyPolice) {
+    public AlgorithmNotifyPolice(Map<String, Integer> timeSeriesTheshold, Map<String, Integer> eventSeriesTheshold, AlgorithmNotifyPoliceEnum notifyPolice) {
         this.timeSeriesTheshold = timeSeriesTheshold;
         this.eventSeriesTheshold = eventSeriesTheshold;
         this.notifyPolice = notifyPolice;
     }
     
-    public Map<String, Long> getEventSeriesTheshold() {
+    public Map<String, Integer> getEventSeriesTheshold() {
         return eventSeriesTheshold;
     }
 
@@ -25,7 +25,7 @@ public class AlgorithmNotifyPolice {
         return notifyPolice;
     }
 
-    public Map<String, Long> getTimeSeriesTheshold() {
+    public Map<String, Integer> getTimeSeriesTheshold() {
         return timeSeriesTheshold;
     }
 }

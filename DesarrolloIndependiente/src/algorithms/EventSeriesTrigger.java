@@ -4,15 +4,15 @@ import signals.WriterRunnableEventSeries;
 
 class EventSeriesTrigger {
     private String identifierSignal;
-    private long newEventCount;
-    private long lastEventReported;
-    private long theshold;
+    private int newEventCount;
+    private int lastEventReported;
+    private int theshold;
 
         //@comentario es necesario determinar qué poltica de concurrencia sigue esta clase. Para simplificar las cosas
     //el mantener las instancias de esta clase confinadas dentro de Trigger nos puede ayudar
     //@pendiente sincronizar esta clase para que se pueda usar en entornos multihilo.
 
-    public EventSeriesTrigger(long theshold) {
+    public EventSeriesTrigger(int theshold) {
         this.theshold = theshold;
         this.newEventCount = 0;
         this.lastEventReported = 0;
@@ -39,4 +39,19 @@ class EventSeriesTrigger {
     public String getIdentifierSignal() {
         return identifierSignal;
     }
+
+    public int getLastEventReported() {
+        return lastEventReported;
+    }
+
+    public int getNewEventCount() {
+        return newEventCount;
+    }
+
+    public int getTheshold() {
+        return theshold;
+    }
+
+
+
 }
