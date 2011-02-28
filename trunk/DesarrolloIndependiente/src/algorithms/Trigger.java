@@ -26,12 +26,12 @@ public class Trigger {
         Set<String> keySetTimeSeries = algorithmNotifyPolice.getTimeSeriesTheshold().keySet();
         for (String keyTimeSeries : keySetTimeSeries) {
             this.timeSeriesTriggers.put(keyTimeSeries,
-                    new TimeSeriesTrigger(algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
+                    new TimeSeriesTrigger(keyTimeSeries,algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
         }
         Set<String> keySetEventSeries = algorithmNotifyPolice.getEventSeriesTheshold().keySet();
         for (String keyEventSeries : keySetEventSeries) {
             this.eventSeriesTriggers.put(keyEventSeries,
-                    new EventSeriesTrigger(algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
+                    new EventSeriesTrigger(keyEventSeries,algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
         }
 
     }
@@ -51,8 +51,8 @@ public class Trigger {
     //(los objetos TimeSeriesTrigget y EventSeriesTrigger están confinados en esta clase) que modifique
     //alguna instancia de TimeSeriesTrigget o de EventSeriesTrigger
     //@pendiente mirar el modelo de sincronización para esto
-
-    public boolean trigger() {
+    //@revisar que todos los metodos tienen que tener sincronizacion
+    public synchronized boolean trigger() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
             if (timeSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ONE)) {

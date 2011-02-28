@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,8 +13,8 @@ public class AlgorithmNotifyPolice {
     private AlgorithmNotifyPoliceEnum notifyPolice;
 
     public AlgorithmNotifyPolice(Map<String, Integer> timeSeriesTheshold, Map<String, Integer> eventSeriesTheshold, AlgorithmNotifyPoliceEnum notifyPolice) {
-        this.timeSeriesTheshold = timeSeriesTheshold;
-        this.eventSeriesTheshold = eventSeriesTheshold;
+        this.timeSeriesTheshold = new HashMap<String, Integer>(timeSeriesTheshold);
+        this.eventSeriesTheshold = new HashMap<String, Integer>( eventSeriesTheshold);
         this.notifyPolice = notifyPolice;
     }
     

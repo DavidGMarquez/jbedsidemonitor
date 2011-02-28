@@ -1,6 +1,8 @@
 package signals;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReaderCallableMultiSignal extends ReaderCallable {
 
@@ -12,11 +14,15 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     }
 
     @Override
-    public ReadResult call() {//dar soporte a lectura de mltiples senhales
-        this.getLocks();
-        //@comentario lo que aquí queda por gestionar es qu pasa si getLocks () nos devuelve falso y por tanto
-        //no podemos realizar la lectura en este momento. Lo que yo propongo es "esperar", por ejemplo haciendo un
-        //Thread.sleep(millis) 
+    public ReadResult call() {
+       while(!this.getLocks()){
+           //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       }
         this.read();
         this.releaseLocks();
         return this.getReadResult();
@@ -25,7 +31,6 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     protected ReadResult read() {
         ReadResultMultiSignal readResultMulti=new ReadResultMultiSignal(this.getIdentifierOwner());
         for (ReaderCallableOneSignal readerCallableOneSignal : readerCallables) {
-            //@pendiente Este cast no debería estar pero ya me estoy liando un poco
             readResultMulti.addReadResultOneSignal((ReadResultOneSignal) readerCallableOneSignal.read());
         }
         return readResultMulti;
