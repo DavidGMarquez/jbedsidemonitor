@@ -1,7 +1,9 @@
-package signals;
+package auxiliarTools;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import signals.Event;
+import signals.WriterRunnableEventSeries;
 
 public class AuxTestUtilities {
 
@@ -26,6 +28,13 @@ public class AuxTestUtilities {
         float[] array = new float[tam];
         for (int i = 0; i < tam; i++) {
             array[i] = (float) Math.random() * 100;
+        }
+        return array;
+    }
+        public static int[] generateArrayInteger(int tam) {
+        int[] array = new int[tam];
+        for (int i = 0; i < tam; i++) {
+            array[i] = (int) Math.random() * 100;
         }
         return array;
     }
@@ -60,6 +69,14 @@ public class AuxTestUtilities {
         for (int i = 0; i < events.size(); i++) {
             System.out.println("Event " + i + " time" + events.get(i).getLocation() + " tipo " + events.get(i).getType());
         }
+    }
+    public static WriterRunnableEventSeries generarWriterRunnableEvents(String nameSignal,int numberEvents,int timeinit, int duration)
+    {
+        WriterRunnableEventSeries writerRunnableEventSeries= new WriterRunnableEventSeries(nameSignal);
+        for (int i = 0; i < numberEvents; i++) {
+            writerRunnableEventSeries.addEventToWrite(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", null));
+        }
+        return writerRunnableEventSeries;
     }
 
     public static boolean eventosCompararListas(LinkedList<Event> eventos1, LinkedList<Event> eventos2) {

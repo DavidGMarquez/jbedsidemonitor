@@ -28,10 +28,7 @@ public class CompletionExecutorServiceReader implements Runnable {
             try {
                 Future<ReadResult> futureReadResult = executorCompletionService.take();
                 ReadResult readResult = futureReadResult.get();
-                //@debug borrar esto incluir lo que hay que hacer con el result
                 AlgorithmManager.getInstance().processData(readResult);
-                System.out.println("Operacion Lectura Completada");
-
             } catch (ExecutionException ex) {
                 Logger.getLogger(CompletionExecutorServiceReader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
