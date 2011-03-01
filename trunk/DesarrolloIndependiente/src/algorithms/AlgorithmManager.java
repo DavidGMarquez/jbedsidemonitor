@@ -41,7 +41,7 @@ public class AlgorithmManager {
     }
 
     private Trigger addTrigger(Algorithm algorithm) {
-        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(), new Trigger(algorithm.getNotifyPolice()));
+        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(), new Trigger(algorithm.getIdentifier(),algorithm.getNotifyPolice()));
     }
 
     private void addSignalNamesToMap(Algorithm algorithm) {

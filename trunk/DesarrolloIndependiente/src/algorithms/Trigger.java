@@ -9,6 +9,7 @@ import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableMultiSignal;
 import signals.ReaderCallableTimeSeries;
 import signals.WriterRunnableEventSeries;
+import signals.WriterRunnableOneSignal;
 import signals.WriterRunnableTimeSeries;
 
 public class Trigger {
@@ -18,7 +19,8 @@ public class Trigger {
     private Map<String, EventSeriesTrigger> eventSeriesTriggers;
     private AlgorithmNotifyPoliceEnum notifyPolice;
 
-    Trigger(AlgorithmNotifyPolice algorithmNotifyPolice) {
+    Trigger(String identifierAlgorithm,AlgorithmNotifyPolice algorithmNotifyPolice) {
+        this.identifierAlgorithm=identifierAlgorithm;
         this.timeSeriesTriggers = new HashMap<String, TimeSeriesTrigger>();
         this.eventSeriesTriggers = new HashMap<String, EventSeriesTrigger>();
         this.notifyPolice = algorithmNotifyPolice.getNotifyPolice();
@@ -26,32 +28,28 @@ public class Trigger {
         Set<String> keySetTimeSeries = algorithmNotifyPolice.getTimeSeriesTheshold().keySet();
         for (String keyTimeSeries : keySetTimeSeries) {
             this.timeSeriesTriggers.put(keyTimeSeries,
-                    new TimeSeriesTrigger(keyTimeSeries,algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
+                    new TimeSeriesTrigger(keyTimeSeries, algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
         }
         Set<String> keySetEventSeries = algorithmNotifyPolice.getEventSeriesTheshold().keySet();
         for (String keyEventSeries : keySetEventSeries) {
             this.eventSeriesTriggers.put(keyEventSeries,
-                    new EventSeriesTrigger(keyEventSeries,algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
+                    new EventSeriesTrigger(keyEventSeries, algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
         }
 
     }
 
-    public synchronized void notifyNewData(WriterRunnableEventSeries writerRunnableEventSeries) {
-        this.eventSeriesTriggers.get(writerRunnableEventSeries.getIdentifier()).update(writerRunnableEventSeries);
+    public synchronized void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
+        if (writerRunnableOneSignal instanceof WriterRunnableTimeSeries) {
+            this.timeSeriesTriggers.get(writerRunnableOneSignal.getIdentifier()).update((WriterRunnableTimeSeries) writerRunnableOneSignal);
+        } else {
+            if (writerRunnableOneSignal instanceof WriterRunnableEventSeries) {
+                this.eventSeriesTriggers.get(writerRunnableOneSignal.getIdentifier()).update((WriterRunnableEventSeries) writerRunnableOneSignal);
+            } else {
+                //@pendiente lanzar excepcion
+            }
+        }
     }
 
-    public synchronized void notifyNewData(WriterRunnableTimeSeries writerRunnableTimeSeries) {
-        this.timeSeriesTriggers.get(writerRunnableTimeSeries.getIdentifier()).update(writerRunnableTimeSeries);
-    }
-//@comentario a mi modo de verlo, para no emplear sintonización aqui tenemos que garantizar que cada uno de los
-    //trigger individuales es thread safe. Cosa que ahora no se hace. Quizás podriamos emplear cada objeto tipo
-    //Trigger como lock  para todos los objetos TimeSeriesTrigget y EventSeriesTrigger que contiene,
-    //y así nos ahorramos el trabajo de hacerlos thread safe. En cualquier caso, tal y como esta este método
-    //puede haber problemas de concurrencia con este metodo y cualquier otro metodo de esta clase
-    //(los objetos TimeSeriesTrigget y EventSeriesTrigger están confinados en esta clase) que modifique
-    //alguna instancia de TimeSeriesTrigget o de EventSeriesTrigger
-    //@pendiente mirar el modelo de sincronización para esto
-    //@revisar que todos los metodos tienen que tener sincronizacion
     public synchronized boolean trigger() {
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
@@ -87,13 +85,13 @@ public class Trigger {
         }
     }
 
-    public synchronized ReaderCallable getReaderCallableAndReset() {
-        ReaderCallable readerCallable = this.getReaderCallable();
+    public synchronized ReaderCallableMultiSignal getReaderCallableAndReset() {
+        ReaderCallableMultiSignal readerCallable = this.getReaderCallable();
         //Creo que el reset ya lo cubro al ir creando this.reset();
         return readerCallable;
     }
 
-    private synchronized ReaderCallable getReaderCallable() {
+    private synchronized ReaderCallableMultiSignal getReaderCallable() {
 
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
         //Si tenemos la modalidad de que actualice solo cuando este una sola señal lista,
@@ -106,7 +104,7 @@ public class Trigger {
                         new ReaderCallableTimeSeries(timeSeriesTrigger.getIdentifierSignal(),
                         this.getIdentifierAlgorithm());
                 readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported());
-                readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewDataInMs());
+                readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewData());
                 timeSeriesTrigger.reset();
             }
         }

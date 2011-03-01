@@ -1,6 +1,6 @@
 package signals;
 
-abstract class WriterRunnableOneSignal extends WriterRunnable {
+public abstract class WriterRunnableOneSignal extends WriterRunnable {
 
     protected String identifier;
 

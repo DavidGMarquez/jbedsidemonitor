@@ -24,14 +24,6 @@ public class EventSeriesTriggerTest {
     public EventSeriesTriggerTest() {
     }
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testCreate() {
         EventSeriesTrigger eventSeriesTrigger = new EventSeriesTrigger("EventSeriesOne", 300);
@@ -67,7 +59,7 @@ public class EventSeriesTriggerTest {
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
         assertEquals(eventSeriesTrigger.getNewEventCount(), 399);
-        writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 99, 1000, 2000);
+        writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("", 99, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
         assertEquals(eventSeriesTrigger.getNewEventCount(), 399);
