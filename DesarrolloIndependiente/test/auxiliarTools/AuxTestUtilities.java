@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import signals.Event;
 import signals.WriterRunnableEventSeries;
+import signals.WriterRunnableTimeSeries;
 
 public class AuxTestUtilities {
 
@@ -77,6 +78,9 @@ public class AuxTestUtilities {
             writerRunnableEventSeries.addEventToWrite(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", null));
         }
         return writerRunnableEventSeries;
+    }
+    public static WriterRunnableTimeSeries generarWriterRunnableTime(String nameSignal, int numberSamples){
+        return new WriterRunnableTimeSeries(nameSignal, generateArray(numberSamples));
     }
 
     public static boolean eventosCompararListas(LinkedList<Event> eventos1, LinkedList<Event> eventos2) {
