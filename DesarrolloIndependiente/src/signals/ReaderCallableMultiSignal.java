@@ -67,4 +67,9 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     public boolean addReaderCallableOneSignal(ReaderCallableOneSignal readerCallableOneSignal){
         return this.readerCallables.add(readerCallableOneSignal);
     }
+        //@debug metodo de depuracion solamente
+    public LinkedList<ReaderCallableOneSignal> getReaderCallables() {
+        return new LinkedList<ReaderCallableOneSignal>(readerCallables);
+    }
+
 }

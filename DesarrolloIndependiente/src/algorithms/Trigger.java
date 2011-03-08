@@ -19,8 +19,8 @@ public class Trigger {
     private Map<String, EventSeriesTrigger> eventSeriesTriggers;
     private AlgorithmNotifyPoliceEnum notifyPolice;
 
-    Trigger(String identifierAlgorithm,AlgorithmNotifyPolice algorithmNotifyPolice) {
-        this.identifierAlgorithm=identifierAlgorithm;
+    Trigger(String identifierAlgorithm, AlgorithmNotifyPolice algorithmNotifyPolice) {
+        this.identifierAlgorithm = identifierAlgorithm;
         this.timeSeriesTriggers = new HashMap<String, TimeSeriesTrigger>();
         this.eventSeriesTriggers = new HashMap<String, EventSeriesTrigger>();
         this.notifyPolice = algorithmNotifyPolice.getNotifyPolice();
@@ -67,7 +67,12 @@ public class Trigger {
                 return false;
             }
         }
-        return true;
+        if (notifyPolice.equals(notifyPolice.ONE)) {
+            return false;
+        } else if (notifyPolice.equals(notifyPolice.ALL)) {
+            return true;
+        }
+        return false;
     }
 
     //Tiene sentido que resetee todo? o solo debería resetear los triggers?
@@ -86,13 +91,15 @@ public class Trigger {
     }
 
     public synchronized ReaderCallableMultiSignal getReaderCallableAndReset() {
+        //@duda debería comprobar si el trigger esta activado antes de devolver el callable?
+        //Es decir ahora mismo aunque la politica sea ALL si le pedimos el readerCallable nos los da solo de
+        //las señales que estan listas
         ReaderCallableMultiSignal readerCallable = this.getReaderCallable();
         //Creo que el reset ya lo cubro al ir creando this.reset();
         return readerCallable;
     }
 
     private synchronized ReaderCallableMultiSignal getReaderCallable() {
-
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
         //Si tenemos la modalidad de que actualice solo cuando este una sola señal lista,
         //el número de señales será variable
@@ -106,6 +113,7 @@ public class Trigger {
                 readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported());
                 readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewData());
                 timeSeriesTrigger.reset();
+                readerCallable.addReaderCallableOneSignal(readerCallableTimeSeries);
             }
         }
         Collection<EventSeriesTrigger> valuesEventSeriesTrigger = eventSeriesTriggers.values();
@@ -117,6 +125,7 @@ public class Trigger {
                 readerCallableEventSeries.setFirstInstantToInclude(eventSeriesTrigger.getLastEventReported());
                 readerCallableEventSeries.setLastInstantToInclude(eventSeriesTrigger.getNewEventCount());
                 eventSeriesTrigger.reset();
+                readerCallable.addReaderCallableOneSignal(readerCallableEventSeries);
             }
         }
         return readerCallable;
@@ -124,5 +133,15 @@ public class Trigger {
 
     public String getIdentifierAlgorithm() {
         return identifierAlgorithm;
+    }
+
+    //@debug metodo de depuracion solamente
+    public synchronized Map<String, EventSeriesTrigger> getEventSeriesTriggers() {
+        return new HashMap<String, EventSeriesTrigger>(eventSeriesTriggers);
+    }
+    //@debug metodo de depuracion solamente
+
+    public synchronized Map<String, TimeSeriesTrigger> getTimeSeriesTriggers() {
+        return new HashMap<String, TimeSeriesTrigger>(timeSeriesTriggers);
     }
 }
