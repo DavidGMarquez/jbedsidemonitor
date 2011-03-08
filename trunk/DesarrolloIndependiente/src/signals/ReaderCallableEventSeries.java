@@ -11,6 +11,12 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
         super(identifierSignal, identifierOwner);
     }
 
+    public ReaderCallableEventSeries(String identifierSignal, String identifierOwner, long firstInstantToInclude, long lastInstantToInclude) {
+        super(identifierSignal, identifierOwner);
+        this.firstInstantToInclude = firstInstantToInclude;
+        this.lastInstantToInclude = lastInstantToInclude;
+    }
+
     @Override
     protected ReadResult read() {
         SignalManager signalManager = SignalManager.getInstance();
@@ -37,4 +43,5 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
     public long getLastInstantToInclude() {
         return lastInstantToInclude;
     }
+    
 }

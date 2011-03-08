@@ -1,6 +1,8 @@
 package signals;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WriterRunnableMultiSignal extends WriterRunnable {
 
@@ -15,8 +17,14 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
 
     @Override
     public void run() {
-        this.getLocks();
-        //@pendiente aqui habría que ver la estrategia para si no se pueden obtener los locks
+       while(!this.getLocks()){
+           //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       }
         this.write();
         this.releaseLocks();
     }

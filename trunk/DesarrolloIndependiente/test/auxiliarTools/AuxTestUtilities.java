@@ -1,8 +1,12 @@
 package auxiliarTools;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import signals.Event;
+import signals.ReaderCallableEventSeries;
+import signals.ReaderCallableOneSignal;
+import signals.ReaderCallableTimeSeries;
 import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 
@@ -32,7 +36,8 @@ public class AuxTestUtilities {
         }
         return array;
     }
-        public static int[] generateArrayInteger(int tam) {
+
+    public static int[] generateArrayInteger(int tam) {
         int[] array = new int[tam];
         for (int i = 0; i < tam; i++) {
             array[i] = (int) Math.random() * 100;
@@ -53,12 +58,12 @@ public class AuxTestUtilities {
             System.out.println(readFromTimeSeries[i]);
         }
     }
+
     public static void secuentialArray(float[] data) {
         for (int i = 0; i < data.length; i++) {
             data[i] = i;
         }
     }
-
 
     public static void eventosAleatorios(LinkedList<Event> eventos, int numberofevents, int timeinit, int duration) {
         for (int i = 0; i < numberofevents; i++) {
@@ -71,15 +76,16 @@ public class AuxTestUtilities {
             System.out.println("Event " + i + " time" + events.get(i).getLocation() + " tipo " + events.get(i).getType());
         }
     }
-    public static WriterRunnableEventSeries generarWriterRunnableEvents(String nameSignal,int numberEvents,int timeinit, int duration)
-    {
-        WriterRunnableEventSeries writerRunnableEventSeries= new WriterRunnableEventSeries(nameSignal);
+
+    public static WriterRunnableEventSeries generarWriterRunnableEvents(String nameSignal, int numberEvents, int timeinit, int duration) {
+        WriterRunnableEventSeries writerRunnableEventSeries = new WriterRunnableEventSeries(nameSignal);
         for (int i = 0; i < numberEvents; i++) {
             writerRunnableEventSeries.addEventToWrite(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", null));
         }
         return writerRunnableEventSeries;
     }
-    public static WriterRunnableTimeSeries generarWriterRunnableTime(String nameSignal, int numberSamples){
+
+    public static WriterRunnableTimeSeries generarWriterRunnableTime(String nameSignal, int numberSamples) {
         return new WriterRunnableTimeSeries(nameSignal, generateArray(numberSamples));
     }
 
@@ -95,5 +101,40 @@ public class AuxTestUtilities {
         } else {
             return false;
         }
+    }
+
+    public static boolean compareReaderCallables(LinkedList<ReaderCallableOneSignal> readerCallables, HashMap<String, ReaderCallableOneSignal> expectedResults) {
+        if(expectedResults==null ||readerCallables==null || (expectedResults.keySet().size()!=readerCallables.size()))
+            return false;
+        for (ReaderCallableOneSignal readerCallableOneSignal : readerCallables) {
+            ReaderCallableOneSignal expectedResult = expectedResults.get(readerCallableOneSignal.getIdentifierSignal());
+            if (expectedResult == null) {
+                return false;
+            }
+
+            if (expectedResult instanceof ReaderCallableEventSeries && readerCallableOneSignal instanceof ReaderCallableEventSeries) {
+                ReaderCallableEventSeries expectedResultConcrete = (ReaderCallableEventSeries) expectedResult;
+                ReaderCallableEventSeries readerCallableOneSignalConcrete = (ReaderCallableEventSeries) readerCallableOneSignal;
+                if (!((expectedResultConcrete.getFirstInstantToInclude() == readerCallableOneSignalConcrete.getFirstInstantToInclude())
+                        && (expectedResultConcrete.getLastInstantToInclude() == readerCallableOneSignalConcrete.getLastInstantToInclude())
+                        && (expectedResultConcrete.getIdentifierOwner().equals(readerCallableOneSignalConcrete.getIdentifierOwner()))
+                        && (expectedResultConcrete.getIdentifierSignal().equals(readerCallableOneSignalConcrete.getIdentifierSignal())))) {
+                    return false;
+                }
+            } else if (expectedResult instanceof ReaderCallableTimeSeries && readerCallableOneSignal instanceof ReaderCallableTimeSeries) {
+                ReaderCallableTimeSeries expectedResultConcrete = (ReaderCallableTimeSeries) expectedResult;
+                ReaderCallableTimeSeries readerCallableOneSignalConcrete = (ReaderCallableTimeSeries) readerCallableOneSignal;
+                if (!((expectedResultConcrete.getPosInitToRead() == readerCallableOneSignalConcrete.getPosInitToRead())
+                        && (expectedResultConcrete.getSizeToRead() == readerCallableOneSignalConcrete.getSizeToRead())
+                        && (expectedResultConcrete.getIdentifierOwner().equals(readerCallableOneSignalConcrete.getIdentifierOwner()))
+                        && (expectedResultConcrete.getIdentifierSignal().equals(readerCallableOneSignalConcrete.getIdentifierSignal())))) {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }

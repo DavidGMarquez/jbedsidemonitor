@@ -1,6 +1,6 @@
 package signals;
 
-abstract class ReaderCallableOneSignal extends ReaderCallable {
+public abstract class ReaderCallableOneSignal extends ReaderCallable {
 
     protected String identifierSignal;
 

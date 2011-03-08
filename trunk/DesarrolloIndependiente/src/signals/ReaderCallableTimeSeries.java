@@ -9,6 +9,13 @@ public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
         super(identifierSignal, identifierOwner);
     }
 
+    public ReaderCallableTimeSeries(String identifierSignal, String identifierOwner, int posInitToRead, int sizeToRead) {
+        super(identifierSignal, identifierOwner);
+        this.posInitToRead = posInitToRead;
+        this.sizeToRead = sizeToRead;
+    }
+
+
     @Override
     protected ReadResult read() {
         SignalManager signalManager = SignalManager.getInstance();
@@ -24,4 +31,13 @@ public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
     public void setSizeToRead(int sizeToRead) {
         this.sizeToRead = sizeToRead;
     }
+
+    public int getPosInitToRead() {
+        return posInitToRead;
+    }
+
+    public int getSizeToRead() {
+        return sizeToRead;
+    }
+
 }
