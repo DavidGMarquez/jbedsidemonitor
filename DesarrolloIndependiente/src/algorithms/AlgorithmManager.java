@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import signals.ReadResult;
 import signals.ReaderCallable;
-import signals.WriterRunnableEventSeries;
-import signals.WriterRunnableTimeSeries;
+import signals.WriterRunnableOneSignal;
 
 /**
  * Singlenton
@@ -33,15 +32,19 @@ public class AlgorithmManager {
 
     //@pendiente comprobar que los identificadores no se repitan y lanzar
     //excepción si es necesario.
-
     public Algorithm addAlgorithm(Algorithm algorithm) {
-        this.addTrigger(algorithm);
-        this.addSignalNamesToMap(algorithm);
-        return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
+        if (this.algorithmsByName.get(algorithm.getIdentifier()) == null) {
+            this.addTrigger(algorithm);
+            this.addSignalNamesToMap(algorithm);
+            return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
+        } else {
+            // throw Exception;
+            return null;
+        }
     }
 
     private Trigger addTrigger(Algorithm algorithm) {
-        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(), new Trigger(algorithm.getIdentifier(),algorithm.getNotifyPolice()));
+        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(), new Trigger(algorithm.getIdentifier(), algorithm.getNotifyPolice()));
     }
 
     private void addSignalNamesToMap(Algorithm algorithm) {
@@ -65,23 +68,13 @@ public class AlgorithmManager {
             this.algorithmsNameBySignalName.put(eventSeriesName, algorithmNames);
         }
     }
-//@comentario cada vez que se termina una lectura SignalManager debería notificar (llamar a este metodo)
-    public void notifyNewData(WriterRunnableEventSeries writerRunnableEventSeries) {
-        String signalName = writerRunnableEventSeries.getIdentifier();
+
+    public void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
+        String signalName = writerRunnableOneSignal.getIdentifier();
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
         for (String algorithmName : algorithmNames) {
             Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-            algorithmTrigger.notifyNewData(writerRunnableEventSeries);
-            this.checkTriggers();
-        }
-    }
-//@comentario ¿para que dos métodos? ¿no nos podemos arreglar con uno que reciba un ReadResult?
-    public void notifyNewData(WriterRunnableTimeSeries writerRunnableTimeSeries) {
-        String signalName = writerRunnableTimeSeries.getIdentifier();
-        LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
-        for (String algorithmName : algorithmNames) {
-            Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-            algorithmTrigger.notifyNewData(writerRunnableTimeSeries);
+            algorithmTrigger.notifyNewData(writerRunnableOneSignal);
             this.checkTriggers();
         }
     }
@@ -92,7 +85,7 @@ public class AlgorithmManager {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             if (triggerAlgorithm.trigger()) {
                 ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableAndReset();
-                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
+                signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
     }
@@ -111,5 +104,25 @@ public class AlgorithmManager {
 
     public Algorithm getAlgorithm(String name) {
         return this.algorithmsByName.get(name);
+    }
+    //@debud metodos de depuracion
+
+    public LinkedList<String> getAllAlgorithmNames() {
+        return (new LinkedList<String>(this.algorithmsByName.keySet()));
+    }
+
+    public Trigger getTrigger(String algorithmName) {
+        return this.triggersByAlgorithmName.get(algorithmName);
+    }
+
+    public LinkedList<String> getAlgorithmNamesToSignal(String algorithmName) {
+        return this.algorithmsNameBySignalName.get(algorithmName);
+    }
+
+    public void reset() {
+        this.algorithmsByName = new HashMap<String, Algorithm>();
+        this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
+        this.triggersByAlgorithmName = new HashMap<String, Trigger>();
+        this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
 }

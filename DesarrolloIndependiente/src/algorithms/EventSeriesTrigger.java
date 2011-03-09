@@ -9,9 +9,6 @@ class EventSeriesTrigger {
     private int lastEventReported;
     private int theshold;
 
-    //@comentario es necesario determinar qué poltica de concurrencia sigue esta clase. Para simplificar las cosas
-    //el mantener las instancias de esta clase confinadas dentro de Trigger nos puede ayudar
-    //@pendiente sincronizar esta clase para que se pueda usar en entornos multihilo.
     public EventSeriesTrigger(String identifierSignal,int theshold) {
         this.identifierSignal=identifierSignal;
         this.theshold = theshold;
