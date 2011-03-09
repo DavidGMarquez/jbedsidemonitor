@@ -10,12 +10,12 @@ public class AlgorithmNotifyPolice {
 
     protected Map<String, Integer> timeSeriesTheshold;
     protected Map<String, Integer> eventSeriesTheshold;
-    private AlgorithmNotifyPoliceEnum notifyPolice;
+    private AlgorithmNotifyPoliceEnum notifyPoliceType;
 
     public AlgorithmNotifyPolice(Map<String, Integer> timeSeriesTheshold, Map<String, Integer> eventSeriesTheshold, AlgorithmNotifyPoliceEnum notifyPolice) {
         this.timeSeriesTheshold = new HashMap<String, Integer>(timeSeriesTheshold);
         this.eventSeriesTheshold = new HashMap<String, Integer>( eventSeriesTheshold);
-        this.notifyPolice = notifyPolice;
+        this.notifyPoliceType = notifyPolice;
     }
     
     public Map<String, Integer> getEventSeriesTheshold() {
@@ -23,7 +23,7 @@ public class AlgorithmNotifyPolice {
     }
 
     public AlgorithmNotifyPoliceEnum getNotifyPolice() {
-        return notifyPolice;
+        return notifyPoliceType;
     }
 
     public Map<String, Integer> getTimeSeriesTheshold() {

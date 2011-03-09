@@ -19,11 +19,11 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
     public void run() {
        while(!this.getLocks()){
            //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
-            try {
+          /*  try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }*/
        }
         this.write();
         this.releaseLocks();
@@ -56,7 +56,7 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
 
     protected void releaseLocks() {
         for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
-            this.lockManager.releaseReadLock(writerRunnableOneSignal.getIdentifier());
+            this.lockManager.releaseWriteLock(writerRunnableOneSignal.getIdentifier());
         }
     }
 

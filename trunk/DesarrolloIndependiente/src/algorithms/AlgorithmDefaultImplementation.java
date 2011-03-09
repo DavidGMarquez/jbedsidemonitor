@@ -1,5 +1,7 @@
 package algorithms;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import signals.ReadResult;
 
 public class AlgorithmDefaultImplementation implements Algorithm {
@@ -8,22 +10,24 @@ public class AlgorithmDefaultImplementation implements Algorithm {
     private String identifierSignalToWrite;
     private AlgorithmNotifyPolice algorithmNotifyPolice;
 
-    
     public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
         this.identifier = identifier;
         this.identifierSignalToWrite = identifierSignalToWrite;
         this.algorithmNotifyPolice = algorithmNotifyPolice;
     }
-    //@comentario proporciona otro constructor al cual no sea necesario pasarle una AlgorithmNotifyPolice
-    //y emplea una política de notificacion por defecto que estara definida dentro de esta misma clase
-    //@respuesta necesito saber las señales que quiere leer igualmente para poder crear el AlgorithmNotifyPolice
-
-    public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite) {
+    public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         this.identifier = identifier;
         this.identifierSignalToWrite = identifierSignalToWrite;
-        this.algorithmNotifyPolice= new AlgorithmNotifyPolice(null, null, AlgorithmNotifyPoliceEnum.ALL);
+        HashMap<String, Integer> eventSeriesHold = new HashMap<String, Integer>();
+        for (String eventSerieName : eventSeries) {
+            eventSeriesHold.put(eventSerieName, new Integer(10));
+        }
+        HashMap<String, Integer> timeSeriesHold = new HashMap<String, Integer>();
+        for (String timeSerieName : timeSeries) {
+            timeSeriesHold.put(timeSerieName, new Integer(100));
+        }
+        this.algorithmNotifyPolice = new AlgorithmNotifyPolice(timeSeriesHold, eventSeriesHold, AlgorithmNotifyPoliceEnum.ALL);
     }
-
 
     public AlgorithmNotifyPolice getNotifyPolice() {
         return this.algorithmNotifyPolice;

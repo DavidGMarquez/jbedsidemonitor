@@ -56,10 +56,6 @@ public class AlgorithmNotifyPoliceTest {
 
         AlgorithmNotifyPolice algorithmNotifyPolice = new AlgorithmNotifyPolice(timeSeriesHold, eventSeriesHold, AlgorithmNotifyPoliceEnum.ALL);
 
-
-
-
-        //@duda debería de exigir esto? es decir que haga copia de todo lo que se le paasa por defecto?
         assertEquals(algorithmNotifyPolice.getTimeSeriesTheshold().get("Serie4").intValue(), 4);
         assertEquals(algorithmNotifyPolice.getTimeSeriesTheshold().get("Serie3").intValue(), 3);
         assertEquals(algorithmNotifyPolice.getTimeSeriesTheshold().get("Serie2").intValue(), 2);

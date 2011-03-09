@@ -108,6 +108,6 @@ public class TesterWriterService {
         assertTrue(AuxTestUtilities.compareArray(dataToWrite1, signalManager.readFromTimeSeries("Signal 1Time", 0, 10), dataToWrite1.length));
         assertTrue(AuxTestUtilities.compareArray(dataToWrite2, signalManager.readFromTimeSeries("Signal 2Time", 0, 100), dataToWrite2.length));
         assertEquals(1, signalManager.getEvents("Signal 1Event").size());
-        assertEquals(3, signalManager.getEvents("Signal 2Event").size());
+        assertEquals(3, signalManager.getEvents("Signal 2Event").size());                        
     }
 }
