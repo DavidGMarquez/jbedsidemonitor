@@ -48,4 +48,10 @@ public class LockManager {
     public boolean tryWriteLock(String identifier) {
         return this.signalsLocks.get(identifier).writeLock().tryLock();
     }
+    //@debug metodo depuracion
+
+    public void reset() {
+        signalsLocks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
+
+    }
 }

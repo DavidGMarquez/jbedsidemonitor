@@ -7,7 +7,7 @@ package signals;
  * crear, y luego le pasamos al usuario y el usuario lo hace con él lo que quiere. Lo vamos
  * a dejar asi. Pero hay que ser consciente de esta decisión de diseño.
  */
-class ReadResultTimeSeries extends ReadResultOneSignal{
+public class ReadResultTimeSeries extends ReadResultOneSignal{
 
     private float[] data;
     private int posInitToRead;

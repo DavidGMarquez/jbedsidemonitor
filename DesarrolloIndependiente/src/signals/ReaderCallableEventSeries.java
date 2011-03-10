@@ -43,5 +43,4 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
     public long getLastInstantToInclude() {
         return lastInstantToInclude;
     }
-    
 }
