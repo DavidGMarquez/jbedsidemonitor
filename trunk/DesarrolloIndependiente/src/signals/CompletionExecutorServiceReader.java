@@ -24,11 +24,12 @@ public class CompletionExecutorServiceReader implements Runnable {
     @Override
     public void run() {
         while (true) {
-            System.out.println("Run");
+            System.out.println("RunCompletion");
             try {
                 Future<ReadResult> futureReadResult = executorCompletionService.take();
                 ReadResult readResult = futureReadResult.get();
-             //   AlgorithmManager.getInstance().processData(readResult);
+                System.out.println("Obteniendo un resultado Futuro de "+readResult.getIdentifierOwner());
+                AlgorithmManager.getInstance().processData(readResult);
             } catch (ExecutionException ex) {
                 Logger.getLogger(CompletionExecutorServiceReader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {

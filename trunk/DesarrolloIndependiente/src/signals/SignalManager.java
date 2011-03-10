@@ -93,4 +93,14 @@ public class SignalManager {
     SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
         return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
     }
+    //@debug metodo depuracion
+    public void reset(){
+                lockManager = LockManager.getInstance();
+        timeSeries = new ConcurrentHashMap<String, TimeSeries>();
+        eventSeries = new ConcurrentHashMap<String, EventSeries>();
+        executorServiceWriter = new ExecutorServiceWriter();
+        completionExecutorServiceReader = new CompletionExecutorServiceReader();
+        this.initiateThread();
+
+    }
 }

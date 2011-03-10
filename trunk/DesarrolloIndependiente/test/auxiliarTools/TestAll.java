@@ -23,6 +23,8 @@ import org.junit.runners.Suite;
     signals.SignalManagerTest.class,
     signals.TesterReaderService.class,
     signals.EventTest.class,
+    signals.CompletionExecutorServiceReaderTest.class,
+    signals.LockManagerTest.class,
     algorithms.AlgorithmNotifyPoliceTest.class,
     algorithms.EventSeriesTriggerTest.class,
     algorithms.TimeSeriesTriggerTest.class,

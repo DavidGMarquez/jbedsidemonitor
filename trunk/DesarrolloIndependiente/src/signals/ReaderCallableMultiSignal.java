@@ -28,12 +28,13 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
         return this.getReadResult();
     }
 
-    protected ReadResult read() {
+    protected ReadResult read() {        
         ReadResultMultiSignal readResultMulti=new ReadResultMultiSignal(this.getIdentifierOwner());
         for (ReaderCallableOneSignal readerCallableOneSignal : readerCallables) {
             readResultMulti.addReadResultOneSignal((ReadResultOneSignal) readerCallableOneSignal.read());
         }
-        return readResultMulti;
+        this.readResult=readResultMulti;
+        return this.readResult;
 
     }
 

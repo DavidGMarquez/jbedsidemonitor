@@ -71,12 +71,16 @@ public class AlgorithmManager {
 
     public void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
         String signalName = writerRunnableOneSignal.getIdentifier();
+
         LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
-        for (String algorithmName : algorithmNames) {
-            Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-            algorithmTrigger.notifyNewData(writerRunnableOneSignal);
-            this.checkTriggers();
+        if (algorithmNames != null) {
+            for (String algorithmName : algorithmNames) {
+                Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
+                algorithmTrigger.notifyNewData(writerRunnableOneSignal);
+                this.checkTriggers();
+            }
         }
+
     }
 
     private void checkTriggers() {
