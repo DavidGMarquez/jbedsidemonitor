@@ -3,21 +3,22 @@ package algorithms;
 import java.util.HashMap;
 import java.util.LinkedList;
 import signals.ReadResult;
+import signals.Series;
 
 public class AlgorithmDefaultImplementation implements Algorithm {
 
     private String identifier;
-    private String identifierSignalToWrite;
+    private Series signalToWrite;
     private AlgorithmNotifyPolice algorithmNotifyPolice;
 
-    public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
+    public AlgorithmDefaultImplementation(String identifier, Series signalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
         this.identifier = identifier;
-        this.identifierSignalToWrite = identifierSignalToWrite;
+        this.signalToWrite = signalToWrite;
         this.algorithmNotifyPolice = algorithmNotifyPolice;
     }
-    public AlgorithmDefaultImplementation(String identifier, String identifierSignalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmDefaultImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         this.identifier = identifier;
-        this.identifierSignalToWrite = identifierSignalToWrite;
+        this.signalToWrite = signalToWrite;
         HashMap<String, Integer> eventSeriesHold = new HashMap<String, Integer>();
         for (String eventSerieName : eventSeries) {
             eventSeriesHold.put(eventSerieName, new Integer(10));
@@ -37,8 +38,8 @@ public class AlgorithmDefaultImplementation implements Algorithm {
         return this.identifier;
     }
 
-    public String getIdentifierSignalToWrite() {
-        return this.identifierSignalToWrite;
+    public Series getSignalToWrite() {
+        return this.signalToWrite;
     }
 
     public boolean execute(ReadResult readResult) {

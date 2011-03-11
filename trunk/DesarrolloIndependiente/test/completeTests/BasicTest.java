@@ -58,9 +58,7 @@ public class BasicTest {
 
     @Before
     public void setUp() {
-        SignalManager.getInstance().reset();
-        LockManager.getInstance().reset();
-        AlgorithmManager.getInstance().reset();
+        AuxTestUtilities.reset();
 
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
         timeSeries2 = new TimeSeries("TimeSeries2", "Simulated", 1, 100, "mv");
@@ -90,10 +88,12 @@ public class BasicTest {
         timeSignals3 = new LinkedList<String>();
         eventSignals3.add("EventSeries1");
         timeSignals3.add("TimeSeries1");
-
-        algorithm1 = new AlgorithmStupidImplementation("Algorithm1", "Out_Algorithm1", timeSignals1, eventSignals1);
-        algorithm2 = new AlgorithmStupidImplementation("Algorithm2", "Out_Algorithm2", timeSignals2, eventSignals2);
-        algorithm3 = new AlgorithmStupidImplementation("Algorithm3", "Out_Algorithm3", timeSignals3, eventSignals3);
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm1", 0, 300, "NaN");
+        EventSeries eventSeriesOut2 = new EventSeries("Out_Algorithm_2", "Algorithm2", 0, new ArrayList<String>(), "NaN");
+        TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_3", "Algorithm3", 0, 300, "NaN");
+        algorithm1 = new AlgorithmStupidImplementation("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1);
+        algorithm2 = new AlgorithmStupidImplementation("Algorithm2", eventSeriesOut2, timeSignals2, eventSignals2);
+        algorithm3 = new AlgorithmStupidImplementation("Algorithm3", timeSeriesOut3, timeSignals3, eventSignals3);
 
 
     }
@@ -106,7 +106,10 @@ public class BasicTest {
     public void testBasico() {
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
+        assertTrue(SignalManager.getInstance().getAllEventSeriesNames().size()==1);
+        assertTrue(SignalManager.getInstance().getAllTimeSeriesNames().size()==1);
         AlgorithmManager.getInstance().addAlgorithm(algorithm1);
+        assertTrue(SignalManager.getInstance().getAllTimeSeriesNames().size()==2);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 1000);
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
         try {

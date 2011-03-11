@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import signals.ReadResult;
 import signals.ReaderCallable;
+import signals.SignalManager;
 import signals.WriterRunnableOneSignal;
 
 /**
@@ -34,6 +35,7 @@ public class AlgorithmManager {
     //excepción si es necesario.
     public Algorithm addAlgorithm(Algorithm algorithm) {
         if (this.algorithmsByName.get(algorithm.getIdentifier()) == null) {
+            SignalManager.getInstance().addSeries(algorithm.getSignalToWrite());
             this.addTrigger(algorithm);
             this.addSignalNamesToMap(algorithm);
             return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);

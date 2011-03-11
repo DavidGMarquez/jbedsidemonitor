@@ -10,6 +10,7 @@ import signals.ReadResult;
 import signals.ReadResultEventSeries;
 import signals.ReadResultMultiSignal;
 import signals.ReadResultTimeSeries;
+import signals.Series;
 
 /**
  *
@@ -17,8 +18,8 @@ import signals.ReadResultTimeSeries;
  */
 public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementation {
 
-    public AlgorithmStupidImplementation(String identifier, String identifierSignalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
-        super(identifier, identifierSignalToWrite, timeSeries, eventSeries);
+    public AlgorithmStupidImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+        super(identifier, signalToWrite, timeSeries, eventSeries);
     }
 
     public boolean execute(ReadResult readResult) {

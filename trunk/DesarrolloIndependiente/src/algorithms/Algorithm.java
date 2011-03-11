@@ -1,12 +1,13 @@
 package algorithms;
 
 import signals.ReadResult;
+import signals.Series;
 
 public interface Algorithm {
     //@pendiente revisar si falta algo de la especificación de la memoria inicial.
     public String getIdentifier();
 
-    public String getIdentifierSignalToWrite();
+    public Series getSignalToWrite();
 
     public AlgorithmNotifyPolice getNotifyPolice();
 
