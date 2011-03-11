@@ -4,6 +4,7 @@
  */
 package algorithms;
 
+import auxiliarTools.AuxTestUtilities;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import signals.EventSeries;
+import signals.TimeSeries;
 import static org.junit.Assert.*;
 
 /**
@@ -52,7 +55,7 @@ public class AlgorithmManagerTest {
 
     @After
     public void tearDown() {
-        AlgorithmManager.getInstance().reset();
+        AuxTestUtilities.reset();
     }
 
     @Test
@@ -62,7 +65,8 @@ public class AlgorithmManagerTest {
         AlgorithmManager instance3 = AlgorithmManager.getInstance();
         assertEquals(instance1, instance2);
         assertEquals(instance3, AlgorithmManager.getInstance());
-        instance1.addAlgorithm(new AlgorithmDefaultImplementation("Algorithm_1", "Out_Algorithm_1", timeSignalsA, eventSignalsA));
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
+        instance1.addAlgorithm(new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA));
         assertEquals(instance1, AlgorithmManager.getInstance());
 
     }
@@ -70,9 +74,9 @@ public class AlgorithmManagerTest {
     @Test
     public void testAddAlgorithm() {
 
-        AlgorithmManager.getInstance().reset();
-
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", "Out_Algorithm_1", timeSignalsA, eventSignalsA);
+        AuxTestUtilities.reset();
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA);
         AlgorithmManager instance = AlgorithmManager.getInstance();
         assertEquals(instance.getAllAlgorithmNames().size(), 0);
         instance.addAlgorithm(algorithm1);
@@ -119,12 +123,15 @@ public class AlgorithmManagerTest {
 
     @Test
     public void testAddMultiAlgorithm() {
-        AlgorithmManager.getInstance().reset();
+        AuxTestUtilities.reset();
         AlgorithmManager instance = AlgorithmManager.getInstance();
         assertEquals(instance.getAllAlgorithmNames().size(), 0);
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", "Out_Algorithm_1", timeSignalsA, eventSignalsA);
-        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2", "Out_Algorithm_2", timeSignalsA, eventSignalsA);
-        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3", "Out_Algorithm_3", timeSignalsB, eventSignalsB);
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
+        EventSeries eventSeriesOut2 = new EventSeries("Out_Algorithm_2", "Algorithm_2", 0, new ArrayList<String>(), "NaN");
+        TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_3", "Algorithm_3", 0, 300, "NaN");
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA);
+        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2", eventSeriesOut2, timeSignalsA, eventSignalsA);
+        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3", timeSeriesOut3, timeSignalsB, eventSignalsB);
 
         instance.addAlgorithm(algorithm1);
         instance.addAlgorithm(algorithm2);
@@ -132,7 +139,7 @@ public class AlgorithmManagerTest {
         instance.addAlgorithm(algorithm3);
         assertEquals(instance.getAllAlgorithmNames().size(), 3);
         assertEquals(instance.getAlgorithm("Algorithm_1"), algorithm1);
-        assertTrue(instance.getAlgorithm("Algorithm_2").getIdentifierSignalToWrite().equals("Out_Algorithm_2"));
+        assertTrue(instance.getAlgorithm("Algorithm_2").getSignalToWrite().getIdentifier().equals("Out_Algorithm_2"));
         assertTrue(instance.getAlgorithmNamesToSignal("EventSeries1").size() == 2);
         LinkedList<String> algorithmNameBySignalName = instance.getAlgorithmNamesToSignal("EventSeries1");
         algorithmNameBySignalName.remove("Algorithm_1");

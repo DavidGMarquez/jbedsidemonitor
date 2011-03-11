@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package signals;
 
+import auxiliarTools.AuxTestUtilities;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,16 +23,16 @@ public class LockManagerTest {
 
     @Test
     public void testInstance() {
-        LockManager.getInstance().reset();
-        LockManager lockManager=LockManager.getInstance();
+        AuxTestUtilities.reset();
+        LockManager lockManager = LockManager.getInstance();
         assertEquals(lockManager, LockManager.getInstance());
-       assertEquals(lockManager, lockManager.getInstance());
+        assertEquals(lockManager, lockManager.getInstance());
     }
 
     @Test
     public void testAddLock() {
-        LockManager.getInstance().reset();
-        LockManager lockManager=LockManager.getInstance();
+                AuxTestUtilities.reset();
+        LockManager lockManager = LockManager.getInstance();
         assertTrue(lockManager.addLock("Series1"));
         assertTrue(lockManager.addLock("Series2"));
         assertTrue(lockManager.addLock("Series3"));

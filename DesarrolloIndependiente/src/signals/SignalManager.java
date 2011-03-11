@@ -32,6 +32,16 @@ public class SignalManager {
     //@pendiente si es necesario hacer una copia del objeto ya que es mutable
     //Comentario hasta que se haga para que no se olvide copia defensiva
 
+    public Series addSeries(Series series)
+    {
+        if(series instanceof TimeSeries)
+            return this.addTimeSeries((TimeSeries)series);
+        if(series instanceof EventSeries)
+        {
+            return this.addEventSeries((EventSeries)series);
+        }
+        return null;
+    }
     public TimeSeries addTimeSeries(TimeSeries ts) {
         this.lockManager.addLock(ts.getIdentifier());
         return this.timeSeries.put(ts.getIdentifier(), ts);
@@ -103,5 +113,13 @@ public class SignalManager {
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
         this.initiateThread();
 
+    }
+    public LinkedList<String> getAllTimeSeriesNames()
+    {
+        return new LinkedList<String>(this.timeSeries.keySet());
+    }
+        public LinkedList<String> getAllEventSeriesNames()
+    {
+        return new LinkedList<String>(this.eventSeries.keySet());
     }
 }

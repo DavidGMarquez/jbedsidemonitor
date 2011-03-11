@@ -1,12 +1,15 @@
 package auxiliarTools;
 
+import algorithms.AlgorithmManager;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import signals.Event;
+import signals.LockManager;
 import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableOneSignal;
 import signals.ReaderCallableTimeSeries;
+import signals.SignalManager;
 import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 
@@ -136,5 +139,10 @@ public class AuxTestUtilities {
             }
         }
         return true;
+    }
+    public static void reset(){
+        LockManager.getInstance().reset();
+        SignalManager.getInstance().reset();
+        AlgorithmManager.getInstance().reset();
     }
 }

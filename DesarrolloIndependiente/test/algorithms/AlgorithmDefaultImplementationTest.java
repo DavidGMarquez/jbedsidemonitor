@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import signals.ReadResult;
+import signals.TimeSeries;
 
 /**
  *
@@ -39,9 +40,10 @@ LinkedList<String> timeSignals;
 
     @Test
     public void testCreate() {
-        Algorithm algorithm1=new AlgorithmDefaultImplementation("algorithm1", "out_algorithm1", timeSignals, eventSignals);
+        TimeSeries timeSeriesOut1=new TimeSeries("Out_Algorithm_1", "algorithm1", 0, 300, "NaN");
+        Algorithm algorithm1=new AlgorithmDefaultImplementation("algorithm1", timeSeriesOut1, timeSignals, eventSignals);
         assertTrue(algorithm1.getIdentifier().equals("algorithm1"));
-        assertTrue(algorithm1.getIdentifierSignalToWrite().endsWith("out_algorithm1"));
+        assertTrue(algorithm1.getSignalToWrite().getIdentifier().equals("Out_Algorithm_1"));
         assertTrue(algorithm1.getNotifyPolice().getNotifyPolice().equals(AlgorithmNotifyPoliceEnum.ALL));
         assertEquals(algorithm1.getNotifyPolice().getEventSeriesTheshold().get("EventSeries1").intValue(),10);
         assertEquals(algorithm1.getNotifyPolice().getEventSeriesTheshold().get("EventSeries2").intValue(),10);
