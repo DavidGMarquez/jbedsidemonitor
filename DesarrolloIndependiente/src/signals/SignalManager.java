@@ -94,8 +94,9 @@ public class SignalManager {
         return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
     }
     //@debug metodo depuracion
-    public void reset(){
-                lockManager = LockManager.getInstance();
+
+    public void reset() {
+        lockManager = LockManager.getInstance();
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
