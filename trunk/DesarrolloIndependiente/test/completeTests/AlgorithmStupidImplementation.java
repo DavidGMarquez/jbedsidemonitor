@@ -25,7 +25,8 @@ public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementatio
         System.out.println("Ejecutandose Algoritmo");
         if (readResult instanceof ReadResultMultiSignal) {
             ReadResultMultiSignal readResultMultiSignal = (ReadResultMultiSignal) readResult;
-            System.out.println("Multisignal");
+            readResultMultiSignal.getReadResults().size();
+            System.out.println("Multisignal de "+readResultMultiSignal.getReadResults().size()+" Señáles");
         }
         if (readResult instanceof ReadResultTimeSeries) {
             ReadResultTimeSeries readResultTimeSeries = (ReadResultTimeSeries) readResult;
