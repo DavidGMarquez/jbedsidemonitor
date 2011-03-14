@@ -30,6 +30,9 @@ import org.junit.runners.Suite;
     algorithms.TimeSeriesTriggerTest.class,
     algorithms.TriggerTest.class,
     algorithms.AlgorithmDefaultImplementationTest.class,
-    algorithms.AlgorithmManagerTest.class})
+    algorithms.AlgorithmManagerTest.class,
+    completeTests.BasicTest.class,
+    completeTests.Basic2AlgorithmsTest.class}
+)
 public class TestAll {
 }

@@ -13,6 +13,6 @@ class AlgorithmRunner implements Runnable {
     }
 
     public void run() {
-//        algorithm.execute(readResult);
+        algorithm.execute(readResult);
     }
 }

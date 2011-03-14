@@ -82,8 +82,8 @@ public class AlgorithmManager {
                 this.checkTriggers();
             }
         }
-
     }
+    //@pendiente Falta un notifyNewData Para Multisignal
 
     private void checkTriggers() {
         Set<String> algorithmNames = this.triggersByAlgorithmName.keySet();

@@ -5,12 +5,22 @@
 package completeTests;
 
 import algorithms.AlgorithmDefaultImplementation;
+import auxiliarTools.AuxTestUtilities;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.LinkedList;
+import signals.Event;
+import signals.EventSeries;
 import signals.ReadResult;
 import signals.ReadResultEventSeries;
 import signals.ReadResultMultiSignal;
 import signals.ReadResultTimeSeries;
 import signals.Series;
+import signals.SignalManager;
+import signals.TimeSeries;
+import signals.WriterRunnable;
+import signals.WriterRunnableEventSeries;
+import signals.WriterRunnableTimeSeries;
 
 /**
  *
@@ -28,6 +38,19 @@ public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementatio
             ReadResultMultiSignal readResultMultiSignal = (ReadResultMultiSignal) readResult;
             readResultMultiSignal.getReadResults().size();
             System.out.println("Multisignal de "+readResultMultiSignal.getReadResults().size()+" Señáles");
+            if(this.getSignalToWrite() instanceof TimeSeries)
+            {
+
+                float f[]={0};
+                WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(this.getSignalToWrite().getIdentifier(), f);
+                SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
+            }
+            if(this.getSignalToWrite() instanceof EventSeries)
+            {
+                WriterRunnableEventSeries writerRunnableEventSeries=new WriterRunnableEventSeries(this.getSignalToWrite().getIdentifier());
+                writerRunnableEventSeries.addEventToWrite(new Event(0, "Generated", new HashMap<String, String>()));
+                SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
+            }
         }
         if (readResult instanceof ReadResultTimeSeries) {
             ReadResultTimeSeries readResultTimeSeries = (ReadResultTimeSeries) readResult;

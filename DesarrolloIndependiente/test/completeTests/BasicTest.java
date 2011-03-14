@@ -48,14 +48,6 @@ public class BasicTest {
     LinkedList<String> eventSignals3;
     LinkedList<String> timeSignals3;
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
         AuxTestUtilities.reset();
@@ -129,7 +121,7 @@ public class BasicTest {
         WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeries1", 100, 0, 100);
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
         try {
-            Thread.sleep(2000);
+            Thread.sleep(200);
         } catch (InterruptedException ex) {
             Logger.getLogger(BasicTest.class.getName()).log(Level.SEVERE, null, ex);
         }
