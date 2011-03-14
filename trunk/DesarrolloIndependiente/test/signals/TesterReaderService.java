@@ -1,7 +1,9 @@
 package signals;
 
+import completeTests.AlgorithmStupidImplementation;
+import algorithms.AlgorithmDefaultImplementation;
+import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
-import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -18,6 +20,16 @@ public class TesterReaderService {
     public void testReaderTimeSeries() {
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.initiateThread();
+        AlgorithmDefaultImplementation algorithm1;
+        LinkedList<String> eventSignals1;
+        LinkedList<String> timeSignals1;
+        eventSignals1 = new LinkedList<String>();
+        timeSignals1 = new LinkedList<String>();
+        timeSignals1.add("Signal 1");
+        timeSignals1.add("Signal 2");
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm1", 0, 300, "NaN");
+        algorithm1 = new AlgorithmStupidImplementation("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1);
+        AlgorithmManager.getInstance().addAlgorithm(algorithm1);
         assertFalse(signalManager == null);
         signalManager.addTimeSeries(new TimeSeries("Signal 1", "Simulated", 1, 100, "mv"));
         signalManager.addTimeSeries(new TimeSeries("Signal 2", "Simulated", 1, 100, "mv"));
@@ -40,10 +52,10 @@ public class TesterReaderService {
                 signalManager.readFromTimeSeries("Signal 1", 0, 10), dataToWrite1.length));
         assertTrue(AuxTestUtilities.compareArray(dataToWrite2,
                 signalManager.readFromTimeSeries("Signal 2", 0, 100), dataToWrite2.length));
-        ReaderCallableTimeSeries reader1 = new ReaderCallableTimeSeries("Signal 1", "Algorithm 1");
+        ReaderCallableTimeSeries reader1 = new ReaderCallableTimeSeries("Signal 1", "Algorithm1");
         reader1.setPosInitToRead(0);
         reader1.setSizeToRead(10);
-        ReaderCallableTimeSeries reader2 = new ReaderCallableTimeSeries("Signal 2", "Algorithm 1");
+        ReaderCallableTimeSeries reader2 = new ReaderCallableTimeSeries("Signal 2", "Algorithm1");
         reader2.setPosInitToRead(0);
         reader2.setSizeToRead(100);
         signalManager.encueReadOperation(reader1);
@@ -63,9 +75,22 @@ public class TesterReaderService {
     public void testReaderEventSeries() {
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.initiateThread();
+        AlgorithmDefaultImplementation algorithm1;
+        LinkedList<String> eventSignals1;
+        LinkedList<String> timeSignals1;
+        eventSignals1 = new LinkedList<String>();
+        timeSignals1 = new LinkedList<String>();
+        eventSignals1.add("EventSeries1");
+        eventSignals1.add("Signal 1");
+        eventSignals1.add("Signal 2");
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm1", 0, 300, "NaN");
+        algorithm1 = new AlgorithmStupidImplementation("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1);
+        AlgorithmManager.getInstance().addAlgorithm(algorithm1);
+
+
         assertFalse(signalManager == null);
-        signalManager.addEventSeries(new EventSeries("Events1", "Agente1", 100, new ArrayList<String>(), "mv"));
-        signalManager.addEventSeries(new EventSeries("Events2", "Agente2", 100, new ArrayList<String>(), "mv"));
+        signalManager.addEventSeries(new EventSeries("Events1", "Algorithm1", 100, new ArrayList<String>(), "mv"));
+        signalManager.addEventSeries(new EventSeries("Events2", "Algorithm1", 100, new ArrayList<String>(), "mv"));
         WriterRunnableEventSeries writer1 = new WriterRunnableEventSeries("Events1");
         WriterRunnableEventSeries writer2 = new WriterRunnableEventSeries("Events2");
         LinkedList<Event> events1 = new LinkedList<Event>();
@@ -88,10 +113,10 @@ public class TesterReaderService {
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEvents("Events1"))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEvents("Events2"))));
-        ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Agente1");
+        ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Algorithm1");
         reader1.setFirstInstantToInclude(1000);
         reader1.setLastInstantToInclude(1300);
-        ReaderCallableEventSeries reader2 = new ReaderCallableEventSeries("Events2", "Agente2");
+        ReaderCallableEventSeries reader2 = new ReaderCallableEventSeries("Events2", "Algorithm1");
         reader2.setFirstInstantToInclude(9900);
         reader2.setLastInstantToInclude(9900 + 130);
         signalManager.encueReadOperation(reader1);
@@ -109,7 +134,7 @@ public class TesterReaderService {
         System.out.println(signalManager.getEvents("Events1").size());
         assertEquals(0, signalManager.getEvents("Events1").size());
 
-        ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Agente1");
+        ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Algorithm1");
         reader3.setFirstInstantToInclude(1000);
         reader3.setLastInstantToInclude(1300);
         signalManager.encueReadOperation(reader3);

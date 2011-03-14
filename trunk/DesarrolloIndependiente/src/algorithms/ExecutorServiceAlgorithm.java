@@ -28,6 +28,7 @@ public class ExecutorServiceAlgorithm {
             System.out.println("EventSeries"+readResultEventSeries.getIdentifierSignal());
             System.out.println("N" + readResultEventSeries.getEventsRead().size());
         }
+        System.out.println("Haciendo un AlgorithmRunner");
         this.executorService.execute(new AlgorithmRunner(algorithm, readResult));
     }
 }

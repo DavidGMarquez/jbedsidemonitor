@@ -100,6 +100,7 @@ public class Trigger {
     }
 
     private synchronized ReaderCallableMultiSignal getReaderCallable() {
+        //@pendiente que devuelva no solo MultiSignal sino también las OneSignal si es el caso
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
         //Si tenemos la modalidad de que actualice solo cuando este una sola señal lista,
         //el número de señales será variable
