@@ -16,10 +16,7 @@ public class ExecutorServiceWriter {
         this.executorService.execute(writerRunnable);
         System.out.println("Ejecutando Operacion Escritura");
         //@duda no se si esto iria aqui
-        if(writerRunnable instanceof WriterRunnableOneSignal)
-        {
-            System.out.println("Avisando de lo escrito");
-        AlgorithmManager.getInstance().notifyNewData((WriterRunnableOneSignal)writerRunnable);
-        }
+
+        AlgorithmManager.getInstance().notifyNewData(writerRunnable);
     }
 }

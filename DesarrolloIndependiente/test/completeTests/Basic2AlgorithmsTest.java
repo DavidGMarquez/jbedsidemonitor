@@ -62,13 +62,12 @@ public class Basic2AlgorithmsTest {
     LinkedList<String> timeSignals1;
     LinkedList<String> eventSignals2;
     LinkedList<String> timeSignals2;
-
+    String nameAlgorithmOUT;
     @Before
     public void setUp() {
         AuxTestUtilities.reset();
 
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-
 
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
@@ -80,8 +79,9 @@ public class Basic2AlgorithmsTest {
 
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_IN", "Algorithm1", 0, 300, "NaN");
         TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_OUT", "Algorithm3", 0, 300, "NaN");
+        nameAlgorithmOUT="FileAlgorithmOUT";
         algorithmIN = new AlgorithmStupid2XImplementation("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
-        algorithmOUT = new AlgorithmStupidFileImplementation("AlgorithmOUT", timeSeriesOut3, timeSignals2, eventSignals2);
+        algorithmOUT = new AlgorithmStupidFileImplementation("AlgorithmOUT", timeSeriesOut3, timeSignals2, eventSignals2,nameAlgorithmOUT);
 
 
 
@@ -93,7 +93,6 @@ public class Basic2AlgorithmsTest {
 
     @Test
     public void testBasico() {
-
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         AlgorithmManager.getInstance().addAlgorithm(algorithmOUT);
@@ -108,7 +107,7 @@ public class Basic2AlgorithmsTest {
         File file = null;
         FileReader fr = null;
         BufferedReader br = null;
-        file = new File("salidaStupidFileImplementation.txt");
+        file = new File(nameAlgorithmOUT);
         try {
             fr = new FileReader(file);
         } catch (FileNotFoundException ex) {
@@ -132,5 +131,8 @@ public class Basic2AlgorithmsTest {
             System.out.println("Comparar "+dataToWrite[i]+" y "+dataRead[i]/2);
            assertTrue(dataToWrite[i]==dataRead[i]/2);
         }
+        //@pendiente Test escribir mas de dos señales al mismo tiempo
+        //@pendiente hacerlo para señales de eventos
     }
+
 }

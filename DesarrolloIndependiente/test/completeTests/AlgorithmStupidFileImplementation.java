@@ -36,11 +36,13 @@ public class AlgorithmStupidFileImplementation extends AlgorithmDefaultImplement
 
     FileWriter file = null;
     PrintWriter pw = null;
+    String nameFile=null;
 
-    public AlgorithmStupidFileImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmStupidFileImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries,String nameFile) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
+        this.nameFile=nameFile;
         try {
-            file = new FileWriter("salidaStupidFileImplementation.txt");
+            file = new FileWriter(this.nameFile);
         } catch (IOException ex) {
             Logger.getLogger(AlgorithmStupidFileImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }

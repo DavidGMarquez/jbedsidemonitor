@@ -7,6 +7,8 @@ import java.util.Set;
 import signals.ReadResult;
 import signals.ReaderCallable;
 import signals.SignalManager;
+import signals.WriterRunnable;
+import signals.WriterRunnableMultiSignal;
 import signals.WriterRunnableOneSignal;
 
 /**
@@ -38,7 +40,7 @@ public class AlgorithmManager {
             this.addSignalNamesToMap(algorithm);
             return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
         } else {
-             throw new AlgorithmAlreadyExistsException("Algorithm already exists in Algorithm Manager",algorithm);
+            throw new AlgorithmAlreadyExistsException("Algorithm already exists in Algorithm Manager", algorithm);
         }
     }
 
@@ -68,19 +70,30 @@ public class AlgorithmManager {
         }
     }
 
-    public void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
-        String signalName = writerRunnableOneSignal.getIdentifier();
+    public void notifyNewData(WriterRunnable writerRunnable) {
 
-        LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
-        if (algorithmNames != null) {
-            for (String algorithmName : algorithmNames) {
-                Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-                algorithmTrigger.notifyNewData(writerRunnableOneSignal);
-                this.checkTriggers();
+        if (writerRunnable instanceof WriterRunnableOneSignal) {
+            WriterRunnableOneSignal writerRunnableOneSignal = (WriterRunnableOneSignal) writerRunnable;
+            String signalName = writerRunnableOneSignal.getIdentifier();
+
+            LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
+            if (algorithmNames != null) {
+                for (String algorithmName : algorithmNames) {
+                    Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
+                    algorithmTrigger.notifyNewData(writerRunnableOneSignal);
+                    this.checkTriggers();
+                }
+            }
+        }
+        if(writerRunnable instanceof WriterRunnableMultiSignal)
+        {
+            WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;
+            LinkedList<WriterRunnableOneSignal> writerRunnables = writerRunnableMultiSignal.getWriterRunnables();
+            for(WriterRunnableOneSignal writerRunnableOneSignal: writerRunnables){
+                this.notifyNewData(writerRunnableOneSignal);
             }
         }
     }
-    //@pendiente Falta un notifyNewData Para Multisignal
 
     private void checkTriggers() {
         Set<String> algorithmNames = this.triggersByAlgorithmName.keySet();
