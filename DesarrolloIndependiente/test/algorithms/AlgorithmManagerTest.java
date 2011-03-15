@@ -136,7 +136,14 @@ public class AlgorithmManagerTest {
         instance.addAlgorithm(algorithm1);
         instance.addAlgorithm(algorithm2);
         instance.addAlgorithm(algorithm3);
+        try{
         instance.addAlgorithm(algorithm3);
+        fail("Deberia saltar excepcion");
+        }
+        catch(AlgorithmAlreadyExistsException e){
+            assertEquals(e.getAlgorithm(), algorithm3);
+
+        }
         assertEquals(instance.getAllAlgorithmNames().size(), 3);
         assertEquals(instance.getAlgorithm("Algorithm_1"), algorithm1);
         assertTrue(instance.getAlgorithm("Algorithm_2").getSignalToWrite().getIdentifier().equals("Out_Algorithm_2"));

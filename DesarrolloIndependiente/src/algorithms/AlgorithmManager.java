@@ -31,8 +31,6 @@ public class AlgorithmManager {
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
 
-    //@pendiente comprobar que los identificadores no se repitan y lanzar
-    //excepción si es necesario.
     public Algorithm addAlgorithm(Algorithm algorithm) {
         if (this.algorithmsByName.get(algorithm.getIdentifier()) == null) {
             SignalManager.getInstance().addSeries(algorithm.getSignalToWrite());
@@ -40,8 +38,7 @@ public class AlgorithmManager {
             this.addSignalNamesToMap(algorithm);
             return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
         } else {
-            // throw Exception;
-            return null;
+             throw new AlgorithmAlreadyExistsException("Algorithm already exists in Algorithm Manager",algorithm);
         }
     }
 

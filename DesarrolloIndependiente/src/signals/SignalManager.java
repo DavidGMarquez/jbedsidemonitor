@@ -43,13 +43,20 @@ public class SignalManager {
         return null;
     }
     public TimeSeries addTimeSeries(TimeSeries ts) {
+        if(this.timeSeries.get(ts.getIdentifier())==null)
+        {
         this.lockManager.addLock(ts.getIdentifier());
         return this.timeSeries.put(ts.getIdentifier(), ts);
+        }
+        throw new TimeSerieslAlreadyExistsException("TimeSeries already exists in Signal Manager",ts);
     }
 
     public EventSeries addEventSeries(EventSeries eventSeries) {
+        if(this.eventSeries.get(eventSeries.getIdentifier())==null){
         this.lockManager.addLock(eventSeries.getIdentifier());
         return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
+        }
+        throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager",eventSeries);
     }
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {

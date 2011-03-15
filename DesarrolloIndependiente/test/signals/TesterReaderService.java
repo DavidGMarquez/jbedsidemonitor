@@ -18,6 +18,7 @@ public class TesterReaderService {
 
     @Test
     public void testReaderTimeSeries() {
+        AuxTestUtilities.reset();
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.initiateThread();
         AlgorithmDefaultImplementation algorithm1;
@@ -73,6 +74,7 @@ public class TesterReaderService {
 
     @Test
     public void testReaderEventSeries() {
+        AuxTestUtilities.reset();
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.initiateThread();
         AlgorithmDefaultImplementation algorithm1;
