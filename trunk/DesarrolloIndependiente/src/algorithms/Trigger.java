@@ -37,6 +37,7 @@ public class Trigger {
         }
 
     }
+    //@pendiente hacer uno multisignal
 
     public synchronized void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
         if (writerRunnableOneSignal instanceof WriterRunnableTimeSeries) {
@@ -44,8 +45,6 @@ public class Trigger {
         } else {
             if (writerRunnableOneSignal instanceof WriterRunnableEventSeries) {
                 this.eventSeriesTriggers.get(writerRunnableOneSignal.getIdentifier()).update((WriterRunnableEventSeries) writerRunnableOneSignal);
-            } else {
-                //@pendiente lanzar excepcion
             }
         }
     }

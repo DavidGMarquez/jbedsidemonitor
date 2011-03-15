@@ -63,4 +63,9 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
     public void addWriterRunnableOneSignal(WriterRunnableOneSignal writerRunnableOneSignal) {
         this.writerRunnables.add(writerRunnableOneSignal);
     }
+
+    public LinkedList<WriterRunnableOneSignal> getWriterRunnables() {
+        return new LinkedList<WriterRunnableOneSignal>(writerRunnables);
+    }
+
 }
