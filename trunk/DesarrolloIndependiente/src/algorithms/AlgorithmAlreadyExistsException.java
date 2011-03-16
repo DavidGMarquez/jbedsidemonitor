@@ -1,7 +1,5 @@
 package algorithms;
 
-import signals.*;
-
 class AlgorithmAlreadyExistsException extends RuntimeException {
 
     private String message;

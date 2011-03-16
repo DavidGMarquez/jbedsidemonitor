@@ -13,21 +13,14 @@ import signals.TimeSeries;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import signals.EventSeries;
-import signals.LockManager;
 import signals.SignalManager;
 import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author USUARIO
- */
 public class BasicTest {
 
     public BasicTest() {

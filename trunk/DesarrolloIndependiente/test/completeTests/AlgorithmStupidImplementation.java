@@ -28,26 +28,27 @@ import signals.WriterRunnableTimeSeries;
  */
 public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementation {
 
-    public AlgorithmStupidImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmStupidImplementation(String identifier, Series signalToWrite,
+            LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
     }
 
+    @Override
     public boolean execute(ReadResult readResult) {
         System.out.println("Ejecutandose Algoritmo");
         if (readResult instanceof ReadResultMultiSignal) {
             ReadResultMultiSignal readResultMultiSignal = (ReadResultMultiSignal) readResult;
             readResultMultiSignal.getReadResults().size();
             System.out.println("Multisignal de "+readResultMultiSignal.getReadResults().size()+" Señáles");
-            if(this.getSignalToWrite() instanceof TimeSeries)
-            {
-
+            if(this.getSignalToWrite() instanceof TimeSeries){
                 float f[]={0};
-                WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(this.getSignalToWrite().getIdentifier(), f);
+                WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(
+                        this.getSignalToWrite().getIdentifier(), f);
                 SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
             }
-            if(this.getSignalToWrite() instanceof EventSeries)
-            {
-                WriterRunnableEventSeries writerRunnableEventSeries=new WriterRunnableEventSeries(this.getSignalToWrite().getIdentifier());
+            if(this.getSignalToWrite() instanceof EventSeries){
+                WriterRunnableEventSeries writerRunnableEventSeries =
+                        new WriterRunnableEventSeries(this.getSignalToWrite().getIdentifier());
                 writerRunnableEventSeries.addEventToWrite(new Event(0, "Generated", new HashMap<String, String>()));
                 SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
             }
