@@ -1,51 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package completeTests;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedList;
-import algorithms.AlgorithmDefaultImplementation;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import signals.TimeSeries;
-import algorithms.AlgorithmManager;
-import auxiliarTools.AuxTestUtilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import signals.EventSeries;
-import signals.SignalManager;
-import signals.WriterRunnableTimeSeries;
 import java.util.LinkedList;
 import algorithms.AlgorithmDefaultImplementation;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import signals.TimeSeries;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import signals.EventSeries;
-import signals.LockManager;
 import signals.SignalManager;
-import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author USUARIO
- */
 public class Basic2AlgorithmsTest {
 
     public Basic2AlgorithmsTest() {
@@ -82,9 +56,6 @@ public class Basic2AlgorithmsTest {
         nameAlgorithmOUT="FileAlgorithmOUT";
         algorithmIN = new AlgorithmStupid2XImplementation("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
         algorithmOUT = new AlgorithmStupidFileImplementation("AlgorithmOUT", timeSeriesOut3, timeSignals2, eventSignals2,nameAlgorithmOUT);
-
-
-
     }
 
     @After

@@ -17,7 +17,7 @@ import signals.WriterRunnableOneSignal;
 public class AlgorithmManager {
 
     private Map<String, Algorithm> algorithmsByName;
-    private Map<String, LinkedList<String>> algorithmsNameBySignalName;
+    private Map<String, LinkedList<String>> algorithmsToNotifyBySignalName;
     private Map<String, Trigger> triggersByAlgorithmName;
     private ExecutorServiceAlgorithm executorServiceAlgorithm;
     private static final AlgorithmManager INSTANCE = new AlgorithmManager();
@@ -28,7 +28,7 @@ public class AlgorithmManager {
 
     private AlgorithmManager() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
-        this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
+        this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }
@@ -45,48 +45,47 @@ public class AlgorithmManager {
     }
 
     private Trigger addTrigger(Algorithm algorithm) {
-        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(), new Trigger(algorithm.getIdentifier(), algorithm.getNotifyPolice()));
+        return this.triggersByAlgorithmName.put(algorithm.getIdentifier(),
+                new Trigger(algorithm.getIdentifier(), algorithm.getNotifyPolice()));
     }
 
     private void addSignalNamesToMap(Algorithm algorithm) {
         AlgorithmNotifyPolice algorithmNotifyPolice = algorithm.getNotifyPolice();
         Set<String> timeSeriesNames = algorithmNotifyPolice.getTimeSeriesTheshold().keySet();
         for (String timeSeriesName : timeSeriesNames) {
-            LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(timeSeriesName);
+            LinkedList<String> algorithmNames = this.algorithmsToNotifyBySignalName.get(timeSeriesName);
             if (algorithmNames == null) {
                 algorithmNames = new LinkedList<String>();
             }
             algorithmNames.add(algorithm.getIdentifier());
-            this.algorithmsNameBySignalName.put(timeSeriesName, algorithmNames);
+            this.algorithmsToNotifyBySignalName.put(timeSeriesName, algorithmNames);
         }
         Set<String> eventSeriesNames = algorithmNotifyPolice.getEventSeriesTheshold().keySet();
         for (String eventSeriesName : eventSeriesNames) {
-            LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(eventSeriesName);
+            LinkedList<String> algorithmNames = this.algorithmsToNotifyBySignalName.get(eventSeriesName);
             if (algorithmNames == null) {
                 algorithmNames = new LinkedList<String>();
             }
             algorithmNames.add(algorithm.getIdentifier());
-            this.algorithmsNameBySignalName.put(eventSeriesName, algorithmNames);
+            this.algorithmsToNotifyBySignalName.put(eventSeriesName, algorithmNames);
         }
     }
 
     public void notifyNewData(WriterRunnable writerRunnable) {
-
         if (writerRunnable instanceof WriterRunnableOneSignal) {
             WriterRunnableOneSignal writerRunnableOneSignal = (WriterRunnableOneSignal) writerRunnable;
             String signalName = writerRunnableOneSignal.getIdentifier();
 
-            LinkedList<String> algorithmNames = this.algorithmsNameBySignalName.get(signalName);
+            LinkedList<String> algorithmNames = this.algorithmsToNotifyBySignalName.get(signalName);
             if (algorithmNames != null) {
                 for (String algorithmName : algorithmNames) {
                     Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
                     algorithmTrigger.notifyNewData(writerRunnableOneSignal);
-                    this.checkTriggers();
                 }
+                this.checkTriggers();
             }
         }
-        if(writerRunnable instanceof WriterRunnableMultiSignal)
-        {
+        else{
             WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;
             LinkedList<WriterRunnableOneSignal> writerRunnables = writerRunnableMultiSignal.getWriterRunnables();
             for(WriterRunnableOneSignal writerRunnableOneSignal: writerRunnables){
@@ -99,6 +98,7 @@ public class AlgorithmManager {
         Set<String> algorithmNames = this.triggersByAlgorithmName.keySet();
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
+            //@pendiente
             if (triggerAlgorithm.trigger()) {
                 ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableAndReset();
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
@@ -132,12 +132,12 @@ public class AlgorithmManager {
     }
 
     public LinkedList<String> getAlgorithmNamesToSignal(String algorithmName) {
-        return this.algorithmsNameBySignalName.get(algorithmName);
+        return this.algorithmsToNotifyBySignalName.get(algorithmName);
     }
 
     public void reset() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
-        this.algorithmsNameBySignalName = new HashMap<String, LinkedList<String>>();
+        this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
     }

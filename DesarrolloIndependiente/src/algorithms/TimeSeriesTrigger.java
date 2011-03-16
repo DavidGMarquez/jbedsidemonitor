@@ -18,7 +18,7 @@ class TimeSeriesTrigger {
 
     public void update(WriterRunnableTimeSeries writerRunnableTimeSeries) {
         if(writerRunnableTimeSeries.getIdentifier().equals(identifierSignal))
-        this.newData += writerRunnableTimeSeries.getDataToWrite().length;
+            this.newData += writerRunnableTimeSeries.getDataToWrite().length;
     }
 
     public boolean trigger() {

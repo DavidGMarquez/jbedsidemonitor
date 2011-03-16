@@ -11,12 +11,14 @@ public class AlgorithmDefaultImplementation implements Algorithm {
     private Series signalToWrite;
     private AlgorithmNotifyPolice algorithmNotifyPolice;
 
-    public AlgorithmDefaultImplementation(String identifier, Series signalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
+    public AlgorithmDefaultImplementation(String identifier,
+            Series signalToWrite, AlgorithmNotifyPolice algorithmNotifyPolice) {
         this.identifier = identifier;
         this.signalToWrite = signalToWrite;
         this.algorithmNotifyPolice = algorithmNotifyPolice;
     }
-    public AlgorithmDefaultImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmDefaultImplementation(String identifier, Series signalToWrite,
+            LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         this.identifier = identifier;
         this.signalToWrite = signalToWrite;
         HashMap<String, Integer> eventSeriesHold = new HashMap<String, Integer>();
@@ -27,7 +29,8 @@ public class AlgorithmDefaultImplementation implements Algorithm {
         for (String timeSerieName : timeSeries) {
             timeSeriesHold.put(timeSerieName, new Integer(100));
         }
-        this.algorithmNotifyPolice = new AlgorithmNotifyPolice(timeSeriesHold, eventSeriesHold, AlgorithmNotifyPoliceEnum.ALL);
+        this.algorithmNotifyPolice = new AlgorithmNotifyPolice(timeSeriesHold,
+                eventSeriesHold, AlgorithmNotifyPoliceEnum.ALL);
     }
 
     public AlgorithmNotifyPolice getNotifyPolice() {

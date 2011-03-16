@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import signals.ReaderCallable;
 import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableMultiSignal;
 import signals.ReaderCallableTimeSeries;
@@ -37,7 +36,6 @@ public class Trigger {
         }
 
     }
-    //@pendiente hacer uno multisignal
 
     public synchronized void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
         if (writerRunnableOneSignal instanceof WriterRunnableTimeSeries) {
@@ -68,10 +66,10 @@ public class Trigger {
         }
         if (notifyPolice.equals(notifyPolice.ONE)) {
             return false;
-        } else if (notifyPolice.equals(notifyPolice.ALL)) {
+        }
+        else {
             return true;
         }
-        return false;
     }
 
     //Tiene sentido que resetee todo? o solo debería resetear los triggers?

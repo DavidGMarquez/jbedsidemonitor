@@ -19,7 +19,7 @@ class EventSeriesTrigger {
     public void update(WriterRunnableEventSeries writerRunnableEventSeries) {
         //Cuando contamos eventos nuevos... como afectan los que se eliminan?
         if(writerRunnableEventSeries.getIdentifier().equals(identifierSignal))
-        this.newEventCount += writerRunnableEventSeries.getEventsToWrite().size();
+            this.newEventCount += writerRunnableEventSeries.getEventsToWrite().size();
     }
 
     public boolean trigger() {
