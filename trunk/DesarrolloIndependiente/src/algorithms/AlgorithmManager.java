@@ -99,8 +99,8 @@ public class AlgorithmManager {
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             //@pendiente
-            if (triggerAlgorithm.trigger()) {
-                ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableAndReset();
+            ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableIfTriggerAndReset();
+            if (readerCallable!=null) {                
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
@@ -108,9 +108,6 @@ public class AlgorithmManager {
 
     public void processData(ReadResult readResult) {
         Algorithm algorithm = this.algorithmsByName.get(readResult.getIdentifierOwner());
-//@comentario al ejecutar los test del paquete signals se generan NullPointerExceptions
-//porque algorithm siempre vale null aqui
-//@pendiente revisar esto
         this.encueAlgorithmReadResultOperation(algorithm, readResult);
     }
 

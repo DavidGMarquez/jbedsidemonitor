@@ -53,10 +53,4 @@ LinkedList<String> timeSignals;
         assertEquals(algorithm1.getNotifyPolice().getTimeSeriesTheshold().get("TimeSeries3").intValue(),100);
     }
 
-    @Test
-    public void testExecute() {
-        //@pendiente no se como probar exactamente esto....
-
-    }
-
-}
+ }

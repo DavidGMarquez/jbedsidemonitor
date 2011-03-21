@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import signals.ReaderCallable;
 import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableMultiSignal;
 import signals.ReaderCallableTimeSeries;
@@ -66,8 +67,7 @@ public class Trigger {
         }
         if (notifyPolice.equals(notifyPolice.ONE)) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -87,20 +87,22 @@ public class Trigger {
         }
     }
 
+    public synchronized ReaderCallable getReaderCallableIfTriggerAndReset() {
+        if (this.trigger()) {
+            return this.getReaderCallable();
+        }
+        return null;
+    }
+
     public synchronized ReaderCallableMultiSignal getReaderCallableAndReset() {
-        //@duda debería comprobar si el trigger esta activado antes de devolver el callable?
-        //Es decir ahora mismo aunque la politica sea ALL si le pedimos el readerCallable nos los da solo de
-        //las señales que estan listas
         ReaderCallableMultiSignal readerCallable = this.getReaderCallable();
-        //Creo que el reset ya lo cubro al ir creando this.reset();
         return readerCallable;
     }
 
     private synchronized ReaderCallableMultiSignal getReaderCallable() {
-        //@pendiente que devuelva no solo MultiSignal sino también las OneSignal si es el caso
+        //@duda sería necesario que devuelva no solo MultiSignal sino también las OneSignal si es el caso?
+        //@pendiente tal y como esta la cosa nunca le llegan a los algoritmos ReadResult simples, siempre le llegan Multi aunque sean de una sola señal
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
-        //Si tenemos la modalidad de que actualice solo cuando este una sola señal lista,
-        //el número de señales será variable
 
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {

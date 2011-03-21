@@ -10,10 +10,12 @@ public abstract class WriterRunnableOneSignal extends WriterRunnable {
     }
     protected boolean getLocks() {
         this.lockManager.getWriteLock(identifier);
+        System.out.println("--GetLockWrite"+identifier);
         return true;
     }
 
    protected void releaseLocks() {
+       System.out.println("--ReleaseLockWrite"+identifier);
         this.lockManager.releaseWriteLock(identifier);
     }
 
