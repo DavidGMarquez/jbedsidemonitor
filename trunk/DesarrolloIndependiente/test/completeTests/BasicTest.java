@@ -89,6 +89,7 @@ public class BasicTest {
 
     @Test
     public void testBasico() {
+        AuxTestUtilities.reset();
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         assertTrue(SignalManager.getInstance().getAllEventSeriesNames().size()==1);
@@ -107,6 +108,7 @@ public class BasicTest {
 
     @Test
     public void testEjecucionAlgoritmoBasico() {
+        AuxTestUtilities.reset();
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         AlgorithmManager.getInstance().addAlgorithm(algorithm3);

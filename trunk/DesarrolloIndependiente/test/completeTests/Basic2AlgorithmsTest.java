@@ -71,7 +71,7 @@ public class Basic2AlgorithmsTest {
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
         float[] dataToWrite = writerRunnableTimeSeries.getDataToWrite();
         try {
-            Thread.sleep(200);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(Basic2AlgorithmsTest.class.getName()).log(Level.SEVERE, null, ex);
         }

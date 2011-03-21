@@ -32,31 +32,30 @@ public class SignalManager {
     //@pendiente si es necesario hacer una copia del objeto ya que es mutable
     //Comentario hasta que se haga para que no se olvide copia defensiva
 
-    public Series addSeries(Series series)
-    {
-        if(series instanceof TimeSeries)
-            return this.addTimeSeries((TimeSeries)series);
-        if(series instanceof EventSeries)
-        {
-            return this.addEventSeries((EventSeries)series);
+    public Series addSeries(Series series) {
+        if (series instanceof TimeSeries) {
+            return this.addTimeSeries((TimeSeries) series);
+        }
+        if (series instanceof EventSeries) {
+            return this.addEventSeries((EventSeries) series);
         }
         return null;
     }
+
     public TimeSeries addTimeSeries(TimeSeries ts) {
-        if(this.timeSeries.get(ts.getIdentifier())==null)
-        {
-        this.lockManager.addLock(ts.getIdentifier());
-        return this.timeSeries.put(ts.getIdentifier(), ts);
+        if (this.timeSeries.get(ts.getIdentifier()) == null) {
+            this.lockManager.addLock(ts.getIdentifier());
+            return this.timeSeries.put(ts.getIdentifier(), ts);
         }
-        throw new TimeSerieslAlreadyExistsException("TimeSeries already exists in Signal Manager",ts);
+        throw new TimeSerieslAlreadyExistsException("TimeSeries already exists in Signal Manager", ts);
     }
 
     public EventSeries addEventSeries(EventSeries eventSeries) {
-        if(this.eventSeries.get(eventSeries.getIdentifier())==null){
-        this.lockManager.addLock(eventSeries.getIdentifier());
-        return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
+        if (this.eventSeries.get(eventSeries.getIdentifier()) == null) {
+            this.lockManager.addLock(eventSeries.getIdentifier());
+            return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
         }
-        throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager",eventSeries);
+        throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager", eventSeries);
     }
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
@@ -77,10 +76,12 @@ public class SignalManager {
         threadCompletionService.start();
     }
     //@metodo debug no USAR segun api
-   public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+
+    public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
     }
 //@metodo debug no USAR segun api
+
     public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
             float result[] = this.timeSeries.get(identifier).read(indexLastRead, (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) + 1 % this.timeSeries.get(identifier).getCapacity());
@@ -92,6 +93,11 @@ public class SignalManager {
 
     boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
+        return result;
+    }
+
+    boolean writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
+        boolean result = this.timeSeries.get(identifier).write(dataToWrite,indexInitToWrite);
         return result;
     }
 
@@ -121,12 +127,12 @@ public class SignalManager {
         this.initiateThread();
 
     }
-    public LinkedList<String> getAllTimeSeriesNames()
-    {
+
+    public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());
     }
-        public LinkedList<String> getAllEventSeriesNames()
-    {
+
+    public LinkedList<String> getAllEventSeriesNames() {
         return new LinkedList<String>(this.eventSeries.keySet());
     }
 }

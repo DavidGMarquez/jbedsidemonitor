@@ -79,4 +79,12 @@ public class TimeSeries extends Series {
             throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
         }
     }
+        public boolean write(float[] datatowrite, int indexInitToWrite) {
+
+        try {
+            return this.buffer.write(datatowrite,indexInitToWrite);
+        } catch (TooMuchDataToWriteException e) {
+            throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
+        }
+    }
 }
