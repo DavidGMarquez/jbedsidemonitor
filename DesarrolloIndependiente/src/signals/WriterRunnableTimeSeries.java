@@ -2,25 +2,39 @@ package signals;
 
 public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
 
+    private float[] dataToWrite;
+    private int indexInitToWrite;
+
     public WriterRunnableTimeSeries(String identifier) {
         super(identifier);
+        this.dataToWrite = null;
+        this.indexInitToWrite = -1;
     }
 
     public WriterRunnableTimeSeries(String identifier, float[] dataToWrite) {
-         this(identifier);
+        this(identifier);
         copyArray(dataToWrite);
+        this.indexInitToWrite = -1;
     }
 
-    private float[] dataToWrite;
+    public WriterRunnableTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
+        this(identifier);
+        copyArray(dataToWrite);
+        this.indexInitToWrite = indexInitToWrite;
+    }
 
     @Override
     protected void write() {
         SignalManager signalManager = SignalManager.getInstance();
-        signalManager.writeToTimeSeries(identifier, dataToWrite);
+        if (indexInitToWrite == -1) {
+            signalManager.writeToTimeSeries(identifier, dataToWrite);
+        } else {
+            signalManager.writeToTimeSeries(identifier, dataToWrite, indexInitToWrite);
+        }
     }
 
     public void setDataToWrite(float[] dataToWrite) {
-        copyArray(dataToWrite);
+        this.copyArray(dataToWrite);
     }
 
     private void copyArray(float[] dataToWrite) {
@@ -33,4 +47,7 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
         return dataToWrite;
     }
 
+    public int getIndexInitToWrite() {
+        return indexInitToWrite;
+    }
 }

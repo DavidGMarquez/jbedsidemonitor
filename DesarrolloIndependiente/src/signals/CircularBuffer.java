@@ -82,6 +82,30 @@ class CircularBuffer {
     }
 
     /**
+     * Escribe datos en el buffer.
+     * Si la cantidad de datos a escribir es mayor que el tamaño del buffer devuelve false
+     * En cualquier otro caso devuelve true
+     *
+     * Se debe indicar el array de floats con los datos a escribir y aparte el numero de datos a escribir.
+     * En este caso tambien indicamos donde queremos que se realice la escritura.
+     * Si usamos este metodo no se controla el orden en las escrituras, debe ser llevado de forma externa
+     *
+     * @param dataToWrite indexInitToWrite
+     * @return
+     */
+    boolean write(float[] dataToWrite, int indexInitToWrite) {
+        if (indexInitToWrite > this.capacity) {
+            indexInitToWrite = indexInitToWrite % capacity;
+        }
+        this.indexNextWrite = indexInitToWrite;
+        this.write(dataToWrite);
+        //@duda si hace falta podría volver a la anterior.
+
+
+        return true;
+    }
+
+    /**
      * Lee datos del buffer.
      * Si la cantidad de datos a leer es mayor que el tamaño del buffer solo se lee el tamaño del buffer
      * En otro caso devuelve una referencia a los datos leidos.

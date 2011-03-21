@@ -181,4 +181,36 @@ public class CircularBufferTest {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    public void write3NumbersOrder() {
+        float[] dataToWrite = {1, 2, 3};
+        CircularBuffer buffer = new CircularBuffer(5);
+        boolean result = buffer.write(dataToWrite, 0);
+        assertEquals(true, result);
+        assertEquals(true, AuxTestUtilities.compareArray(
+                buffer.read(0, 3), dataToWrite, dataToWrite.length));
+        buffer = new CircularBuffer(5);
+        buffer.write(dataToWrite, 1);
+
+        assertEquals(true, AuxTestUtilities.compareArray(
+                buffer.read(1, 3), dataToWrite, dataToWrite.length));
+
+    }
+        @Test
+    public void readWhitRandomNumbersOrder() {
+        CircularBuffer buffer = new CircularBuffer(9);
+        float[] array1 = AuxTestUtilities.generateArray(5);
+        float[] array2 = AuxTestUtilities.generateArray(5);
+        float[] array3 = AuxTestUtilities.generateArray(5);
+        buffer.write(array1,0);
+        assertEquals(true, AuxTestUtilities.compareArray(array1, buffer.read(0, 5), 5));
+        buffer.write(array2,0);
+        assertEquals(true, AuxTestUtilities.compareArray(array2, buffer.read(0, 5), 5));
+        buffer.write(array2,5);
+        assertEquals(true, AuxTestUtilities.compareArray(array2, buffer.read(5, 5), 5));
+        buffer.write(array3,10);
+        assertEquals(6, buffer.getIndexold());
+        assertEquals(true, AuxTestUtilities.compareArray(array3, buffer.read(1, 5), 5));
+    }
 }

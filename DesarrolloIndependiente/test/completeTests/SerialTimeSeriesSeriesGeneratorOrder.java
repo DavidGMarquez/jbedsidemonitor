@@ -14,13 +14,13 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class SerialTimeSeriesSeriesGenerator {
+public class SerialTimeSeriesSeriesGeneratorOrder {
     String nameSignal;
     Timer timer;
     int limitOfItIterations;
     int currentIteration;
 
-    public SerialTimeSeriesSeriesGenerator(int delayFirstTime, int periodOfTime,int limitOfIterations,String nameSignal) {
+    public SerialTimeSeriesSeriesGeneratorOrder(int delayFirstTime, int periodOfTime,int limitOfIterations,String nameSignal) {
         timer = new Timer();
         timer.scheduleAtFixedRate(new RemindTask(), delayFirstTime,periodOfTime);
         this.currentIteration = 0;

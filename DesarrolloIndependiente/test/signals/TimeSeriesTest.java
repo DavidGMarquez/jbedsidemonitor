@@ -83,4 +83,26 @@ public class TimeSeriesTest {
             System.out.println(e.getMessage());
         }
     }
+    @Test
+    public void writingRandomNumbersOrder() {
+        TimeSeries ts = new TimeSeries("Series1", "Watson", new Date().getTime(), (float) 10, "mV");
+        float[] dataToWrite = null;
+        dataToWrite = AuxTestUtilities.generateArray(75000);
+        assertEquals(ts.getIndexNewsample(), -1);
+        assertEquals(ts.getIndexOldestsample(), -1);
+        assertEquals(ts.getSamplescounter(), 0);
+        ts.write(dataToWrite, 75000);
+        assertEquals(ts.getIndexNewsample(), 49999);
+        assertEquals(ts.getIndexOldestsample(), 50000);
+        assertEquals(ts.getSamplescounter(), 100000);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(75000, 75000), dataToWrite, 75000), true);
+        dataToWrite = AuxTestUtilities.generateArray(75000);
+        ts.write(dataToWrite, 0);
+        assertEquals(ts.getIndexNewsample(), 74999);
+        assertEquals(ts.getIndexOldestsample(), 75000);
+        assertEquals(ts.getSamplescounter(), 100000);
+        assertEquals(AuxTestUtilities.compareArray(ts.read(0, 75000), dataToWrite, 75000), true);
+
+
+    }
 }

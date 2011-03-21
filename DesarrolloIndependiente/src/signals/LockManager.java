@@ -24,13 +24,15 @@ public class LockManager {
             return false;
         }
     }
-
+    //@duda esto necesita sincronización o con esto ya se supone que valdría?
     public void getReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().lock();
     }
 
     public void releaseReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().unlock();
+        //@duda necesarios?
+        //this.signalsLocks.get(identifier).readLock().notifyAll();
     }
 
     public boolean tryReadLock(String identifier) {
