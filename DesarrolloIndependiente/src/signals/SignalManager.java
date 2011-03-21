@@ -76,12 +76,12 @@ public class SignalManager {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
         threadCompletionService.start();
     }
-
-    float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+    //@metodo debug no USAR segun api
+   public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
     }
-
-    float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
+//@metodo debug no USAR segun api
+    public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
             float result[] = this.timeSeries.get(identifier).read(indexLastRead, (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) + 1 % this.timeSeries.get(identifier).getCapacity());
             return result;

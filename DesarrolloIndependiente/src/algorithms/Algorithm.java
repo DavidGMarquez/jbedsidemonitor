@@ -5,6 +5,8 @@ import signals.Series;
 
 public interface Algorithm {
     //@pendiente revisar si falta algo de la especificación de la memoria inicial.
+    //Veo que es dificil sincronizar las señales. Es decir si tienes dos señales, saber exactamente
+    //como las puedes situar en el tiempo cada una de ellas para saber donde estas trabajando.
     public String getIdentifier();
 
     public Series getSignalToWrite();
