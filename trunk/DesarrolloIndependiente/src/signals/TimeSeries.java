@@ -80,6 +80,7 @@ public class TimeSeries extends Series {
         }
     }
         public boolean write(float[] datatowrite, int indexInitToWrite) {
+        System.out.println("<<-->>"+this.getIdentifier()+"Escribiendo en"+indexInitToWrite+ "Cantidad "+datatowrite.length);
 
         try {
             return this.buffer.write(datatowrite,indexInitToWrite);

@@ -19,6 +19,8 @@ class CircularBuffer {
     private int capacity;
     private float data[];
     private boolean full;
+    private int lastSampleWrite;
+    private int numberOfSamplesWrite;
 
     /**
      * Crea un buffer con el tamaño por defecto asignado
@@ -43,6 +45,11 @@ class CircularBuffer {
         indexNextWrite = 0;
         indexOldest = 0;
         full = false;
+        lastSampleWrite = -1;
+        numberOfSamplesWrite = 0;
+        //@duda y si escribo dos veces la misma muestra se deben contar dos veces?
+        //@duda no se si necesito ambos contadores pero por si acaso los he puesto
+
     }
 
     /**
@@ -55,6 +62,7 @@ class CircularBuffer {
      * @param dataToWrite
      * @return
      */
+    //@duda creo que habría que deshabilitar este metodo publicamente
     boolean write(float[] dataToWrite) {
         if (dataToWrite.length > this.capacity) {
             //@pendiente revisar esto
@@ -93,16 +101,38 @@ class CircularBuffer {
      * @param dataToWrite indexInitToWrite
      * @return
      */
-    boolean write(float[] dataToWrite, int indexInitToWrite) {
-        if (indexInitToWrite > this.capacity) {
-            indexInitToWrite = indexInitToWrite % capacity;
+    boolean write(float[] dataToWrite, int sampleInitToWrite) {
+        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length);
+
+        if ((sampleInitToWrite + dataToWrite.length - 1) >= this.lastSampleWrite) {
+            if (sampleInitToWrite > this.lastSampleWrite + 1) {
+                //@pendiente revisar
+                this.writeNAN(lastSampleWrite + 1, sampleInitToWrite - lastSampleWrite + 1);
+            }
+            this.lastSampleWrite = (sampleInitToWrite + dataToWrite.length) - 1;
         }
-        this.indexNextWrite = indexInitToWrite;
+        numberOfSamplesWrite = +dataToWrite.length;
+        if (sampleInitToWrite > this.capacity) {
+            sampleInitToWrite = sampleInitToWrite % capacity;
+        }
+        this.indexNextWrite = sampleInitToWrite;
         this.write(dataToWrite);
         //@duda si hace falta podría volver a la anterior.
-
-
         return true;
+    }
+
+    private void writeNAN(int sampleOrigin, int size) {
+        //@pendiente revisar
+        float[] nanToWrite = new float[size];
+        for (int i = 0; i < size; i++) {
+            nanToWrite[i] = Float.NaN;
+        }
+        if (sampleOrigin > this.capacity) {
+            sampleOrigin = sampleOrigin % capacity;
+        }
+        this.indexNextWrite = sampleOrigin;
+        this.write(nanToWrite);
+
     }
 
     /**
@@ -165,5 +195,19 @@ class CircularBuffer {
             return capacity;
         }
         return indexNextWrite;
+    }
+    public int getSamplesReadyToRead()
+
+    {
+        if (this.lastSampleWrite < 0) {
+            return 0;
+        }
+
+
+        if (this.lastSampleWrite > this.capacity) {
+            return this.capacity;
+        }
+        return this.lastSampleWrite;
+
     }
 }

@@ -34,10 +34,12 @@ import signals.WriterRunnableTimeSeries;
  * @author USUARIO
  */
 public class AlgorithmStupid2XMultiSignalsImplementationOrder extends AlgorithmDefaultImplementation {
-    private Map<String,Integer> indexOfWrite;
+
+    private Map<String, Integer> indexOfWrite;
+
     public AlgorithmStupid2XMultiSignalsImplementationOrder(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
-        indexOfWrite=new HashMap<String, Integer>();
+        indexOfWrite = new HashMap<String, Integer>();
     }
 
     public boolean execute(ReadResult readResult) {
@@ -53,14 +55,13 @@ public class AlgorithmStupid2XMultiSignalsImplementationOrder extends AlgorithmD
                         data[i] = data[i] * 2;
                     }
                     if (this.getSignalToWrite() instanceof TimeSeries) {
-                        if(indexOfWrite.get(readResultTimeSeries.getIdentifierSignal())==null)
-                        {
-                            indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(),new Integer(0));
+                        if (indexOfWrite.get(readResultTimeSeries.getIdentifierSignal()) == null) {
+                            indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(), new Integer(0));
                         }
-                        int auxIndexOfWrite=indexOfWrite.get(readResultTimeSeries.getIdentifierSignal()).intValue();
-                        WriterRunnableTimeSeries writerRunnableTimeSeries = new
-WriterRunnableTimeSeries(readResultTimeSeries.getIdentifierSignal()+"_"+this.getIdentifier(), data,auxIndexOfWrite);
-                        indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(),auxIndexOfWrite+data.length);
+
+                        int auxIndexOfWrite = indexOfWrite.get(readResultTimeSeries.getIdentifierSignal()).intValue();
+                        WriterRunnableTimeSeries writerRunnableTimeSeries = new WriterRunnableTimeSeries(readResultTimeSeries.getIdentifierSignal() + "_" + this.getIdentifier(), data,readResultTimeSeries.getPosInitToRead());
+                        indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(), auxIndexOfWrite + data.length);
                         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
                     }
 

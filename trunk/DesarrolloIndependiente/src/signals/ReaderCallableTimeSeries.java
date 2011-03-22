@@ -19,6 +19,7 @@ public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
     @Override
     protected ReadResult read() {
         SignalManager signalManager = SignalManager.getInstance();
+        System.out.println(">>>>>>>>>>>>>READER CALLABLE<"+identifierSignal+" Desde "+posInitToRead+" Size:"+sizeToRead+" Para"+identifierOwner);
         this.readResult = new ReadResultTimeSeries(identifierOwner, identifierSignal,
                 signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead), posInitToRead);
         return readResult;
