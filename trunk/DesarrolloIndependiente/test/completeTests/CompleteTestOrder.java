@@ -50,9 +50,7 @@ public class CompleteTestOrder {
     LinkedList<String> timeSignals6;
     LinkedList<String> eventSignals7;
     LinkedList<String> timeSignals7;
-    //@duda me he dado cuenta que no se como se tendría que detener todo esto
-    //@duda y tampoco se si al terminar hay que forzar a que se envie todo lo que no se ha enviado
-    //@bug ? Puede ser que los callables no se resuelvan en orden y por eso este dando problemas
+
     public CompleteTestOrder() {
     }
 
@@ -122,8 +120,7 @@ public class CompleteTestOrder {
             Logger.getLogger(CompleteTestOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
        float[] readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1", 0);
-        //@pendiente de vez en cuando aparece un 0 al final no se porque
-        //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
+        
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
             if(readNewFromTimeSeriesTimeSeries1[i]!=((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
@@ -133,8 +130,7 @@ public class CompleteTestOrder {
 
         }
         readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
-        //@pendiente de vez en cuando aparece un 0 al final no se porque
-        //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
+
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
             if(readNewFromTimeSeriesTimeSeries1[i]!=2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
@@ -143,9 +139,6 @@ public class CompleteTestOrder {
           //  assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
 
         }
-        //@pendiente al parecer el error es que cuando hace dos escrituras sobreescribe una con la anterior.
-        //@el problema podría ser del CompletionEjecutor que sobreescribe la misma.
-        //@bug el problema es que se desordenan las operaciones de escritura, no se hacen en orden.
 
     /*   float[] readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1", 0);
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries2.length);

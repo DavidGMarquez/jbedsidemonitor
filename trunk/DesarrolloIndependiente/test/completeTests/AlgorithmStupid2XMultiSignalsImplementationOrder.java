@@ -5,19 +5,9 @@
 package completeTests;
 
 import algorithms.AlgorithmDefaultImplementation;
-import auxiliarTools.AuxTestUtilities;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import signals.Event;
-import signals.EventSeries;
 import signals.ReadResult;
 import signals.ReadResultEventSeries;
 import signals.ReadResultMultiSignal;
@@ -25,8 +15,6 @@ import signals.ReadResultTimeSeries;
 import signals.Series;
 import signals.SignalManager;
 import signals.TimeSeries;
-import signals.WriterRunnable;
-import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 
 /**

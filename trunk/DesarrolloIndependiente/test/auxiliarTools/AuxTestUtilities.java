@@ -62,6 +62,14 @@ public class AuxTestUtilities {
         }
     }
 
+    public static boolean containsNAN(float[] data)
+    {
+        for(int i=0;i<data.length;i++){
+            if(data[i]!=Float.NaN)
+                return false;
+        }
+        return true;
+    }
     public static void secuentialArray(float[] data) {
         for (int i = 0; i < data.length; i++) {
             data[i] = i;

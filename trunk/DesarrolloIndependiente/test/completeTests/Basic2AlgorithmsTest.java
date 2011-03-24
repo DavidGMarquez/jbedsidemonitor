@@ -25,6 +25,7 @@ public class Basic2AlgorithmsTest {
     public Basic2AlgorithmsTest() {
     }
     TimeSeries timeSeries1;
+    TimeSeries timeSeries1_out;
     TimeSeries timeSeries2;
     TimeSeries timeSeries3;
     EventSeries eventSeries1;
@@ -37,25 +38,26 @@ public class Basic2AlgorithmsTest {
     LinkedList<String> eventSignals2;
     LinkedList<String> timeSignals2;
     String nameAlgorithmOUT;
+
     @Before
     public void setUp() {
         AuxTestUtilities.reset();
 
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-
+        timeSeries1_out= new TimeSeries("TimeSeries1_AlgorithmIN", "Simulated", 1, 100, "mv");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
         timeSignals1.add("TimeSeries1");
 
         eventSignals2 = new LinkedList<String>();
         timeSignals2 = new LinkedList<String>();
-        timeSignals2.add("Out_Algorithm_IN");
+        timeSignals2.add("TimeSeries1_AlgorithmIN");
 
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_IN", "Algorithm1", 0, 300, "NaN");
         TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_OUT", "Algorithm3", 0, 300, "NaN");
-        nameAlgorithmOUT="FileAlgorithmOUT";
-        algorithmIN = new AlgorithmStupid2XImplementation("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
-        algorithmOUT = new AlgorithmStupidFileImplementation("AlgorithmOUT", timeSeriesOut3, timeSignals2, eventSignals2,nameAlgorithmOUT);
+        nameAlgorithmOUT = "FileAlgorithmOUT";
+        algorithmIN = new AlgorithmStupid2XMultiSignalsImplementationOrder("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
+        algorithmOUT = new AlgorithmStupidFileImplementation("AlgorithmOUT", timeSeriesOut3, timeSignals2, eventSignals2, nameAlgorithmOUT);
     }
 
     @After
@@ -65,9 +67,10 @@ public class Basic2AlgorithmsTest {
     @Test
     public void testBasico() {
         SignalManager.getInstance().addTimeSeries(timeSeries1);
+        SignalManager.getInstance().addTimeSeries(timeSeries1_out);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         AlgorithmManager.getInstance().addAlgorithm(algorithmOUT);
-        WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 1000);
+        WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 10000);
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
         float[] dataToWrite = writerRunnableTimeSeries.getDataToWrite();
         try {
@@ -86,24 +89,22 @@ public class Basic2AlgorithmsTest {
         }
         br = new BufferedReader(fr);
         String line;
-        float[] dataRead=new float[dataToWrite.length];
+        String line2;
+        float[] dataRead = new float[dataToWrite.length];
         try {
-            int i=0;
             while ((line = br.readLine()) != null) {
-                dataRead[i]=new Float(line).floatValue();
-                i++;
+                if ((line2 = br.readLine()) != null) {
+                    dataRead[new Integer(line).intValue()] = new Float(line2).floatValue();
+                }
             }
 
         } catch (IOException ex) {
             Logger.getLogger(Basic2AlgorithmsTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        for (int i = 0;i < dataRead.length;i++) {
-            System.out.println("Comparar "+dataToWrite[i]+" y "+dataRead[i]/2);
-           assertTrue(dataToWrite[i]==dataRead[i]/2);
+        for (int i = 0; i < dataRead.length; i++) {
+            System.out.println("Comparar " + dataToWrite[i] + " y " + dataRead[i] / 2);
+            assertTrue(dataToWrite[i] == dataRead[i] / 2);
         }
-        //@pendiente Test escribir mas de dos señales al mismo tiempo
-        //@pendiente hacerlo para señales de eventos
     }
-
 }

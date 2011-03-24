@@ -22,6 +22,7 @@ class CircularBuffer {
     private int lastSampleWrite;
     private int numberOfSamplesWrite;
 
+
     /**
      * Crea un buffer con el tamaño por defecto asignado
      */
@@ -63,7 +64,7 @@ class CircularBuffer {
      * @return
      */
     //@duda creo que habría que deshabilitar este metodo publicamente
-    boolean write(float[] dataToWrite) {
+    public boolean write(float[] dataToWrite) {
         if (dataToWrite.length > this.capacity) {
             //@pendiente revisar esto
             throw new TooMuchDataToWriteException("dataToWrite is bigger that the size of buffer");
@@ -102,13 +103,13 @@ class CircularBuffer {
      * @return
      */
     boolean write(float[] dataToWrite, int sampleInitToWrite) {
-        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length);
-
+        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length + "lastSample" + this.lastSampleWrite);
+        if (sampleInitToWrite > this.lastSampleWrite + 1) {
+            //@pendiente revisar
+            this.writeNAN(lastSampleWrite + 1, sampleInitToWrite -( lastSampleWrite + 1));
+        }
         if ((sampleInitToWrite + dataToWrite.length - 1) >= this.lastSampleWrite) {
-            if (sampleInitToWrite > this.lastSampleWrite + 1) {
-                //@pendiente revisar
-                this.writeNAN(lastSampleWrite + 1, sampleInitToWrite - lastSampleWrite + 1);
-            }
+
             this.lastSampleWrite = (sampleInitToWrite + dataToWrite.length) - 1;
         }
         numberOfSamplesWrite = +dataToWrite.length;
@@ -122,6 +123,7 @@ class CircularBuffer {
     }
 
     private void writeNAN(int sampleOrigin, int size) {
+        System.out.println("NANANANANAN Escribiendo NAN Desde" + sampleOrigin + "Tamaño" + size + "lastSample" + this.lastSampleWrite);
         //@pendiente revisar
         float[] nanToWrite = new float[size];
         for (int i = 0; i < size; i++) {
@@ -130,8 +132,10 @@ class CircularBuffer {
         if (sampleOrigin > this.capacity) {
             sampleOrigin = sampleOrigin % capacity;
         }
+        int auxiliar=this.indexNextWrite;
         this.indexNextWrite = sampleOrigin;
         this.write(nanToWrite);
+        this.indexNextWrite=auxiliar;
 
     }
 
@@ -145,9 +149,24 @@ class CircularBuffer {
      * @return
      */
     float[] read(int posStartReading, int numDataToRead) {
+        
+        if(posStartReading<0)
+        {
+            throw new IllegalReadException("posStartReading is negative", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+        }
+        if(posStartReading+numDataToRead>(this.lastSampleWrite+1))
+        {
+            throw new IllegalReadException("try to read future data", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+        }
+        if(posStartReading<(this.lastSampleWrite-this.capacity))
+        {
+            throw new IllegalReadException("try to read data not avalible, data too old ", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+        }
+
         if (numDataToRead > this.capacity) {
             numDataToRead = this.capacity;
         }
+        posStartReading=posStartReading%this.capacity;
         float[] readedData = new float[numDataToRead];
         int posStartCopying = 0;
         if (posStartReading + numDataToRead > this.capacity) {
@@ -196,14 +215,19 @@ class CircularBuffer {
         }
         return indexNextWrite;
     }
-    public int getSamplesReadyToRead()
 
-    {
+    public int getLastSampleWrite() {
+        return lastSampleWrite;
+    }
+
+    public int getNumberOfSamplesWrite() {
+        return numberOfSamplesWrite;
+    }
+
+    public int getSamplesReadyToRead() {
         if (this.lastSampleWrite < 0) {
             return 0;
         }
-
-
         if (this.lastSampleWrite > this.capacity) {
             return this.capacity;
         }

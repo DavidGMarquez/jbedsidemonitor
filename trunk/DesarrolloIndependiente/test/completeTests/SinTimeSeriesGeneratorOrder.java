@@ -34,7 +34,7 @@ public class SinTimeSeriesGeneratorOrder {
             float[] dataToWrite=new float[10];
             for(int i=0;i<dataToWrite.length;i++){
                 dataToWrite[i]=(float) Math.sin(((float)currentIteration/10)+((float)i/100));
-                System.out.println((i+currentIteration*10)+"Value Sin +"+dataToWrite[i]+ "  "+(((float)currentIteration/10)+((float)i/100)));
+        ///        System.out.println((i+currentIteration*10)+"Value Sin +"+dataToWrite[i]+ "  "+(((float)currentIteration/10)+((float)i/100)));
             }           
             WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(nameSignal, dataToWrite);
             SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);

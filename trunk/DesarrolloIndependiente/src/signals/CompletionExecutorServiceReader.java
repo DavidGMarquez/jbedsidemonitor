@@ -17,6 +17,7 @@ public class CompletionExecutorServiceReader implements Runnable {
     }
 
     public void executeReaderCallable(ReaderCallable readerCallable) {
+        //@debug borrar
         System.out.println("Submit Callable");
         this.executorCompletionService.submit(readerCallable);
     }
@@ -28,7 +29,14 @@ public class CompletionExecutorServiceReader implements Runnable {
             try {
                 Future<ReadResult> futureReadResult = executorCompletionService.take();
                 ReadResult readResult = futureReadResult.get();
-                System.out.println("Obteniendo un resultado Futuro de "+readResult.getIdentifierOwner());
+                //@debug borrar
+                if(readResult instanceof ReadResultTimeSeries)
+                {
+                    ReadResultTimeSeries readResultTimeSeries=(ReadResultTimeSeries)readResult;
+                    System.out.println("Obteniendo un resultado Futuro de "+readResult.getIdentifierOwner()+"desde: "+readResultTimeSeries.getPosInitToRead()+"Size"+readResultTimeSeries.getData().length);
+                }
+ else
+     System.out.println("Obteniendo un resultado Futuro de "+readResult.getIdentifierOwner()+"desde");
                 AlgorithmManager.getInstance().processData(readResult);
             } catch (ExecutionException ex) {
                 Logger.getLogger(CompletionExecutorServiceReader.class.getName()).log(Level.SEVERE, null, ex);
