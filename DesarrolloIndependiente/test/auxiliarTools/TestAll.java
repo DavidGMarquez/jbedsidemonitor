@@ -31,7 +31,7 @@ import org.junit.runners.Suite;
     algorithms.TriggerTest.class,
     algorithms.AlgorithmDefaultImplementationTest.class,
     algorithms.AlgorithmManagerTest.class,
-    completeTests.BasicTest.class,
+    completeTests.CreateTest.class,
     completeTests.Basic2AlgorithmsTest.class}
 )
 public class TestAll {

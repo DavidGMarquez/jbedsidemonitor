@@ -59,9 +59,11 @@ public class AlgorithmStupidFileImplementation extends AlgorithmDefaultImplement
 
             if (readResultOne instanceof ReadResultTimeSeries) {
                 ReadResultTimeSeries readResultTimeSeries = (ReadResultTimeSeries) readResultOne;
+                int posToRead=readResultTimeSeries.getPosInitToRead();
                 float[] data = readResultTimeSeries.getData();
                 for (int i = 0; i < data.length; i++) 
                 {
+                    pw.println(posToRead+i);
                     pw.println(data[i]);
                 }
                 pw.flush();

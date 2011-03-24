@@ -34,7 +34,7 @@ public class SerialTimeSeriesSeriesGeneratorOrder {
             float[] dataToWrite=new float[10];
             for(int i=0;i<dataToWrite.length;i++){
                 dataToWrite[i]=(currentIteration*10)+(i);
-                System.out.println((i+currentIteration*10)+"Value Serial +"+dataToWrite[i]);
+       //         System.out.println((i+currentIteration*10)+"Value Serial +"+dataToWrite[i]);
             }           
             WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(nameSignal, dataToWrite,currentIteration*10);
             SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);

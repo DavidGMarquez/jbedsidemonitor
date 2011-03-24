@@ -40,7 +40,6 @@ public class TimeSeries extends Series {
      * Devuelve la muestra más nueva
      * @return -1 si el buffer esta vacio en otro caso el indice
      */
- 
     public int getIndexNewsample() {
         if (buffer.isEmpty()) {
             return -1;
@@ -68,7 +67,14 @@ public class TimeSeries extends Series {
     }
 
     public float[] read(int posSrc, int sizetoread) {
+               try {
         return this.buffer.read(posSrc, sizetoread);
+        } catch (IllegalReadException e) {
+                   System.out.println("Excepcion capacity"+e.getBufferCapacity()+"lastSample"+e.getLastSampleWrite()+"dataToRead"+e.getNumDataToRead()+"pos StartReading"+e.getPosStartReading());
+            throw new IllegalReadException(e, this.getIdentifier());
+        }
+
+        
     }
 
     public boolean write(float[] datatowrite) {
@@ -79,11 +85,12 @@ public class TimeSeries extends Series {
             throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
         }
     }
-        public boolean write(float[] datatowrite, int indexInitToWrite) {
-        System.out.println("<<-->>"+this.getIdentifier()+"Escribiendo en"+indexInitToWrite+ "Cantidad "+datatowrite.length);
+
+    public boolean write(float[] datatowrite, int indexInitToWrite) {
+        System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);
 
         try {
-            return this.buffer.write(datatowrite,indexInitToWrite);
+            return this.buffer.write(datatowrite, indexInitToWrite);
         } catch (TooMuchDataToWriteException e) {
             throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
         }

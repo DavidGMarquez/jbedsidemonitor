@@ -52,7 +52,8 @@ public class CompleteTest {
     LinkedList<String> timeSignals7;
     //@duda me he dado cuenta que no se como se tendría que detener todo esto
     //@duda y tampoco se si al terminar hay que forzar a que se envie todo lo que no se ha enviado
-
+//@pendiente de vez en cuando aparece un 0 al final no se porque
+        //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
     public CompleteTest() {
     }
 

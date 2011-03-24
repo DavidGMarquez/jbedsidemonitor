@@ -21,9 +21,9 @@ import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableTimeSeries;
 import static org.junit.Assert.*;
 
-public class BasicTest {
+public class CreateTest {
 
-    public BasicTest() {
+    public CreateTest() {
     }
     TimeSeries timeSeries1;
     TimeSeries timeSeries2;
@@ -88,7 +88,7 @@ public class BasicTest {
     }
 
     @Test
-    public void testBasico() {
+    public void testCrearBasico() {
         AuxTestUtilities.reset();
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
@@ -101,13 +101,13 @@ public class BasicTest {
         try {
             Thread.sleep(20);
         } catch (InterruptedException ex) {
-            Logger.getLogger(BasicTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     @Test
-    public void testEjecucionAlgoritmoBasico() {
+    public void testCrearEjecucionAlgoritmoBasico() {
         AuxTestUtilities.reset();
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
@@ -119,7 +119,7 @@ public class BasicTest {
         try {
             Thread.sleep(200);
         } catch (InterruptedException ex) {
-            Logger.getLogger(BasicTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
