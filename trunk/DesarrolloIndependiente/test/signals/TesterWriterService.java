@@ -18,16 +18,18 @@ public class TesterWriterService {
         assertFalse(signalManager == null);
         signalManager.addTimeSeries(new TimeSeries("Signal 1", "Simulated", 1, 100, "mv"));
         signalManager.addTimeSeries(new TimeSeries("Signal 2", "Simulated", 1, 100, "mv"));
-        WriterRunnableTimeSeries Writer1 = new WriterRunnableTimeSeries("Signal 1");
-        WriterRunnableTimeSeries Writer2 = new WriterRunnableTimeSeries("Signal 2");
+        WriterRunnableTimeSeries writer1 = new WriterRunnableTimeSeries("Signal 1");
+        WriterRunnableTimeSeries writer2 = new WriterRunnableTimeSeries("Signal 2");
         float[] dataToWrite1 = new float[10];
         AuxTestUtilities.secuentialArray(dataToWrite1);
         float[] dataToWrite2 = new float[100];
         AuxTestUtilities.secuentialArray(dataToWrite2);
-        Writer1.setDataToWrite(dataToWrite1);
-        Writer2.setDataToWrite(dataToWrite2);
-        signalManager.encueWriteOperation(Writer1);
-        signalManager.encueWriteOperation(Writer2);
+        writer1.setDataToWrite(dataToWrite1);
+        writer1.setIndexInitToWrite(0);
+        writer2.setDataToWrite(dataToWrite2);
+        writer2.setIndexInitToWrite(0);
+        signalManager.encueWriteOperation(writer1);
+        signalManager.encueWriteOperation(writer2);
         try {
             Thread.sleep(30);
         } catch (InterruptedException ex) {
@@ -85,7 +87,9 @@ public class TesterWriterService {
         float[] dataToWrite2 = new float[100];
         AuxTestUtilities.secuentialArray(dataToWrite2);
         writer1T.setDataToWrite(dataToWrite1);
+        writer1T.setIndexInitToWrite(0);
         writer2T.setDataToWrite(dataToWrite2);
+        writer2T.setIndexInitToWrite(0);
         Event e1 = new Event(1, "a", null);
         Event e2 = new Event(2, "b", null);
         Event e3 = new Event(3, "c", null);
@@ -101,7 +105,7 @@ public class TesterWriterService {
         assertEquals(0, signalManager.getEvents("Signal 2Event").size());
         signalManager.encueWriteOperation(writerRunnableMultiSignal);
         try {
-            Thread.sleep(30);
+            Thread.sleep(100);
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }

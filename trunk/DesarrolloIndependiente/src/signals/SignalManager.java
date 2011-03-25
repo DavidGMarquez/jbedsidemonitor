@@ -90,15 +90,14 @@ public class SignalManager {
             return new float[0];
         }
     }
-
+    //@pendiente eliminar
     boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
         boolean result = this.timeSeries.get(identifier).write(dataToWrite);
         return result;
     }
 
-    boolean writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
-        boolean result = this.timeSeries.get(identifier).write(dataToWrite,indexInitToWrite);
-        return result;
+    int[] writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
+        return this.timeSeries.get(identifier).write(dataToWrite,indexInitToWrite);
     }
 
     void addEventToEventSeries(String identifier, Event event) {

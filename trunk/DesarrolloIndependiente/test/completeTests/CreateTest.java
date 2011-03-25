@@ -49,15 +49,15 @@ public class CreateTest {
         timeSeries2 = new TimeSeries("TimeSeries2", "Simulated", 1, 100, "mv");
         timeSeries3 = new TimeSeries("TimeSeries3", "Simulated", 1, 100, "mv");
 
-        eventSeries1 = new EventSeries("EventSeries1", "Simulated", 1, new ArrayList<String>(), "mv");
-        eventSeries2 = new EventSeries("EventSeries2", "Simulated", 1, new ArrayList<String>(), "mv");
-        eventSeries3 = new EventSeries("EventSeries3", "Simulated", 1, new ArrayList<String>(), "mv");
+        eventSeries1 = new EventSeries("EventSeries1CT", "Simulated", 1, new ArrayList<String>(), "mv");
+        eventSeries2 = new EventSeries("EventSeries2CT", "Simulated", 1, new ArrayList<String>(), "mv");
+        eventSeries3 = new EventSeries("EventSeries3CT", "Simulated", 1, new ArrayList<String>(), "mv");
 
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
-        eventSignals1.add("EventSeries1");
-        eventSignals1.add("EventSeries2");
-        eventSignals1.add("EventSeries3");
+        eventSignals1.add("EventSeries1CT");
+        eventSignals1.add("EventSeries2CT");
+        eventSignals1.add("EventSeries3CT");
         timeSignals1.add("TimeSeries1");
         timeSignals1.add("TimeSeries2");
         timeSignals1.add("TimeSeries3");
@@ -114,7 +114,7 @@ public class CreateTest {
         AlgorithmManager.getInstance().addAlgorithm(algorithm3);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 1000);
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
-        WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeries1", 100, 0, 100);
+        WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeries1CT", 100, 0, 100);
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
         try {
             Thread.sleep(200);

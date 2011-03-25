@@ -7,6 +7,8 @@ package completeTests;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signals.SignalManager;
 import signals.WriterRunnableTimeSeries;
 
@@ -35,7 +37,7 @@ public class SinTimeSeriesGeneratorOrder {
             for(int i=0;i<dataToWrite.length;i++){
                 dataToWrite[i]=(float) Math.sin(((float)currentIteration/10)+((float)i/100));
         ///        System.out.println((i+currentIteration*10)+"Value Sin +"+dataToWrite[i]+ "  "+(((float)currentIteration/10)+((float)i/100)));
-            }           
+            }
             WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(nameSignal, dataToWrite);
             SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
             currentIteration++;

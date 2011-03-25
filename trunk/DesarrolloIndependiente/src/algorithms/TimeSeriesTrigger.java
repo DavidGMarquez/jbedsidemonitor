@@ -5,20 +5,28 @@ import signals.WriterRunnableTimeSeries;
 class TimeSeriesTrigger {
 
     private String identifierSignal;
-    private int lastSampleReported;
+    private int lastSampleReportedToAlgorithm;
     private int newData;
     private int theshold;
 
     public TimeSeriesTrigger(String identifierSignal,int theshold) {
         this.identifierSignal=identifierSignal;
         this.theshold = theshold;
-        this.lastSampleReported = 0;
+        this.lastSampleReportedToAlgorithm = -1;
         this.newData = 0;
     }
 
     public void update(WriterRunnableTimeSeries writerRunnableTimeSeries) {
-        if(writerRunnableTimeSeries.getIdentifier().equals(identifierSignal))
-            this.newData += writerRunnableTimeSeries.getDataToWrite().length;
+        System.out.println("Recibiendo datosen"+this.getIdentifierSignal()+"PAra"+writerRunnableTimeSeries.getIdentifier()+"sampleInit"+writerRunnableTimeSeries.getSampleInitToReadInOrder()+"size"+writerRunnableTimeSeries.getSamplesToReadInOrder()+"getLast"+this.getLastSampleReported());
+        if(writerRunnableTimeSeries.getIdentifier().equals(identifierSignal)){
+            //@pendiente si la ultima muestra del agloritmo es mas nueva que la antigua hemos perdido datos
+            if(writerRunnableTimeSeries.getSampleInitToReadInOrder()>(this.lastSampleReportedToAlgorithm+1))
+            {
+                //@pendiente esto esta perdiendo datos ha ocurrido algo malo
+            }
+
+            this.newData=(writerRunnableTimeSeries.getSampleInitToReadInOrder()+writerRunnableTimeSeries.getSamplesToReadInOrder())-(this.lastSampleReportedToAlgorithm+1);
+        }
     }
 
     public boolean trigger() {
@@ -30,7 +38,7 @@ class TimeSeriesTrigger {
     }
 
     public void reset() {
-        this.lastSampleReported += this.newData;
+        this.lastSampleReportedToAlgorithm += this.newData;
         this.newData = 0;
     }
 
@@ -39,7 +47,7 @@ class TimeSeriesTrigger {
     }
 
     public int getLastSampleReported() {
-        return lastSampleReported;
+        return lastSampleReportedToAlgorithm;
     }
 
     public int getNewData() {

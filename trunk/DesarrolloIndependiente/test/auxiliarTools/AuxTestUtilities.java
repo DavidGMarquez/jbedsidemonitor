@@ -26,7 +26,11 @@ public class AuxTestUtilities {
     public static boolean compareArray(float[] array1, float[] array2, int tam) {
         for (int i = 0; i < tam; i++) {
             if (array1[i] != array2[i]) {
+                if((Float.compare(array1[i], Float.NaN)*(Float.compare(array2[i], Float.NaN)))!=0){
+                    System.out.println("Comparar"+array1[i]+" "+array2[i]);
                 return false;
+                }
+                
             }
         }
         return true;
@@ -65,7 +69,7 @@ public class AuxTestUtilities {
     public static boolean containsNAN(float[] data)
     {
         for(int i=0;i<data.length;i++){
-            if(data[i]!=Float.NaN)
+            if(Float.compare(data[i], Float.NaN)!=0)
                 return false;
         }
         return true;
@@ -97,7 +101,7 @@ public class AuxTestUtilities {
     }
 
     public static WriterRunnableTimeSeries generarWriterRunnableTime(String nameSignal, int numberSamples) {
-        return new WriterRunnableTimeSeries(nameSignal, generateArray(numberSamples));
+        return new WriterRunnableTimeSeries(nameSignal, generateArray(numberSamples),0);
     }
 
     public static boolean eventosCompararListas(LinkedList<Event> eventos1, LinkedList<Event> eventos2) {

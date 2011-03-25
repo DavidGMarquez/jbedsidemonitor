@@ -14,7 +14,7 @@ import signals.SignalManager;
 import signals.TimeSeries;
 import static org.junit.Assert.*;
 
-public class CompleteTest {
+public class Pending_CompleteTest {
 
     TimeSeries timeSeries1;
     TimeSeries timeSeries2;
@@ -54,7 +54,8 @@ public class CompleteTest {
     //@duda y tampoco se si al terminar hay que forzar a que se envie todo lo que no se ha enviado
 //@pendiente de vez en cuando aparece un 0 al final no se porque
         //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
-    public CompleteTest() {
+    //@pendiente detener los threads y los completions servers
+    public Pending_CompleteTest() {
     }
 
     @Before
@@ -99,7 +100,7 @@ public class CompleteTest {
         EventSeries eventSeriesOut2 = new EventSeries("Out_Algorithm_2", "Algorithm2", 0, new ArrayList<String>(), "NaN");
         TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_3", "Algorithm3", 0, 300, "NaN");
         TimeSeries timeSeriesOut4 = new TimeSeries("Out_Algorithm_4", "Algorithm3", 0, 300, "NaN");
-        algorithm1 = new AlgorithmStupid2XMultiSignalsImplementation("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1);
+        algorithm1 = new AlgorithmStupid2XMultiSignalsImplementationOrder("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1);
         algorithm2 = new AlgorithmStupidRootMultiSignalsImplementation("Algorithm2", eventSeriesOut2, timeSignals2, eventSignals2);
         algorithm3 = new AlgorithmStupidRootMultiSignalsImplementation("Algorithm3", timeSeriesOut3, timeSignals3, eventSignals3);
         algorithm4 = new AlgorithmStupidRootMultiSignalsImplementation("Algorithm4", timeSeriesOut4, timeSignals4, eventSignals4);
@@ -120,12 +121,10 @@ public class CompleteTest {
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(CompleteTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Pending_CompleteTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         float[] readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
-        //@pendiente de vez en cuando aparece un 0 al final no se porque
-        //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
             if(readNewFromTimeSeriesTimeSeries1[i]!=2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
@@ -134,9 +133,6 @@ public class CompleteTest {
            // assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
 
         }
-        //@pendiente al parecer el error es que cuando hace dos escrituras sobreescribe una con la anterior.
-        //@el problema podría ser del CompletionEjecutor que sobreescribe la misma.
-        //@bug el problema es que se desordenan las operaciones de escritura, no se hacen en orden.
 
      /*   float[] readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1", 0);
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries2.length);
@@ -171,7 +167,7 @@ public class CompleteTest {
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(CompleteTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Pending_CompleteTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         float[] readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);

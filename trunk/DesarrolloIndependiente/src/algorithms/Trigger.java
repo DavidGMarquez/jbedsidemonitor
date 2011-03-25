@@ -110,7 +110,7 @@ public class Trigger {
                 ReaderCallableTimeSeries readerCallableTimeSeries =
                         new ReaderCallableTimeSeries(timeSeriesTrigger.getIdentifierSignal(),
                         this.getIdentifierAlgorithm());
-                readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported());
+                readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported()+1);
                 readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewData());
                 timeSeriesTrigger.reset();
                 readerCallable.addReaderCallableOneSignal(readerCallableTimeSeries);

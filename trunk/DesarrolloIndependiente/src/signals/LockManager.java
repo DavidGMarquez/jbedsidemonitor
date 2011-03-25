@@ -24,7 +24,6 @@ public class LockManager {
             return false;
         }
     }
-    //@duda esto necesita sincronización o con esto ya se supone que valdría?
     public void getReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().lock();
     }
@@ -36,6 +35,8 @@ public class LockManager {
     }
 
     public boolean tryReadLock(String identifier) {
+        if(this.signalsLocks.get(identifier)==null)
+            System.out.println("NULLLLLLLLLLpara "+identifier);
         return this.signalsLocks.get(identifier).readLock().tryLock();
     }
 

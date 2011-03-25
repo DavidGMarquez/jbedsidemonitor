@@ -4,6 +4,10 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
 
     private float[] dataToWrite;
     private int indexInitToWrite;
+    //@pendiente pasarlo a un objeto propio y no aqui como estan metidos
+    private int sampleInitToReadInOrder;
+    private int samplesToReadInOrder;
+
 
     public WriterRunnableTimeSeries(String identifier) {
         super(identifier);
@@ -29,12 +33,20 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
         if (indexInitToWrite == -1) {
             signalManager.writeToTimeSeries(identifier, dataToWrite);
         } else {
-            signalManager.writeToTimeSeries(identifier, dataToWrite, indexInitToWrite);
+            //@pendiente pasarlo a un objeto propio y no aqui como estan metidos
+            int[] resultWrite=signalManager.writeToTimeSeries(identifier, dataToWrite, indexInitToWrite);
+            this.sampleInitToReadInOrder=resultWrite[0];
+            this.samplesToReadInOrder=resultWrite[1];
         }
+
     }
 
     public void setDataToWrite(float[] dataToWrite) {
         this.copyArray(dataToWrite);
+    }
+
+    public void setIndexInitToWrite(int indexInitToWrite) {
+        this.indexInitToWrite = indexInitToWrite;
     }
 
     private void copyArray(float[] dataToWrite) {
@@ -50,4 +62,22 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
     public int getIndexInitToWrite() {
         return indexInitToWrite;
     }
+
+    public int getSampleInitToReadInOrder() {
+        return sampleInitToReadInOrder;
+    }
+
+    public int getSamplesToReadInOrder() {
+        return samplesToReadInOrder;
+    }
+    //@debug
+    public void setSampleInitToReadInOrder(int sampleInitToReadInOrder) {
+        this.sampleInitToReadInOrder = sampleInitToReadInOrder;
+    }
+//@debug
+    public void setSamplesToReadInOrder(int samplesToReadInOrder) {
+        this.samplesToReadInOrder = samplesToReadInOrder;
+    }
+    
+
 }
