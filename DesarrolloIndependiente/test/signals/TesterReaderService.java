@@ -41,11 +41,13 @@ public class TesterReaderService {
         float[] dataToWrite2 = new float[100];
         AuxTestUtilities.secuentialArray(dataToWrite2);
         writer1.setDataToWrite(dataToWrite1);
+        writer1.setIndexInitToWrite(0);
         writer2.setDataToWrite(dataToWrite2);
+        writer2.setIndexInitToWrite(0);
         signalManager.encueWriteOperation(writer1);
         signalManager.encueWriteOperation(writer2);
         try {
-            Thread.sleep(30);
+            Thread.sleep(100);
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }

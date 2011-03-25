@@ -1,5 +1,6 @@
 package signals;
 
+import algorithms.AlgorithmManager;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
     public void run() {
        while(!this.getLocks()){
            //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
+           //@pendiente @duda esto...... esperamos o no?=
           /*  try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
@@ -27,6 +29,8 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
        }
         this.write();
         this.releaseLocks();
+                        //pendiente @b he cambiado esto que sino no funciona
+        AlgorithmManager.getInstance().notifyNewData(this);
     }
 
     protected boolean getLocks() {

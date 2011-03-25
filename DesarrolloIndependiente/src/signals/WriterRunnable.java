@@ -1,5 +1,7 @@
 package signals;
 
+import algorithms.AlgorithmManager;
+
 public abstract class WriterRunnable implements Runnable {
 
     protected LockManager lockManager;
@@ -12,6 +14,8 @@ public abstract class WriterRunnable implements Runnable {
         this.getLocks();
         this.write();
         this.releaseLocks();
+                //pendiente @b he cambiado esto que sino no funciona
+        AlgorithmManager.getInstance().notifyNewData(this);
     }
 
     protected abstract boolean getLocks();

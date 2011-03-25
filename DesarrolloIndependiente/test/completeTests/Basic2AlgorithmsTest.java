@@ -71,6 +71,8 @@ public class Basic2AlgorithmsTest {
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         AlgorithmManager.getInstance().addAlgorithm(algorithmOUT);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 10000);
+        writerRunnableTimeSeries.setSampleInitToReadInOrder(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(10000);
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
         float[] dataToWrite = writerRunnableTimeSeries.getDataToWrite();
         try {
@@ -103,8 +105,8 @@ public class Basic2AlgorithmsTest {
         }
 
         for (int i = 0; i < dataRead.length; i++) {
-            System.out.println("Comparar " + dataToWrite[i] + " y " + dataRead[i] / 2);
-            assertTrue(dataToWrite[i] == dataRead[i] / 2);
+            System.out.println(i+"Comparar " + dataToWrite[i] + " y " + dataRead[i] / 2);
+            assertEquals(dataToWrite[i] , dataRead[i] / 2,000.1);
         }
     }
 }

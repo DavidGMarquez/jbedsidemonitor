@@ -98,7 +98,6 @@ public class AlgorithmManager {
         Set<String> algorithmNames = this.triggersByAlgorithmName.keySet();
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
-            //@pendiente
             ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableIfTriggerAndReset();
             if (readerCallable!=null) {                
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
@@ -128,8 +127,8 @@ public class AlgorithmManager {
         return this.triggersByAlgorithmName.get(algorithmName);
     }
 
-    public LinkedList<String> getAlgorithmNamesToSignal(String algorithmName) {
-        return this.algorithmsToNotifyBySignalName.get(algorithmName);
+    public LinkedList<String> getAlgorithmNamesToSignal(String signalName) {
+        return this.algorithmsToNotifyBySignalName.get(signalName);
     }
 
     public void reset() {

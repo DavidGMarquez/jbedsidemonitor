@@ -71,8 +71,11 @@ public class TimeSeries extends Series {
         return this.buffer.read(posSrc, sizetoread);
         } catch (IllegalReadException e) {
                    System.out.println("Excepcion capacity"+e.getBufferCapacity()+"lastSample"+e.getLastSampleWrite()+"dataToRead"+e.getNumDataToRead()+"pos StartReading"+e.getPosStartReading());
+                   //@pendiente cmabiar
+                   //return new float[0];
             throw new IllegalReadException(e, this.getIdentifier());
         }
+
 
         
     }
@@ -82,17 +85,24 @@ public class TimeSeries extends Series {
         try {
             return this.buffer.write(datatowrite);
         } catch (TooMuchDataToWriteException e) {
-            throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
+            throw new TooMuchDataToWriteException(e, this.getIdentifier());
         }
+                catch(IllegalWriteException e){
+            throw new IllegalWriteException(e, this.getIdentifier());
+        }
+
     }
 
-    public boolean write(float[] datatowrite, int indexInitToWrite) {
+    public int[] write(float[] datatowrite, int indexInitToWrite) {
         System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);
 
         try {
             return this.buffer.write(datatowrite, indexInitToWrite);
         } catch (TooMuchDataToWriteException e) {
-            throw new TooMuchDataToWriteException(e, this.getIdentifier(), this.getCapacity(), datatowrite.length);
+            throw new TooMuchDataToWriteException(e, this.getIdentifier());
+        }
+        catch(IllegalWriteException e){
+            throw new IllegalWriteException(e, this.getIdentifier());
         }
     }
 }
