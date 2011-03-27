@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
 
 /** Singleton Facade
  *
@@ -96,7 +97,7 @@ public class SignalManager {
         return result;
     }
 
-    int[] writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
+    ConsecutiveSamplesAvailableInfo writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
         return this.timeSeries.get(identifier).write(dataToWrite,indexInitToWrite);
     }
 

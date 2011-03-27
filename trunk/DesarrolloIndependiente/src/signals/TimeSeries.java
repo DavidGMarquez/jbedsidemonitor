@@ -1,5 +1,7 @@
 package signals;
 
+import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
+
 /**
  * Representa una serie temporal.
  * identifier es una cadena de texto que representa a la serie temporal.
@@ -47,17 +49,6 @@ public class TimeSeries extends Series {
         return (buffer.getIndexNextWrite() - 1) % this.getCapacity();
     }
 
-    /**
-     * Indice de la muestra mas antigua
-     * @return -1 si el buffer esta vacio en otro caso el indice
-     */
-    public int getIndexOldestsample() {
-        if (buffer.isEmpty()) {
-            return -1;
-        }
-        return buffer.getIndexold();
-    }
-
     public String getUnits() {
         return units;
     }
@@ -67,41 +58,33 @@ public class TimeSeries extends Series {
     }
 
     public float[] read(int posSrc, int sizetoread) {
-               try {
-        return this.buffer.read(posSrc, sizetoread);
+        try {
+            return this.buffer.read(posSrc, sizetoread);
         } catch (IllegalReadException e) {
-                   System.out.println("Excepcion capacity"+e.getBufferCapacity()+"lastSample"+e.getLastSampleWrite()+"dataToRead"+e.getNumDataToRead()+"pos StartReading"+e.getPosStartReading());
-                   //@pendiente cmabiar
-                   //return new float[0];
+            System.out.println("Excepcion capacity" + e.getBufferCapacity() + "lastSample" + e.getLastSampleWrite() + "dataToRead" + e.getNumDataToRead() + "pos StartReading" + e.getPosStartReading());
             throw new IllegalReadException(e, this.getIdentifier());
         }
-
-
-        
     }
 
     public boolean write(float[] datatowrite) {
-
         try {
             return this.buffer.write(datatowrite);
         } catch (TooMuchDataToWriteException e) {
             throw new TooMuchDataToWriteException(e, this.getIdentifier());
-        }
-                catch(IllegalWriteException e){
+        } catch (IllegalWriteException e) {
             throw new IllegalWriteException(e, this.getIdentifier());
         }
-
     }
 
-    public int[] write(float[] datatowrite, int indexInitToWrite) {
+    public ConsecutiveSamplesAvailableInfo write(float[] datatowrite, int indexInitToWrite) {
+        //@comentario ¿realmente te aporta el tener estos System.out.println?
         System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);
 
         try {
             return this.buffer.write(datatowrite, indexInitToWrite);
         } catch (TooMuchDataToWriteException e) {
             throw new TooMuchDataToWriteException(e, this.getIdentifier());
-        }
-        catch(IllegalWriteException e){
+        } catch (IllegalWriteException e) {
             throw new IllegalWriteException(e, this.getIdentifier());
         }
     }

@@ -4,7 +4,6 @@ import java.util.*;
 
 public class EventSeries extends Series {
 
-    //Parametros serie temporal
     private SortedSet<Event> events;
     private String units;
 

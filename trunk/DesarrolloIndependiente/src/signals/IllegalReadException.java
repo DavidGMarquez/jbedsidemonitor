@@ -6,25 +6,25 @@ class IllegalReadException extends RuntimeException {
     private String identifier;
     private int bufferCapacity;
     private int lastSampleWrite;
-    private int numberOfSamplesWrite;
-
     private int posStartReading;
     private int numDataToRead;
-    public IllegalReadException(String message, int bufferCapacity,int posStartReading,int numDataToRead,int lastSampleWrite,int numberOfSamplesWrite) {
+
+    public IllegalReadException(String message, int bufferCapacity, int posStartReading,
+            int numDataToRead, int lastSampleWrite) {
         super(message);
-        this.message = new String(message);
+        this.message = message;
         this.bufferCapacity = bufferCapacity;
-        this.lastSampleWrite=lastSampleWrite;
-        this.numberOfSamplesWrite=numberOfSamplesWrite;
-        this.posStartReading=posStartReading;
-        this.numDataToRead=numDataToRead;
+        this.lastSampleWrite = lastSampleWrite;
+        this.posStartReading = posStartReading;
+        this.numDataToRead = numDataToRead;
     }
 
     IllegalReadException(IllegalReadException e, String identifier) {
         super(e.message + " Signal:" + identifier);
-        this.message = new String(e.message);
-        this.identifier = new String(identifier);
-        
+        //@comentario animal de bellotas ¡los String! son inmutables!
+        this.message = e.message;
+        this.identifier = identifier;
+
     }
 
     public int getBufferCapacity() {
@@ -43,13 +43,7 @@ class IllegalReadException extends RuntimeException {
         return numDataToRead;
     }
 
-    public int getNumberOfSamplesWrite() {
-        return numberOfSamplesWrite;
-    }
-
     public int getPosStartReading() {
         return posStartReading;
     }
-
-
 }

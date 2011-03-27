@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 import java.util.HashMap;
@@ -14,8 +10,6 @@ import java.util.Map;
  * location is a long that represents the time of the event
  * type is a String that represent the type of the event
  * attributes is a Map that collect de pair of the Object that represent de attributes of the event
- *
- * @author USUARIO
  */
 public final class Event implements Comparable<Event> {
 
