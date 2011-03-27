@@ -5,25 +5,24 @@ class IllegalWriteException extends RuntimeException {
     private String message;
     private String identifier;
     private int bufferCapacity;
-    private int lastSampleWrite;
-    private int numberOfSamplesWrite;
+    private int lastSampleWritten;
     private float[] dataToWrite;
     private int sampleInitToWrite;
 
-    public IllegalWriteException(String message, int bufferCapacity, float[] dataToWrite, int sampleInitToWrite, int lastSampleWrite, int numberOfSamplesWrite) {
+    public IllegalWriteException(String message, int bufferCapacity, float[] dataToWrite,
+            int sampleInitToWrite, int lastSampleWritten) {
         super(message);
-        this.message = new String(message);
+        this.message =  message;
         this.bufferCapacity = bufferCapacity;
-        this.lastSampleWrite = lastSampleWrite;
-        this.numberOfSamplesWrite = numberOfSamplesWrite;
+        this.lastSampleWritten = lastSampleWritten;
         this.sampleInitToWrite = sampleInitToWrite;
         this.dataToWrite = dataToWrite;
     }
 
     IllegalWriteException(IllegalWriteException e, String identifier) {
         super(e.message + " Signal:" + identifier);
-        this.message = new String(e.message);
-        this.identifier = new String(identifier);
+        this.message = e.message;
+        this.identifier = identifier;
 
     }
 
@@ -35,12 +34,8 @@ class IllegalWriteException extends RuntimeException {
         return identifier;
     }
 
-    public int getLastSampleWrite() {
-        return lastSampleWrite;
-    }
-
-    public int getNumberOfSamplesWrite() {
-        return numberOfSamplesWrite;
+    public int getLastSampleWritten() {
+        return lastSampleWritten;
     }
 
     public float[] getDataToWrite() {

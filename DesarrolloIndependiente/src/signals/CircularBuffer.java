@@ -1,27 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package signals;
 
 /**
  * Clase que representa un buffer circular.
- * Es un buffer simple con la particularidad de que al llenarse vuelve a escribir al principio del array.
- * indexNextWrite representa por donde vamos a escribir.
- * indexOldest apunta a la muestra mas antigua que hay en el array
+ * Es un buffer simple con la particularidad de que al llenarse vuelve olderSampleAvailabl escribir al principio del array.
+ * indexNextWrite representa por donde vamos olderSampleAvailabl escribir.
+ * indexOldest apunta olderSampleAvailabl la muestra mas antigua que hay en el array
  * full es un boleano que indica si el buffer se ha lleanado ya de datos completamente
- * @author USUARIO
  */
 class CircularBuffer {
 
     private int indexNextWrite;
-    private int indexOldest;
-    //@duda croe el indexOldest no tiene mucho sentido ya ademas se descontrola, el next aun parece que funciona
     private int capacity;
     private float data[];
     private boolean full;
-    private int lastSampleWrite;
-    private int numberOfSamplesWrite;
+    private int lastSampleWritten;
 
     /**
      * Crea un buffer con el tamaño por defecto asignado
@@ -29,7 +21,7 @@ class CircularBuffer {
     public CircularBuffer() {
         this(10000);
     }
-    //@pendiente:  para que no escape la refencia durante la construcción a la
+    //@pendiente:  para que no escape la refencia durante la construcción olderSampleAvailabl la
     //hora de ser concurrente habría que hacer el constructor mediante un metodo static
 
     /**
@@ -44,21 +36,16 @@ class CircularBuffer {
     private void initialize() {
         data = new float[capacity];
         indexNextWrite = 0;
-        indexOldest = 0;
         full = false;
-        lastSampleWrite = -1;
-        numberOfSamplesWrite = 0;
-        //@duda y si escribo dos veces la misma muestra se deben contar dos veces?
-        //@duda no se si necesito ambos contadores pero por si acaso los he puesto
-
+        lastSampleWritten = -1;
     }
 
     /**
      * Escribe datos en el buffer.
-     * Si la cantidad de datos a escribir es mayor que el tamaño del buffer devuelve false
+     * Si la cantidad de datos olderSampleAvailabl escribir es mayor que el tamaño del buffer devuelve false
      * En cualquier otro caso devuelve true
      *
-     * Se debe indicar el array de floats con los datos a escribir y aparte el numero de datos a escribir.
+     * Se debe indicar el array de floats con los datos olderSampleAvailabl escribir y aparte el numero de datos olderSampleAvailabl escribir.
      *
      * @param dataToWrite
      * @return
@@ -83,53 +70,48 @@ class CircularBuffer {
             firstNewDataToCopy = dataToWrite.length - numberOfDataRemainingToBeCopied;
             System.arraycopy(dataToWrite, firstNewDataToCopy, this.data, indexNextWrite, numberOfDataRemainingToBeCopied);
             this.indexNextWrite = (this.indexNextWrite + numberOfDataRemainingToBeCopied) % this.capacity;
-            if (full) {
-                this.indexOldest = this.indexNextWrite;
-            }
         }
         return true;
     }
 
     /**
      * Escribe datos en el buffer.
-     * Si la cantidad de datos a escribir es mayor que el tamaño del buffer devuelve false
+     * Si la cantidad de datos olderSampleAvailabl escribir es mayor que el tamaño del buffer devuelve false
      * En cualquier otro caso devuelve true
      *
-     * Se debe indicar el array de floats con los datos a escribir y aparte el numero de datos a escribir.
+     * Se debe indicar el array de floats con los datos olderSampleAvailabl escribir y aparte el numero de datos olderSampleAvailabl escribir.
      * En este caso tambien indicamos donde queremos que se realice la escritura.
      * Si usamos este metodo no se controla el orden en las escrituras, debe ser llevado de forma externa
      *
      * @param dataToWrite indexInitToWrite
      * @return
      */
-    int[] write(float[] dataToWrite, int sampleInitToWrite) {
-        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length + "lastSample" + this.lastSampleWrite);
-        if (sampleInitToWrite < ((this.lastSampleWrite + 1) - this.capacity)) {
-            throw new IllegalWriteException("try to write data too old ", this.capacity, dataToWrite, sampleInitToWrite, this.lastSampleWrite, this.numberOfSamplesWrite);
+    ConsecutiveSamplesAvailableInfo write(float[] dataToWrite, int sampleInitToWrite) {
+        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length + "lastSample" + this.lastSampleWritten);
+        if (sampleInitToWrite < ((this.lastSampleWritten + 1) - this.capacity)) {
+            throw new IllegalWriteException("try to write data too old ", this.capacity, dataToWrite,
+                    sampleInitToWrite, this.lastSampleWritten);
         }
-        if (sampleInitToWrite > this.lastSampleWrite + 1) {
+        if (sampleInitToWrite > this.lastSampleWritten + 1) {
             //@pendiente revisar
-            this.writeNAN(lastSampleWrite + 1, sampleInitToWrite - (lastSampleWrite + 1));
+            this.writeNAN(lastSampleWritten + 1, sampleInitToWrite - (lastSampleWritten + 1));
         }
-        if ((sampleInitToWrite + dataToWrite.length - 1) >= this.lastSampleWrite) {
+        if ((sampleInitToWrite + dataToWrite.length - 1) >= this.lastSampleWritten) {
 
-            this.lastSampleWrite = (sampleInitToWrite + dataToWrite.length) - 1;
+            this.lastSampleWritten = (sampleInitToWrite + dataToWrite.length) - 1;
         }
-        numberOfSamplesWrite = +dataToWrite.length;
         if (sampleInitToWrite > this.capacity) {
             sampleInitToWrite = sampleInitToWrite % capacity;
         }
         this.indexNextWrite = sampleInitToWrite;
         this.write(dataToWrite);
-        //@duda si hace falta podría volver a la anterior.
-        int[] returnValues=new int[2];
-        returnValues[0]=this.getSampleInitToReadInOrder();
-        returnValues[1]=this.getSamplesReadyToReadInOrder(returnValues[0]);
-        return returnValues;
+        //@duda si hace falta podría volver olderSampleAvailabl la anterior.
+        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = new ConsecutiveSamplesAvailableInfo();
+        return consecutiveSamplesAvailableInfo;
     }
 
     private void writeNAN(int sampleOrigin, int size) {
-        System.out.println("NANANANANAN Escribiendo NAN Desde" + sampleOrigin + "Tamaño" + size + "lastSample" + this.lastSampleWrite);
+        System.out.println("NANANANANAN Escribiendo NAN Desde" + sampleOrigin + "Tamaño" + size + "lastSample" + this.lastSampleWritten);
         //@pendiente revisar
         float[] nanToWrite = new float[size];
         for (int i = 0; i < size; i++) {
@@ -147,9 +129,9 @@ class CircularBuffer {
 
     /**
      * Lee datos del buffer.
-     * Si la cantidad de datos a leer es mayor que el tamaño del buffer solo se lee el tamaño del buffer
-     * En otro caso devuelve una referencia a los datos leidos.
-     * Se indica a partir de que posicion quremos leer y la cantidad de datos
+     * Si la cantidad de datos olderSampleAvailabl leer es mayor que el tamaño del buffer solo se lee el tamaño del buffer
+     * En otro caso devuelve una referencia olderSampleAvailabl los datos leidos.
+     * Se indica olderSampleAvailabl partir de que posicion quremos leer y la cantidad de datos
      * @param posStartReading
      * @param numDataToRead
      * @return
@@ -157,13 +139,16 @@ class CircularBuffer {
     float[] read(int posStartReading, int numDataToRead) {
 
         if (posStartReading < 0) {
-            throw new IllegalReadException("posStartReading is negative", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+            throw new IllegalReadException("posStartReading is negative", this.capacity,
+                    posStartReading, numDataToRead, this.lastSampleWritten);
         }
-        if (posStartReading + numDataToRead > (this.lastSampleWrite + 1)) {
-            throw new IllegalReadException("try to read future data", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+        if (posStartReading + numDataToRead > (this.lastSampleWritten + 1)) {
+            throw new IllegalReadException("try to read future data", this.capacity,
+                    posStartReading, numDataToRead, this.lastSampleWritten);
         }
-        if (posStartReading < ((this.lastSampleWrite + 1) - this.capacity)) {
-            throw new IllegalReadException("try to read data not avalible, data too old ", this.capacity, posStartReading, numDataToRead, this.lastSampleWrite, this.numberOfSamplesWrite);
+        if (posStartReading < ((this.lastSampleWritten + 1) - this.capacity)) {
+            throw new IllegalReadException("try to read data not avalible, data too old ", this.capacity,
+                    posStartReading, numDataToRead, this.lastSampleWritten);
         }
 
         if (numDataToRead > this.capacity) {
@@ -189,11 +174,7 @@ class CircularBuffer {
         if (this.isEmpty()) {
             return -1;
         }
-        return read(lastSampleWrite, 1)[0];
-    }
-
-    public int getIndexold() {
-        return indexOldest;
+        return read(lastSampleWritten, 1)[0];
     }
 
     public boolean isFull() {
@@ -220,35 +201,54 @@ class CircularBuffer {
     }
 
     public int getLastSampleWrite() {
-        return lastSampleWrite;
+        return lastSampleWritten;
     }
 
-    public int getNumberOfSamplesWrite() {
-        return numberOfSamplesWrite;
-    }
+    //ahora mismo he diseñado esta clase para que sus objetos sean inmutables
+    //pero sería fácil de cambiar para que nos dé una vision "live" del buffer
+    //el problema seria que antes de poder acceder a esa vision "live" habría que coger
+    //el lock del buffer
+    public class ConsecutiveSamplesAvailableInfo {
 
-    public int getSamplesReadyToReadInOrder(int sampleInitToReadInOrder) {
-        boolean encontradoNaN = false;
-        int numberOfSamplesToReadInOrder = 0;
-        while (!encontradoNaN) {
-            try{
-            if (Float.compare(this.read(sampleInitToReadInOrder + numberOfSamplesToReadInOrder, 1)[0], Float.NaN) == 0) {
-                encontradoNaN = true;
-            } else {
-                numberOfSamplesToReadInOrder++;
-            }}
-            catch(IllegalReadException e){
-                encontradoNaN=true;
+        private final int olderSampleAvailable;
+        private final int samplesReadyToReadInOrder;
+
+        ConsecutiveSamplesAvailableInfo() {
+            this.olderSampleAvailable = calculateOlderSampleAvailable();
+            this.samplesReadyToReadInOrder = calculateSamplesReadyToReadInOrder(olderSampleAvailable);
+        }
+
+        public int getOlderSampleAvailable() {
+            return olderSampleAvailable;
+        }
+
+        public int getSamplesReadyToReadInOrder() {
+            return samplesReadyToReadInOrder;
+        }
+
+        private int calculateOlderSampleAvailable() {
+            if ((lastSampleWritten + 1) > capacity) {
+                return (lastSampleWritten + 1) - capacity;
             }
+            return 0;
         }
-        return numberOfSamplesToReadInOrder;
-    }
 
-    public int getSampleInitToReadInOrder() {
-        if ((this.lastSampleWrite + 1) > this.capacity) {
-            return (this.lastSampleWrite + 1) - this.capacity;
+        int calculateSamplesReadyToReadInOrder(int sampleStartReading) {
+            boolean encontradoNaN = false;
+            int numberOfSamplesAvailableToReadInOrder = 0;
+            while (!encontradoNaN) {
+                try {
+                    if (Float.compare(read(sampleStartReading + numberOfSamplesAvailableToReadInOrder, 1)[0],
+                            Float.NaN) == 0) {
+                        encontradoNaN = true;
+                    } else {
+                        numberOfSamplesAvailableToReadInOrder++;
+                    }
+                } catch (IllegalReadException e) {
+                    encontradoNaN = true;
+                }
+            }
+            return numberOfSamplesAvailableToReadInOrder;
         }
-        return 0;
-
     }
 }

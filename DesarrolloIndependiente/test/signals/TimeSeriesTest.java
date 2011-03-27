@@ -36,17 +36,14 @@ public class TimeSeriesTest {
         float[] dataToWrite = null;
         dataToWrite = AuxTestUtilities.generateArray(75000);
         assertEquals(ts.getIndexNewsample(), -1);
-        assertEquals(ts.getIndexOldestsample(), -1);
         assertEquals(ts.getSamplescounter(), 0);
         ts.write(dataToWrite,0);
         assertEquals(ts.getIndexNewsample(), 74999);
-        assertEquals(ts.getIndexOldestsample(), 0);
         assertEquals(ts.getSamplescounter(), 75000);
         assertEquals(AuxTestUtilities.compareArray(ts.read(0, 75000), dataToWrite, 75000), true);
         dataToWrite = AuxTestUtilities.generateArray(75000);
         ts.write(dataToWrite,75000);
         assertEquals(ts.getIndexNewsample(), 49999);
-        assertEquals(ts.getIndexOldestsample(), 50000);
         assertEquals(ts.getSamplescounter(), 100000);
         assertEquals(AuxTestUtilities.compareArray(ts.read(75000, 75000), dataToWrite, 75000), true);
     }
@@ -57,11 +54,9 @@ public class TimeSeriesTest {
         float[] dataToWrite = null;
         dataToWrite = AuxTestUtilities.generateArrayWithConsecutiveIntegers(0, 100);
         assertEquals(ts.getIndexNewsample(), -1);
-        assertEquals(ts.getIndexOldestsample(), -1);
         assertEquals(ts.getSamplescounter(), 0);
         ts.write(dataToWrite,0);
         assertEquals(ts.getIndexNewsample(), 99);
-        assertEquals(ts.getIndexOldestsample(), 0);
         assertEquals(ts.getSamplescounter(), 100);
         assertEquals(AuxTestUtilities.compareArray(ts.read(0, 100), dataToWrite, 100), true);
         assertEquals(ts.read(0, 1)[0], 0, 0.001);
@@ -90,17 +85,14 @@ public class TimeSeriesTest {
         float[] dataToWrite = null;
         dataToWrite = AuxTestUtilities.generateArray(75000);
         assertEquals(ts.getIndexNewsample(), -1);
-        assertEquals(ts.getIndexOldestsample(), -1);
         assertEquals(ts.getSamplescounter(), 0);
         ts.write(dataToWrite, 75000);
         assertEquals(ts.getIndexNewsample(), 49999);
-        assertEquals(ts.getIndexOldestsample(), 50000);
         assertEquals(ts.getSamplescounter(), 100000);
         assertEquals(AuxTestUtilities.compareArray(ts.read(75000, 75000), dataToWrite, 75000), true);
         dataToWrite = AuxTestUtilities.generateArray(75000);
         ts.write(dataToWrite, 100000);
         assertEquals(ts.getIndexNewsample(), 74999);
-        assertEquals(ts.getIndexOldestsample(), 75000);
         assertEquals(ts.getSamplescounter(), 100000);
         assertEquals(AuxTestUtilities.compareArray(ts.read(100000, 75000), dataToWrite, 75000), true);
 

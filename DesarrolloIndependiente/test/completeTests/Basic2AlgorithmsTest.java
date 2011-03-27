@@ -71,7 +71,7 @@ public class Basic2AlgorithmsTest {
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         AlgorithmManager.getInstance().addAlgorithm(algorithmOUT);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeries1", 10000);
-        writerRunnableTimeSeries.setSampleInitToReadInOrder(0);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
         writerRunnableTimeSeries.setSamplesToReadInOrder(10000);
         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
         float[] dataToWrite = writerRunnableTimeSeries.getDataToWrite();
