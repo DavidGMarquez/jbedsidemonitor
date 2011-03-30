@@ -25,8 +25,4 @@ public class ReadResultTimeSeries extends ReadResultOneSignal{
     public float[] getData() {
         return data;
     }
-
-    public String getIdentifierSignal() {
-        return identifierSignal;
-    }
 }

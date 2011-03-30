@@ -17,7 +17,11 @@ class TimeSeriesTrigger {
     }
 
     public void update(WriterRunnableTimeSeries writerRunnableTimeSeries) {
-        System.out.println("Recibiendo datosen"+this.getIdentifierSignal()+"PAra"+writerRunnableTimeSeries.getIdentifier()+"sampleInit"+writerRunnableTimeSeries.getOlderSampleAvailable()+"size"+writerRunnableTimeSeries.getSamplesReadyToReadInOrder()+"getLast"+this.getLastSampleReported());
+        System.out.println("Recibiendo datosen"+this.getIdentifierSignal()+
+                "PAra"+writerRunnableTimeSeries.getIdentifier()+
+                "sampleInit"+writerRunnableTimeSeries.getOlderSampleAvailable()+
+                "size"+writerRunnableTimeSeries.getSamplesReadyToReadInOrder()+
+                "getLast"+this.getLastSampleReported());
         if(writerRunnableTimeSeries.getIdentifier().equals(identifierSignal)){
             //@pendiente si la ultima muestra del agloritmo es mas nueva que la antigua hemos perdido datos
             if(writerRunnableTimeSeries.getOlderSampleAvailable()>(this.lastSampleReportedToAlgorithm+1))
@@ -25,7 +29,8 @@ class TimeSeriesTrigger {
                 //@pendiente esto esta perdiendo datos ha ocurrido algo malo
             }
 
-            this.newData=(writerRunnableTimeSeries.getOlderSampleAvailable()+writerRunnableTimeSeries.getSamplesReadyToReadInOrder())-(this.lastSampleReportedToAlgorithm+1);
+            this.newData=(writerRunnableTimeSeries.getOlderSampleAvailable() +
+                    writerRunnableTimeSeries.getSamplesReadyToReadInOrder())-(this.lastSampleReportedToAlgorithm+1);
         }
     }
 

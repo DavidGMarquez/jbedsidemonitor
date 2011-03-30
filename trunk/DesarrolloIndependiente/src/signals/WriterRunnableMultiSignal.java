@@ -19,13 +19,11 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
     @Override
     public void run() {
        while(!this.getLocks()){
-           //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
-           //@pendiente @duda esto...... esperamos o no?=
-          /*  try {
-                Thread.sleep(500);
+            try {
+                this.wait(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+                Logger.getLogger(WriterRunnableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
+            }
        }
         this.write();
         this.releaseLocks();

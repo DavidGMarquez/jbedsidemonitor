@@ -68,14 +68,6 @@ public class SignalManager {
 
     }
 
-/////////A partir de aqui los métodos son discutibles
-    // Estan puesto public para los test
-    //@todo ¿para que es este metodo? No alcanza a ver que esto haga nada útil
-    //@pendiente es para iniciar el thread, me daba warnings si lo hacía desde el constructor directamente.
-    void initiateThread() {
-        Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
-        threadCompletionService.start();
-    }
     //@metodo debug no USAR segun api
 
     public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
@@ -85,7 +77,9 @@ public class SignalManager {
 
     public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
-            float result[] = this.timeSeries.get(identifier).read(indexLastRead, (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) + 1 % this.timeSeries.get(identifier).getCapacity());
+            float result[] = this.timeSeries.get(identifier).read(indexLastRead, 
+                    (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) +
+                    1 % this.timeSeries.get(identifier).getCapacity());
             return result;
         } else {
             return new float[0];
@@ -128,6 +122,12 @@ public class SignalManager {
 
     }
 
+/////////A partir de aqui los métodos son discutibles
+    // Estan puesto public para los test
+    void initiateThread() {
+        Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
+        threadCompletionService.start();
+    }
     public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());
     }

@@ -27,23 +27,24 @@ public class Trigger {
 
         Set<String> keySetTimeSeries = algorithmNotifyPolice.getTimeSeriesTheshold().keySet();
         for (String keyTimeSeries : keySetTimeSeries) {
-            this.timeSeriesTriggers.put(keyTimeSeries,
-                    new TimeSeriesTrigger(keyTimeSeries, algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
+            this.timeSeriesTriggers.put(keyTimeSeries, new TimeSeriesTrigger(keyTimeSeries,
+                    algorithmNotifyPolice.getTimeSeriesTheshold().get(keyTimeSeries)));
         }
         Set<String> keySetEventSeries = algorithmNotifyPolice.getEventSeriesTheshold().keySet();
         for (String keyEventSeries : keySetEventSeries) {
-            this.eventSeriesTriggers.put(keyEventSeries,
-                    new EventSeriesTrigger(keyEventSeries, algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
+            this.eventSeriesTriggers.put(keyEventSeries, new EventSeriesTrigger(keyEventSeries,
+                    algorithmNotifyPolice.getEventSeriesTheshold().get(keyEventSeries)));
         }
-
     }
 
     public synchronized void notifyNewData(WriterRunnableOneSignal writerRunnableOneSignal) {
         if (writerRunnableOneSignal instanceof WriterRunnableTimeSeries) {
-            this.timeSeriesTriggers.get(writerRunnableOneSignal.getIdentifier()).update((WriterRunnableTimeSeries) writerRunnableOneSignal);
+            TimeSeriesTrigger trigger = this.timeSeriesTriggers.get(writerRunnableOneSignal.getIdentifier());
+            trigger.update((WriterRunnableTimeSeries) writerRunnableOneSignal);
         } else {
             if (writerRunnableOneSignal instanceof WriterRunnableEventSeries) {
-                this.eventSeriesTriggers.get(writerRunnableOneSignal.getIdentifier()).update((WriterRunnableEventSeries) writerRunnableOneSignal);
+                EventSeriesTrigger trigger = this.eventSeriesTriggers.get(writerRunnableOneSignal.getIdentifier());
+                trigger.update((WriterRunnableEventSeries) writerRunnableOneSignal);
             }
         }
     }
@@ -72,34 +73,19 @@ public class Trigger {
         }
     }
 
-    //Tiene sentido que resetee todo? o solo debería resetear los triggers?
-    //@comentario: respecto a tu pregunta ¿estás reseteando algo más que los triggers? Yo no veo que
-    //resetees nada más
-    //@respuesta me exprese mal. Quiero decir reseteo solo los triggers que estan con trigger() o todos?
-    private synchronized void reset() {
-        Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
-        for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
-            timeSeriesTrigger.reset();
-        }
-        Collection<EventSeriesTrigger> valuesEventSeriesTrigger = eventSeriesTriggers.values();
-        for (EventSeriesTrigger eventSeriesTrigger : valuesEventSeriesTrigger) {
-            eventSeriesTrigger.reset();
-        }
-    }
-
     public synchronized ReaderCallable getReaderCallableIfTriggerAndReset() {
         if (this.trigger()) {
-            return this.getReaderCallable();
+            return this.getReaderCallableAnResetTriggers();
         }
         return null;
     }
 
     public synchronized ReaderCallableMultiSignal getReaderCallableAndReset() {
-        ReaderCallableMultiSignal readerCallable = this.getReaderCallable();
+        ReaderCallableMultiSignal readerCallable = this.getReaderCallableAnResetTriggers();
         return readerCallable;
     }
 
-    private synchronized ReaderCallableMultiSignal getReaderCallable() {
+    private synchronized ReaderCallableMultiSignal getReaderCallableAnResetTriggers() {
         //@duda sería necesario que devuelva no solo MultiSignal sino también las OneSignal si es el caso?
         //@pendiente tal y como esta la cosa nunca le llegan a los algoritmos ReadResult simples, siempre le llegan Multi aunque sean de una sola señal
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
