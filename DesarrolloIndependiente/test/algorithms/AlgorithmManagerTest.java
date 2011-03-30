@@ -1,9 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
+import signals.ReadResult;
 import auxiliarTools.AuxTestUtilities;
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -17,10 +14,6 @@ import signals.EventSeries;
 import signals.TimeSeries;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author USUARIO
- */
 public class AlgorithmManagerTest {
 
     LinkedList<String> eventSignalsA;
@@ -66,7 +59,12 @@ public class AlgorithmManagerTest {
         assertEquals(instance1, instance2);
         assertEquals(instance3, AlgorithmManager.getInstance());
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
-        instance1.addAlgorithm(new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA));
+        instance1.addAlgorithm(new AlgorithmDefaultImplementation("Algorithm_1", 
+                timeSeriesOut1, timeSignalsA, eventSignalsA){
+            public boolean execute(ReadResult readResult) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        });
         assertEquals(instance1, AlgorithmManager.getInstance());
 
     }
@@ -76,7 +74,12 @@ public class AlgorithmManagerTest {
 
         AuxTestUtilities.reset();
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA);
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", 
+                timeSeriesOut1, timeSignalsA, eventSignalsA){
+            public boolean execute(ReadResult readResult) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
         AlgorithmManager instance = AlgorithmManager.getInstance();
         assertEquals(instance.getAllAlgorithmNames().size(), 0);
         instance.addAlgorithm(algorithm1);
@@ -129,9 +132,25 @@ public class AlgorithmManagerTest {
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
         EventSeries eventSeriesOut2 = new EventSeries("Out_Algorithm_2", "Algorithm_2", 0, new ArrayList<String>(), "NaN");
         TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_3", "Algorithm_3", 0, 300, "NaN");
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", timeSeriesOut1, timeSignalsA, eventSignalsA);
-        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2", eventSeriesOut2, timeSignalsA, eventSignalsA);
-        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3", timeSeriesOut3, timeSignalsB, eventSignalsB);
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", 
+                timeSeriesOut1, timeSignalsA, eventSignalsA)
+                {
+            public boolean execute(ReadResult readResult) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2", 
+                eventSeriesOut2, timeSignalsA, eventSignalsA){
+            public boolean execute(ReadResult readResult) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3", 
+                timeSeriesOut3, timeSignalsB, eventSignalsB){
+            public boolean execute(ReadResult readResult) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
 
         instance.addAlgorithm(algorithm1);
         instance.addAlgorithm(algorithm2);
@@ -142,7 +161,6 @@ public class AlgorithmManagerTest {
         }
         catch(AlgorithmAlreadyExistsException e){
             assertEquals(e.getAlgorithm(), algorithm3);
-
         }
         assertEquals(instance.getAllAlgorithmNames().size(), 3);
         assertEquals(instance.getAlgorithm("Algorithm_1"), algorithm1);
@@ -158,7 +176,5 @@ public class AlgorithmManagerTest {
         algorithmNameBySignalName.remove("Algorithm_2");
         algorithmNameBySignalName.remove("Algorithm_3");
         assertTrue(algorithmNameBySignalName.isEmpty());
-
-
     }
 }

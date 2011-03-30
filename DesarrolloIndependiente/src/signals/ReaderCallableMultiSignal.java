@@ -16,9 +16,8 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     @Override
     public ReadResult call() {
        while(!this.getLocks()){
-           //Aqui podriamos esperar un número de veces determinadas y sino luego lanzar una excepción.
             try {
-                Thread.sleep(500);
+                this.wait(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -35,7 +34,6 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
         }
         this.readResult=readResultMulti;
         return this.readResult;
-
     }
 
     @Override
@@ -56,7 +54,6 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
             }
             return false;
         }
-
     }
 
     @Override
@@ -72,5 +69,4 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     public LinkedList<ReaderCallableOneSignal> getReaderCallables() {
         return new LinkedList<ReaderCallableOneSignal>(readerCallables);
     }
-
 }

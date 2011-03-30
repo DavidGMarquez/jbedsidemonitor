@@ -9,7 +9,7 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
         eventsToWrite = new LinkedList<Event>();
         eventsToDelete = new LinkedList<Event>();
     }
-    //Para modificar eventos se pone el antigo en la lista de borrar y el nuevo en la de añadir
+
     private LinkedList<Event> eventsToDelete;
     private LinkedList<Event> eventsToWrite;
 

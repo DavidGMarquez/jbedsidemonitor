@@ -2,10 +2,9 @@ package algorithms;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import signals.ReadResult;
 import signals.Series;
 
-public class AlgorithmDefaultImplementation implements Algorithm {
+public abstract class AlgorithmDefaultImplementation implements Algorithm {
 
     private String identifier;
     private Series signalToWrite;
@@ -43,10 +42,5 @@ public class AlgorithmDefaultImplementation implements Algorithm {
 
     public Series getSignalToWrite() {
         return this.signalToWrite;
-    }
-
-    public boolean execute(ReadResult readResult) {
-        throw new UnsupportedOperationException("Not supported yet.");
-        //Implementar aqui el código del algoritmo
     }
 }
