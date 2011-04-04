@@ -59,7 +59,7 @@ public class BasicTestOrder {
         AlgorithmManager.getInstance().addAlgorithm(algorithm1);
         SerialTimeSeriesSeriesGeneratorOrder serialTimeSeriesSeriesGenerator = new SerialTimeSeriesSeriesGeneratorOrder(10, 1, 100, "TimeSeries1");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException ex) {
             Logger.getLogger(CompleteTestOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,7 +70,7 @@ public class BasicTestOrder {
                 System.out.print("_");
             }
             System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i]);
-            //assertEquals(readNewFromTimeSeriesTimeSeries1[i], i, 0.001);
+            assertEquals(readNewFromTimeSeriesTimeSeries1[i], i, 0.001);
 
         }
         readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);

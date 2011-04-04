@@ -20,7 +20,7 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
     public void run() {
        while(!this.getLocks()){
             try {
-                this.wait(100);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WriterRunnableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
             }

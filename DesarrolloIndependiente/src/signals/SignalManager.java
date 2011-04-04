@@ -76,10 +76,10 @@ public class SignalManager {
 //@metodo debug no USAR segun api
 
     public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
-        if (this.timeSeries.get(identifier).getIndexNewsample() != -1) {
+        if (this.timeSeries.get(identifier).getLastSampleWrite() != -1) {
             float result[] = this.timeSeries.get(identifier).read(indexLastRead, 
-                    (this.timeSeries.get(identifier).getIndexNewsample() - indexLastRead) +
-                    1 % this.timeSeries.get(identifier).getCapacity());
+                    (this.timeSeries.get(identifier).getLastSampleWrite()
+                    - indexLastRead) +1);
             return result;
         } else {
             return new float[0];

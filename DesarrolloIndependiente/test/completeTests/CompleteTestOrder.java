@@ -126,7 +126,7 @@ public class CompleteTestOrder {
             if(readNewFromTimeSeriesTimeSeries1[i]!=((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
                 System.out.print("_");
             System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i] + "   " + ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))));
-        //    assertEquals(readNewFromTimeSeriesTimeSeries1[i],((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
+            assertEquals(readNewFromTimeSeriesTimeSeries1[i],((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
 
         }
         readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
@@ -136,7 +136,7 @@ public class CompleteTestOrder {
             if(readNewFromTimeSeriesTimeSeries1[i]!=2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
                 System.out.print("_");
             System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i] + "   " + 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))));
-          //  assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
+            assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
 
         }
 

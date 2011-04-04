@@ -88,4 +88,8 @@ public class TimeSeries extends Series {
             throw new IllegalWriteException(e, this.getIdentifier());
         }
     }
+    public int getLastSampleWrite()
+    {
+        return buffer.getLastSampleWrite();
+    }
 }
