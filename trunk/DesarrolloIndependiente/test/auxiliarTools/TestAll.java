@@ -32,6 +32,8 @@ import org.junit.runners.Suite;
     algorithms.AlgorithmDefaultImplementationTest.class,
     algorithms.AlgorithmManagerTest.class,
     completeTests.CreateTest.class,
+    completeTests.CompleteTestOrder.class,
+    completeTests.BasicTestOrder.class,
     completeTests.Basic2AlgorithmsTest.class
 }
 )

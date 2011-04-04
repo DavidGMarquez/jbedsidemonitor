@@ -82,6 +82,8 @@ public class TriggerTest {
         Trigger triggerOne = new Trigger("AlgorithmOne", algorithmNotifyPoliceOnlyOne);
         WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 33, 100, 100);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerOne.notifyNewData(writerRunnableEventSeries);
         assertTrue(triggerOne.trigger());
         triggerOne.notifyNewData(writerRunnableTimeSeries);
@@ -89,6 +91,8 @@ public class TriggerTest {
         assertEquals(triggerOne.getEventSeriesTriggers().get("EventSerie1").getNewEventCount(), 33);
         assertEquals(triggerOne.getTimeSeriesTriggers().get("TimeSerie1").getNewData(), 33);
         Trigger triggerComplete = new Trigger("AlgorithmComplete", algorithmNotifyPoliceComplete);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerComplete.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerComplete.trigger());
         triggerComplete.notifyNewData(writerRunnableEventSeries);
@@ -102,6 +106,8 @@ public class TriggerTest {
         Trigger triggerOneA = new Trigger("AlgorithmOneA", algorithmNotifyPoliceOnlyOne);
         WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 33, 100, 100);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         assertFalse(triggerOneA.trigger());
         triggerOneA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerOneA.trigger());
@@ -112,15 +118,19 @@ public class TriggerTest {
         assertFalse(triggerOneA.trigger());
         triggerOneA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerOneA.trigger());
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(66);
         triggerOneA.notifyNewData(writerRunnableTimeSeries);
 
         assertTrue(triggerOneA.trigger());
-        
+
 
 
         Trigger triggerOneB = new Trigger("AlgorithmOneB", algorithmNotifyPoliceOnlyOne);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 33, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         assertFalse(triggerOneB.trigger());
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerOneB.trigger());
@@ -131,14 +141,20 @@ public class TriggerTest {
         assertFalse(triggerOneB.trigger());
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerOneB.trigger());
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(115);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerOneB.trigger());
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerOneB.trigger());
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(230);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerOneB.trigger());
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         assertTrue(triggerOneB.trigger());
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(375);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         assertTrue(triggerOneB.trigger());
 
@@ -147,30 +163,40 @@ public class TriggerTest {
         assertFalse(triggerCompleteA.trigger());
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 33, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerCompleteA.trigger());
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 330, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 330);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(330);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerCompleteA.trigger());
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 330, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 330);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(363);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerCompleteA.trigger());
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 230, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 230);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(230);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         assertFalse(triggerCompleteA.trigger());
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 1, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 1);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(231);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
@@ -180,14 +206,20 @@ public class TriggerTest {
 
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 55, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 35);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(398);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 323, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 313);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(643);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 200, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 343);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(574);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         assertFalse(triggerCompleteA.trigger());
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
@@ -203,6 +235,8 @@ public class TriggerTest {
         Trigger triggerOneA = new Trigger("AlgorithmOneA", algorithmNotifyPoliceOnlyOne);
         WriterRunnableEventSeries writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 100, 100, 100);
         WriterRunnableTimeSeries writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerOneA.notifyNewData(writerRunnableEventSeries);
         triggerOneA.notifyNewData(writerRunnableTimeSeries);
         assertTrue(triggerOneA.trigger());
@@ -214,6 +248,8 @@ public class TriggerTest {
         expectedResults.put("TimeSerie1", new ReaderCallableTimeSeries("TimeSerie1", "AlgorithmOneA", 0, 33));
         assertTrue(AuxTestUtilities.compareReaderCallables(readerCallables, expectedResults));
         triggerOneA.notifyNewData(writerRunnableEventSeries);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(66);
         triggerOneA.notifyNewData(writerRunnableTimeSeries);
         readerCallableA = triggerOneA.getReaderCallableAndReset();
         readerCallables = readerCallableA.getReaderCallables();
@@ -228,7 +264,10 @@ public class TriggerTest {
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 33, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 33);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
+
         ReaderCallableMultiSignal readerCallableB = triggerOneB.getReaderCallableAndReset();
         readerCallables = readerCallableB.getReaderCallables();
         assertTrue(AuxTestUtilities.compareReaderCallables(readerCallables, expectedResults));
@@ -242,8 +281,12 @@ public class TriggerTest {
 
 
         triggerOneB.notifyNewData(writerRunnableEventSeries);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(115);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(230);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         expectedResults.put("EventSerie3", new ReaderCallableEventSeries("EventSerie3", "AlgorithmOneB", 0, 345));
@@ -251,6 +294,8 @@ public class TriggerTest {
         readerCallables = readerCallableB.getReaderCallables();
         assertTrue(AuxTestUtilities.compareReaderCallables(readerCallables, expectedResults));
         expectedResults.remove("EventSerie3");
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(345);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         expectedResults.put("TimeSerie3", new ReaderCallableTimeSeries("TimeSerie3", "AlgorithmOneB", 0, 345));
         readerCallableB = triggerOneB.getReaderCallableAndReset();
@@ -259,14 +304,20 @@ public class TriggerTest {
 
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 1000, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 333);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(678);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 10, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 3);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(36);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 110, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 120);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(120);
         triggerOneB.notifyNewData(writerRunnableTimeSeries);
         triggerOneB.notifyNewData(writerRunnableEventSeries);
         expectedResults.put("EventSerie1", new ReaderCallableEventSeries("EventSerie1", "AlgorithmOneB", 0, 110));
@@ -285,22 +336,32 @@ public class TriggerTest {
         assertTrue(AuxTestUtilities.compareReaderCallables(readerCallables, expectedResults));
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 33, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 33);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(33);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 330, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 330);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(330);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 330, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 330);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(363);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 230, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 230);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(230);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 1, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 1);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(231);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         expectedResults.put("EventSerie1", new ReaderCallableEventSeries("EventSerie1", "AlgorithmCompleteA", 0, 363));
@@ -316,14 +377,20 @@ public class TriggerTest {
 
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie1", 55, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie1", 35);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(398);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie2", 323, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie2", 313);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(643);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSerie3", 555, 100, 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSerie3", 343);
+        writerRunnableTimeSeries.setOlderSampleAvailable(0);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(574);
         triggerCompleteA.notifyNewData(writerRunnableTimeSeries);
         triggerCompleteA.notifyNewData(writerRunnableEventSeries);
         expectedResults.put("EventSerie1", new ReaderCallableEventSeries("EventSerie1", "AlgorithmCompleteA", 363, 55));

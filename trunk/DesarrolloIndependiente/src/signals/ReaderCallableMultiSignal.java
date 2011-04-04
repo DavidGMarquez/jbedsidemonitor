@@ -17,7 +17,7 @@ public class ReaderCallableMultiSignal extends ReaderCallable {
     public ReadResult call() {
        while(!this.getLocks()){
             try {
-                this.wait(100);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ReaderCallableMultiSignal.class.getName()).log(Level.SEVERE, null, ex);
             }

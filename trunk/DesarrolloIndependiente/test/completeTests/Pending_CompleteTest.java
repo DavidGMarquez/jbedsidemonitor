@@ -116,8 +116,8 @@ public class Pending_CompleteTest {
         SignalManager.getInstance().addTimeSeries(timeSeries1_out);
         SignalManager.getInstance().addTimeSeries(timeSeries2_out);
         AlgorithmManager.getInstance().addAlgorithm(algorithm1);
-        SinTimeSeriesGenerator sinTimeSeriesGenerator = new SinTimeSeriesGenerator(10, 100, 50, "TimeSeries1");
-       SerialTimeSeriesSeriesGenerator serialTimeSeriesSeriesGenerator = new SerialTimeSeriesSeriesGenerator(10, 100, 50, "TimeSeries2");
+        SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 100, 50, "TimeSeries1");
+       SerialTimeSeriesSeriesGeneratorOrder serialTimeSeriesSeriesGenerator = new SerialTimeSeriesSeriesGeneratorOrder(10, 100, 50, "TimeSeries2");
         try {
             Thread.sleep(10000);
         } catch (InterruptedException ex) {
