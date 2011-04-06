@@ -64,31 +64,31 @@ public class BasicTestOrder {
             Logger.getLogger(CompleteTestOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
         float[] readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1", 0);
-        System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
+ //@debug      System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length; i++) {
             if (readNewFromTimeSeriesTimeSeries1[i] != i) {
-                System.out.print("_");
+//@debug             System.out.print("_");
             }
-            System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i]);
+   //@debug         System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i]);
             assertEquals(readNewFromTimeSeriesTimeSeries1[i], i, 0.001);
 
         }
         readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
-        System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
+//@debug        System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
         int errors=0;
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length; i++) {
             if (readNewFromTimeSeriesTimeSeries1[i] != 2*i) {
-                System.out.print("_");
+  //@debug              System.out.print("_");
             }
-           System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i]);
-          //  assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2*i, 0.001);
+//@debug           System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i]);
+            assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2*i, 0.001);
             if(readNewFromTimeSeriesTimeSeries1[i]!=2*i)
             {
                 errors++;
             }
             
         }
-        System.out.println("Errors: "+errors);
+ //@debug      System.out.println("Errors: "+errors);
 
     }
 }

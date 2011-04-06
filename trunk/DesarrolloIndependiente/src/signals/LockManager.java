@@ -35,8 +35,6 @@ public class LockManager {
     }
 
     public boolean tryReadLock(String identifier) {
-        if(this.signalsLocks.get(identifier)==null)
-            System.out.println("NULLLLLLLLLLpara "+identifier);
         return this.signalsLocks.get(identifier).readLock().tryLock();
     }
 

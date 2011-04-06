@@ -34,8 +34,8 @@ import org.junit.runners.Suite;
     completeTests.CreateTest.class,
     completeTests.CompleteTestOrder.class,
     completeTests.BasicTestOrder.class,
-    completeTests.Basic2AlgorithmsTest.class
-}
-)
+    completeTests.Basic2AlgorithmsTest.class,
+    completeTests.TimeSeries_CompleteTest.class
+})
 public class TestAll {
 }

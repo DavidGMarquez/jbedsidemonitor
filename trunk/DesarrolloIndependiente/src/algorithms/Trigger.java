@@ -50,11 +50,17 @@ public class Trigger {
     }
 
     public synchronized boolean trigger() {
+        //@debug BORRAR
+        //@debug   System.out.println("Trigger Para"+this.getIdentifierAlgorithm());
         Collection<TimeSeriesTrigger> valuesTimeSeriesTrigger = timeSeriesTriggers.values();
         for (TimeSeriesTrigger timeSeriesTrigger : valuesTimeSeriesTrigger) {
+
+            //@debug   System.out.println("Trigger Para"+timeSeriesTrigger.getIdentifierSignal()+"NewData"+timeSeriesTrigger.getNewData()+"TheShold"+timeSeriesTrigger.getTheshold());
             if (timeSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ONE)) {
+                //@debug                System.out.println("OK");
                 return true;
             } else if (!timeSeriesTrigger.trigger() && notifyPolice.equals(notifyPolice.ALL)) {
+                //@debug System.out.println("FALSO");
                 return false;
             }
         }
@@ -67,8 +73,10 @@ public class Trigger {
             }
         }
         if (notifyPolice.equals(notifyPolice.ONE)) {
+            //@debug  System.out.println("FALSO_FALSO");
             return false;
         } else {
+            //@debug  System.out.println("OK_OK");
             return true;
         }
     }
@@ -96,7 +104,7 @@ public class Trigger {
                 ReaderCallableTimeSeries readerCallableTimeSeries =
                         new ReaderCallableTimeSeries(timeSeriesTrigger.getIdentifierSignal(),
                         this.getIdentifierAlgorithm());
-                readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported()+1);
+                readerCallableTimeSeries.setPosInitToRead(timeSeriesTrigger.getLastSampleReported() + 1);
                 readerCallableTimeSeries.setSizeToRead(timeSeriesTrigger.getNewData());
                 timeSeriesTrigger.reset();
                 readerCallable.addReaderCallableOneSignal(readerCallableTimeSeries);

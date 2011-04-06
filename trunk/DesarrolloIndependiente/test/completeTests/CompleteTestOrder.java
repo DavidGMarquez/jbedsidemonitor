@@ -51,6 +51,10 @@ public class CompleteTestOrder {
     LinkedList<String> eventSignals7;
     LinkedList<String> timeSignals7;
 
+    //@pendiente de vez en cuando aparece un 0 al final no se porque
+    //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
+    //@pendiente detener los threads y los completions servers
+
     public CompleteTestOrder() {
     }
 
@@ -140,12 +144,18 @@ public class CompleteTestOrder {
 
         }
 
-    /*   float[] readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1", 0);
+       float[] readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2", 0);
         System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries2.length);
         for (int i = 0; i < readNewFromTimeSeriesTimeSeries2.length - 1; i++) {
             System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries2[i] + "   " +2*i);
-            assertEquals(readNewFromTimeSeriesTimeSeries2[i], 2 * i, 0.001);
-        }*/
+            assertEquals(readNewFromTimeSeriesTimeSeries2[i], i, 0.001);
+        }
+        readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1", 0);
+        System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries2.length);
+        for (int i = 0; i < readNewFromTimeSeriesTimeSeries2.length - 1; i++) {
+            System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries2[i] + "   " +2*i);
+            assertEquals(readNewFromTimeSeriesTimeSeries2[i], 2*i, 0.001);
+        }
 
     }
 

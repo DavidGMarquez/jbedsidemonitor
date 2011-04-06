@@ -68,9 +68,7 @@ public class TesterReaderService {
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Comparar 1");
         AuxTestUtilities.printArray(dataToWrite1);
-        System.out.println("Comparar 2");
         AuxTestUtilities.printArray(dataToWrite2);
     }
 
@@ -129,13 +127,13 @@ public class TesterReaderService {
         for (int i = 0; i < events1.size(); i++) {
             writer3.addEventToDelete(events1.get(i));
         }
-        System.out.println(signalManager.getEvents("Events1").size());
+    //@debug    System.out.println(signalManager.getEvents("Events1").size());
         signalManager.encueWriteOperation(writer3);
         try {
             Thread.sleep(30);
         } catch (InterruptedException ex) {
         }
-        System.out.println(signalManager.getEvents("Events1").size());
+  //@debug      System.out.println(signalManager.getEvents("Events1").size());
         assertEquals(0, signalManager.getEvents("Events1").size());
 
         ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Algorithm1");

@@ -99,7 +99,7 @@ public class AlgorithmManager {
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableIfTriggerAndReset();
-            if (readerCallable!=null) {                
+            if (readerCallable!=null) {
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }

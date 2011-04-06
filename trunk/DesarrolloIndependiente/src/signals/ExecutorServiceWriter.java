@@ -14,7 +14,7 @@ public class ExecutorServiceWriter {
 
     public void executeWriterRunnable(WriterRunnable writerRunnable) {
         this.executorService.execute(writerRunnable);
-        System.out.println("Ejecutando Operacion Escritura");
+//@debug        System.out.println("Ejecutando Operacion Escritura");
         //@duda no se si esto iria aqui
         //pendiente @a he cambiado esto que sino no funciona
         //AlgorithmManager.getInstance().notifyNewData(writerRunnable);
