@@ -61,7 +61,7 @@ public class TimeSeries extends Series {
         try {
             return this.buffer.read(posSrc, sizetoread);
         } catch (IllegalReadException e) {
-            System.out.println("Excepcion capacity" + e.getBufferCapacity() + "lastSample" + e.getLastSampleWrite() + "dataToRead" + e.getNumDataToRead() + "pos StartReading" + e.getPosStartReading());
+     //@debug       System.out.println("Excepcion capacity" + e.getBufferCapacity() + "lastSample" + e.getLastSampleWrite() + "dataToRead" + e.getNumDataToRead() + "pos StartReading" + e.getPosStartReading());
             throw new IllegalReadException(e, this.getIdentifier());
         }
     }
@@ -77,9 +77,7 @@ public class TimeSeries extends Series {
     }
 
     public ConsecutiveSamplesAvailableInfo write(float[] datatowrite, int indexInitToWrite) {
-        //@comentario ¿realmente te aporta el tener estos System.out.println?
-        System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);
-
+    //@debug  System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);               
         try {
             return this.buffer.write(datatowrite, indexInitToWrite);
         } catch (TooMuchDataToWriteException e) {

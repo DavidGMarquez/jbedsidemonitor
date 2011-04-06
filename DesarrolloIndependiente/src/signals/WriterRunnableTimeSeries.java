@@ -10,16 +10,9 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
     private int olderSampleAvailable;
     private int samplesReadyToReadInOrder;
 
-
     public WriterRunnableTimeSeries(String identifier) {
         super(identifier);
         this.dataToWrite = null;
-        this.indexInitToWrite = -1;
-    }
-
-    public WriterRunnableTimeSeries(String identifier, float[] dataToWrite) {
-        this(identifier);
-        copyArray(dataToWrite);
         this.indexInitToWrite = -1;
     }
 
@@ -31,15 +24,13 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
 
     @Override
     protected void write() {
+        //@debug BORRAR System.out.println("----Escribiendo en " + this.getIdentifier() + " Desde" + this.getIndexInitToWrite() + "Cantidad " + this.getDataToWrite().length);
+
         SignalManager signalManager = SignalManager.getInstance();
-        if (indexInitToWrite == -1) {
-            signalManager.writeToTimeSeries(identifier, dataToWrite);
-        } else {
-            //@pendiente pasarlo a un objeto propio y no aqui como estan metidos
-            ConsecutiveSamplesAvailableInfo resultWrite=signalManager.writeToTimeSeries(identifier, dataToWrite, indexInitToWrite);
-            this.olderSampleAvailable=resultWrite.getOlderSampleAvailable();
-            this.samplesReadyToReadInOrder=resultWrite.getSamplesReadyToReadInOrder();
-        }
+        //@pendiente pasarlo a un objeto propio y no aqui como estan metidos
+        ConsecutiveSamplesAvailableInfo resultWrite = signalManager.writeToTimeSeries(identifier, dataToWrite, indexInitToWrite);
+        this.olderSampleAvailable = resultWrite.getOlderSampleAvailable();
+        this.samplesReadyToReadInOrder = resultWrite.getSamplesReadyToReadInOrder();
 
     }
 
@@ -73,13 +64,13 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
         return samplesReadyToReadInOrder;
     }
     //@debug
+
     public void setOlderSampleAvailable(int sampleInitToReadInOrder) {
         this.olderSampleAvailable = sampleInitToReadInOrder;
     }
 //@debug
+
     public void setSamplesToReadInOrder(int samplesToReadInOrder) {
         this.samplesReadyToReadInOrder = samplesToReadInOrder;
     }
-    
-
 }

@@ -87,7 +87,7 @@ class CircularBuffer {
      * @return
      */
     ConsecutiveSamplesAvailableInfo write(float[] dataToWrite, int sampleInitToWrite) {
-        System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length + "lastSample" + this.lastSampleWritten);
+      //@debug  System.out.println("-->>Escribiendo en" + sampleInitToWrite + "Cantidad " + dataToWrite.length + "lastSample" + this.lastSampleWritten);
         if (sampleInitToWrite < ((this.lastSampleWritten + 1) - this.capacity)) {
             throw new IllegalWriteException("try to write data too old ", this.capacity, dataToWrite,
                     sampleInitToWrite, this.lastSampleWritten);
@@ -111,7 +111,7 @@ class CircularBuffer {
     }
 
     private void writeNAN(int sampleOrigin, int size) {
-        System.out.println("NANANANANAN Escribiendo NAN Desde" + sampleOrigin + "Tamaño" + size + "lastSample" + this.lastSampleWritten);
+      //@debug  System.out.println("NANANANANAN Escribiendo NAN Desde" + sampleOrigin + "Tamaño" + size + "lastSample" + this.lastSampleWritten);
         //@pendiente revisar
         float[] nanToWrite = new float[size];
         for (int i = 0; i < size; i++) {

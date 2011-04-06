@@ -54,7 +54,6 @@ public class AlgorithmStupidFileImplementation extends AlgorithmDefaultImplement
         if (readResult instanceof ReadResultMultiSignal) {
             ReadResultMultiSignal readResultMultiSignal = (ReadResultMultiSignal) readResult;
             readResultMultiSignal.getReadResults().size();
-            System.out.println("STUPIDFILE---Multisignal de " + readResultMultiSignal.getReadResults().size() + " Señáles");
             ReadResult readResultOne = readResultMultiSignal.getReadResults().getFirst();
 
             if (readResultOne instanceof ReadResultTimeSeries) {

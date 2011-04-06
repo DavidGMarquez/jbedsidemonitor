@@ -42,7 +42,7 @@ public class AlgorithmStupid2XMultiSignalsImplementationOrder extends AlgorithmD
                     for (int i = 0; i < data.length; i++) {
                         data[i] = data[i] * 2;
                     }
-                    if (this.getSignalToWrite() instanceof TimeSeries) {
+                    
                         if (indexOfWrite.get(readResultTimeSeries.getIdentifierSignal()) == null) {
                             indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(), new Integer(0));
                         }
@@ -51,7 +51,7 @@ public class AlgorithmStupid2XMultiSignalsImplementationOrder extends AlgorithmD
                         WriterRunnableTimeSeries writerRunnableTimeSeries = new WriterRunnableTimeSeries(readResultTimeSeries.getIdentifierSignal() + "_" + this.getIdentifier(), data,readResultTimeSeries.getPosInitToRead());
                         indexOfWrite.put(readResultTimeSeries.getIdentifierSignal(), auxIndexOfWrite + data.length);
                         SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
-                    }
+                    
 
 
                 }

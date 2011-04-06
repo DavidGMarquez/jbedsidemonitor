@@ -35,15 +35,14 @@ public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementatio
 
     @Override
     public boolean execute(ReadResult readResult) {
-        System.out.println("Ejecutandose Algoritmo");
         if (readResult instanceof ReadResultMultiSignal) {
             ReadResultMultiSignal readResultMultiSignal = (ReadResultMultiSignal) readResult;
             readResultMultiSignal.getReadResults().size();
-            System.out.println("Multisignal de "+readResultMultiSignal.getReadResults().size()+" Señáles");
+        //@debug    System.out.println("Multisignal de "+readResultMultiSignal.getReadResults().size()+" Señáles");
             if(this.getSignalToWrite() instanceof TimeSeries){
                 float f[]={0};
                 WriterRunnableTimeSeries writerRunnableTimeSeries=new WriterRunnableTimeSeries(
-                        this.getSignalToWrite().getIdentifier(), f);
+                        this.getSignalToWrite().getIdentifier(), f,0);
                 SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
             }
             if(this.getSignalToWrite() instanceof EventSeries){
@@ -55,13 +54,13 @@ public class AlgorithmStupidImplementation extends AlgorithmDefaultImplementatio
         }
         if (readResult instanceof ReadResultTimeSeries) {
             ReadResultTimeSeries readResultTimeSeries = (ReadResultTimeSeries) readResult;
-            System.out.println("TimeSeries" + readResultTimeSeries.getIdentifierSignal());
-            System.out.println("N" + readResultTimeSeries.getData().length);
+       //@debug  System.out.println("TimeSeries" + readResultTimeSeries.getIdentifierSignal());
+ //@debug           System.out.println("N" + readResultTimeSeries.getData().length);
         }
         if (readResult instanceof ReadResultEventSeries) {
             ReadResultEventSeries readResultEventSeries = (ReadResultEventSeries) readResult;
-            System.out.println("EventSeries" + readResultEventSeries.getIdentifierSignal());
-            System.out.println("N" + readResultEventSeries.getEventsRead().size());
+ //@debug           System.out.println("EventSeries" + readResultEventSeries.getIdentifierSignal());
+  //@debug          System.out.println("N" + readResultEventSeries.getEventsRead().size());
         }
         return true;
     }
