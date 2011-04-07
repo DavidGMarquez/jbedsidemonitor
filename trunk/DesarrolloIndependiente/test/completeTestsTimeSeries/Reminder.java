@@ -1,4 +1,4 @@
-package completeTests;
+package completeTestsTimeSeries;
 
 import java.util.Timer;
 import java.util.TimerTask;

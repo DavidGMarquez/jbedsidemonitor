@@ -1,6 +1,6 @@
 package signals;
 
-import completeTests.AlgorithmStupidImplementation;
+import completeTestsTimeSeries.AlgorithmStupidImplementation;
 import algorithms.AlgorithmDefaultImplementation;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
@@ -112,9 +112,9 @@ public class TesterReaderService {
             Thread.sleep(30);
         } catch (InterruptedException ex) {
         }
-        assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEvents("Events1"))));
+        assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEventsCopy("Events1"))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
-        assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEvents("Events2"))));
+        assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEventsCopy("Events2"))));
         ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Algorithm1");
         reader1.setFirstInstantToInclude(1000);
         reader1.setLastInstantToInclude(1300);
@@ -127,14 +127,14 @@ public class TesterReaderService {
         for (int i = 0; i < events1.size(); i++) {
             writer3.addEventToDelete(events1.get(i));
         }
-    //@debug    System.out.println(signalManager.getEvents("Events1").size());
+    //@debug    System.out.println(signalManager.getEventsCopy("Events1").size());
         signalManager.encueWriteOperation(writer3);
         try {
             Thread.sleep(30);
         } catch (InterruptedException ex) {
         }
-  //@debug      System.out.println(signalManager.getEvents("Events1").size());
-        assertEquals(0, signalManager.getEvents("Events1").size());
+  //@debug      System.out.println(signalManager.getEventsCopy("Events1").size());
+        assertEquals(0, signalManager.getEventsCopy("Events1").size());
 
         ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Algorithm1");
         reader3.setFirstInstantToInclude(1000);

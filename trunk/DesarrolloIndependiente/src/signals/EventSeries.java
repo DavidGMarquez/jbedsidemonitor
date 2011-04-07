@@ -45,8 +45,8 @@ public class EventSeries extends Series {
         return this.events.size();
     }
 
-    public ArrayList<Event> getEventsCopy() {
-        return new ArrayList<Event>(this.events);
+    public SortedSet<Event> getEventsCopy() {
+        return new TreeSet<Event>(this.events);
     }
 
     public boolean addEvent(Event event) {

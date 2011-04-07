@@ -1,4 +1,4 @@
-package completeTests;
+package completeTestsTimeSeries;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

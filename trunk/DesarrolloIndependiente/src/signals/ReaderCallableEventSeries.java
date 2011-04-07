@@ -10,6 +10,7 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
     public ReaderCallableEventSeries(String identifierSignal, String identifierOwner) {
         super(identifierSignal, identifierOwner);
     }
+    //@duda como queremos implementar lo de los eventos
 
     public ReaderCallableEventSeries(String identifierSignal, String identifierOwner, long firstInstantToInclude, long lastInstantToInclude) {
         super(identifierSignal, identifierOwner);
