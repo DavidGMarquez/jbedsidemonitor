@@ -47,6 +47,5 @@ public class LockManagerTest {
         assertTrue(lockManager.tryWriteLock("Series2"));
         //Segun esto es correcto que el thread coja el lock de escritura y luego el de lectura o otro de escritura
         //Pero si comienza con el de lectura tendría que liberarlo para coger el de escritura
-        //@pendiente prueba con multihilo
     }
 }

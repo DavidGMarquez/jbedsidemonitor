@@ -64,15 +64,17 @@ public class TimeSeriesTriggerTest {
         assertEquals(timeSeriesTrigger.getNewData(), 99);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeriesOne", 300);
         //@pendiente en este test deberia salta la excepcion de que ha perdido datos
-        /*writerRunnableTimeSeries.setOlderSampleAvailable(99);
+        writerRunnableTimeSeries.setOlderSampleAvailable(200);
         writerRunnableTimeSeries.setSamplesToReadInOrder(300);
         timeSeriesTrigger.update(writerRunnableTimeSeries);
         assertTrue(timeSeriesTrigger.trigger());
-        assertEquals(timeSeriesTrigger.getNewData(), 399);
+        assertEquals(timeSeriesTrigger.getNewData(), 500);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("", 99);
+        writerRunnableTimeSeries.setOlderSampleAvailable(99);
+        writerRunnableTimeSeries.setSamplesToReadInOrder(400);
         timeSeriesTrigger.update(writerRunnableTimeSeries);
         assertTrue(timeSeriesTrigger.trigger());
-        assertEquals(timeSeriesTrigger.getNewData(), 399);*/
+        assertEquals(timeSeriesTrigger.getNewData(), 399);
 
         timeSeriesTrigger = new TimeSeriesTrigger("TimeSeriesTwo", 100);
         writerRunnableTimeSeries = AuxTestUtilities.generarWriterRunnableTime("TimeSeriesTwo", 99);

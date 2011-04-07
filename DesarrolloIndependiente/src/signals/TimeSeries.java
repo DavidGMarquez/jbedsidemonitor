@@ -66,15 +66,6 @@ public class TimeSeries extends Series {
         }
     }
 
-    public boolean write(float[] datatowrite) {
-        try {
-            return this.buffer.write(datatowrite);
-        } catch (TooMuchDataToWriteException e) {
-            throw new TooMuchDataToWriteException(e, this.getIdentifier());
-        } catch (IllegalWriteException e) {
-            throw new IllegalWriteException(e, this.getIdentifier());
-        }
-    }
 
     public ConsecutiveSamplesAvailableInfo write(float[] datatowrite, int indexInitToWrite) {
     //@debug  System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);               

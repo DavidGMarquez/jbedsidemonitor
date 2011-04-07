@@ -54,6 +54,6 @@ public class AlgorithmStupid2XMultiSignalsEventImplementation extends AlgorithmD
 
     private void proccess(ReadResultEventSeries readResultEventSeries) {
     WriterRunnableEventSeries writerRunnableEventSeries= new WriterRunnableEventSeries(readResultEventSeries.getIdentifierSignal() + "_" + this.getIdentifier());
-    readResultEventSeries.getEventsRead();
+    readResultEventSeries.getEventsReadWritten();
     }
 }

@@ -30,7 +30,7 @@ public class LockManager {
 
     public void releaseReadLock(String identifier) {
         this.signalsLocks.get(identifier).readLock().unlock();
-        //@duda necesarios?
+        //@pendiente necesarios?
         //this.signalsLocks.get(identifier).readLock().notifyAll();
     }
 

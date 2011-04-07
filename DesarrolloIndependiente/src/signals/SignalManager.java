@@ -84,6 +84,9 @@ public class SignalManager {
             return new float[0];
         }
     }
+    public SortedSet<Event> getEventsUnmodifiableCopy(String identifier){
+        return this.eventSeries.get(identifier).getEventsUnmodifiableCopy();
+    }
     //@metodo debug no USAR segun api
 
     public  SortedSet<Event> getEventsCopy(String identifier) {

@@ -26,7 +26,7 @@ public class AlgorithmManagerTest {
 
     @Before
     public void setUp() {
-        //@duda quizas algun método para reiniciar los Singlenton?
+        //@pendiente quizas algun método para reiniciar los Singlenton?
         eventSignalsA = new LinkedList<String>();
         timeSignalsA = new LinkedList<String>();
         eventSignalsA.add("EventSeries1");

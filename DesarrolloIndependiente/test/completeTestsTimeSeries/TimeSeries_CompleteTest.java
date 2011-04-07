@@ -56,7 +56,6 @@ public class TimeSeries_CompleteTest {
     LinkedList<String> timeSignals6;
     LinkedList<String> eventSignals7;
     LinkedList<String> timeSignals7;
-//@pendiente de vez en cuando aparece un 0 al final no se porque
     //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
     //@pendiente detener los threads y los completions servers
 
@@ -315,68 +314,8 @@ public class TimeSeries_CompleteTest {
             if (Float.compare(value_compare3, Float.NaN) == 0) {
                 value_compare3 = 0;
             }
-            assertEquals(value_compare1+value_compare2+value_compare3, dataRead[i], 000.1);
+            assertEquals(value_compare1 + value_compare2 + value_compare3, dataRead[i], 000.1);
         }
 
     }
-
-    /*   @Test
-    public void testBasic1Algorithm() {
-    AuxTestUtilities.reset();
-    SignalManager.getInstance().addTimeSeries(timeSeries1);
-    SignalManager.getInstance().addTimeSeries(timeSeries2);
-    SignalManager.getInstance().addTimeSeries(timeSeries1_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries2_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries1_out_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries2_out_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries1_out_out_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries2_out_out_out);
-    SignalManager.getInstance().addTimeSeries(timeSeries3_out);
-    AlgorithmManager.getInstance().addAlgorithm(algorithm1);
-    AlgorithmManager.getInstance().addAlgorithm(algorithm2);
-    AlgorithmManager.getInstance().addAlgorithm(algorithm3);
-    //    AlgorithmManager.getInstance().addAlgorithm(algorithm4);
-    SinTimeSeriesGenerator sinTimeSeriesGenerator = new SinTimeSeriesGenerator(10, 10, 500, "TimeSeries1");
-    SerialTimeSeriesSeriesGenerator serialTimeSeriesSeriesGenerator = new SerialTimeSeriesSeriesGenerator(10, 100, 40, "TimeSeries2");
-
-
-
-    try {
-    Thread.sleep(10000);
-    } catch (InterruptedException ex) {
-    Logger.getLogger(TimeSeries_CompleteTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
-    float[] readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
-    //@pendiente de vez en cuando aparece un 0 al final no se porque
-    System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
-    System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i] + "   " + 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))));
-    assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
-
-    }
-    float[] readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1", 0);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries2.length - 1; i++) {
-    assertEquals(readNewFromTimeSeriesTimeSeries2[i], 2 * i, 0.001);
-    }
-    readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1_Algorithm2", 0);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
-    assertEquals(readNewFromTimeSeriesTimeSeries1[i], Math.sqrt(2 * ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100)))), 0.001);
-
-    }
-    readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1_Algorithm3", 0);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries2.length - 1; i++) {
-    assertEquals(readNewFromTimeSeriesTimeSeries2[i], Math.sqrt(2 * i), 0.001);
-    }
-    readNewFromTimeSeriesTimeSeries1 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1_Algorithm2_Algorithm4", 0);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries1.length - 1; i++) {
-    assertEquals(readNewFromTimeSeriesTimeSeries1[i], 2 * (Math.sqrt(2 * ((float) Math.sin(((float) ((int) (i / 10)))) / 10 + ((float) (i % 10) / 100)))), 0.001);
-
-    }
-    readNewFromTimeSeriesTimeSeries2 = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries2_Algorithm1_Algorithm3_Algorithm4", 0);
-    for (int i = 0; i < readNewFromTimeSeriesTimeSeries2.length - 1; i++) {
-    assertEquals(readNewFromTimeSeriesTimeSeries2[i], 2 * (Math.sqrt(2 * i)), 0.001);
-    }
-
-    }*/
 }

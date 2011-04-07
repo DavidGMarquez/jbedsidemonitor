@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import signals.ReadResultEventSeries;
 import signals.ReaderCallable;
 import signals.ReaderCallableEventSeries;
 import signals.ReaderCallableMultiSignal;
@@ -87,14 +88,14 @@ public class Trigger {
         }
         return null;
     }
-
+    //@pendiente quizás sea necesario eliminarlo, no aporta nada
     public synchronized ReaderCallableMultiSignal getReaderCallableAndReset() {
         ReaderCallableMultiSignal readerCallable = this.getReaderCallableAnResetTriggers();
         return readerCallable;
     }
 
     private synchronized ReaderCallableMultiSignal getReaderCallableAnResetTriggers() {
-        //@duda sería necesario que devuelva no solo MultiSignal sino también las OneSignal si es el caso?
+        //@comprobar que da igual si envio los multisignal o los one signal
         //@pendiente tal y como esta la cosa nunca le llegan a los algoritmos ReadResult simples, siempre le llegan Multi aunque sean de una sola señal
         ReaderCallableMultiSignal readerCallable = new ReaderCallableMultiSignal(this.getIdentifierAlgorithm());
 
@@ -115,9 +116,8 @@ public class Trigger {
             if (eventSeriesTrigger.trigger()) {
                 ReaderCallableEventSeries readerCallableEventSeries =
                         new ReaderCallableEventSeries(eventSeriesTrigger.getIdentifierSignal(),
-                        this.getIdentifierAlgorithm());
-                readerCallableEventSeries.setFirstInstantToInclude(eventSeriesTrigger.getLastEventReported());
-                readerCallableEventSeries.setLastInstantToInclude(eventSeriesTrigger.getNewEventCount());
+                        this.getIdentifierAlgorithm(),eventSeriesTrigger.getEventsAlreadyWrittenCopy()
+                        ,eventSeriesTrigger.getEventsAlreadyDeletedCopy());
                 eventSeriesTrigger.reset();
                 readerCallable.addReaderCallableOneSignal(readerCallableEventSeries);
             }
