@@ -31,11 +31,7 @@ import org.junit.runners.Suite;
     algorithms.TriggerTest.class,
     algorithms.AlgorithmDefaultImplementationTest.class,
     algorithms.AlgorithmManagerTest.class,
-    completeTests.CreateTest.class,
-    completeTests.CompleteTestOrder.class,
-    completeTests.BasicTestOrder.class,
-    completeTests.Basic2AlgorithmsTest.class,
-    completeTests.TimeSeries_CompleteTest.class
+    completeTestsTimeSeries.TestCompleteTimeSeries.class
 })
 public class TestAll {
 }

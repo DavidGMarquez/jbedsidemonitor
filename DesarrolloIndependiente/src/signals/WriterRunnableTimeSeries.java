@@ -4,6 +4,7 @@ import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
 
 public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
 
+    //@documentacion en el dataToWrite tienen que ser floats validos no pueden ser Float.NaN
     private float[] dataToWrite;
     private int indexInitToWrite;
     //@pendiente pasarlo a un objeto propio y no aqui como estan metidos

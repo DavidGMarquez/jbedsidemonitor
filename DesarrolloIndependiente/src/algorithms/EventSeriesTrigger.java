@@ -18,7 +18,9 @@ class EventSeriesTrigger {
 
     public void update(WriterRunnableEventSeries writerRunnableEventSeries) {
         if(writerRunnableEventSeries.getIdentifier().equals(identifierSignal)){
+            //@duda dijimos que contaban tambien los borrados no?
             this.newEventCount += writerRunnableEventSeries.getEventsToWrite().size();
+            this.newEventCount += writerRunnableEventSeries.getEventsToDelete().size();
         }
     }
 

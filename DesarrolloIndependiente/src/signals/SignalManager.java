@@ -69,7 +69,6 @@ public class SignalManager {
     }
 
     //@metodo debug no USAR segun api
-
     public float[] readFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
         return this.timeSeries.get(identifier).read(posSrc, sizeToRead);
     }
@@ -77,22 +76,27 @@ public class SignalManager {
 
     public float[] readNewFromTimeSeries(String identifier, int indexLastRead) {
         if (this.timeSeries.get(identifier).getLastSampleWrite() != -1) {
-            float result[] = this.timeSeries.get(identifier).read(indexLastRead, 
+            float result[] = this.timeSeries.get(identifier).read(indexLastRead,
                     (this.timeSeries.get(identifier).getLastSampleWrite()
-                    - indexLastRead) +1);
+                    - indexLastRead) + 1);
             return result;
         } else {
             return new float[0];
         }
     }
-    //@pendiente eliminar
-    boolean writeToTimeSeries(String identifier, float[] dataToWrite) {
-        boolean result = this.timeSeries.get(identifier).write(dataToWrite);
-        return result;
+    //@metodo debug no USAR segun api
+
+    public  SortedSet<Event> getEventsCopy(String identifier) {
+        return this.eventSeries.get(identifier).getEventsCopy();
+    }
+//@metodo debug no USAR segun api
+
+    public SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
+        return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
     }
 
     ConsecutiveSamplesAvailableInfo writeToTimeSeries(String identifier, float[] dataToWrite, int indexInitToWrite) {
-        return this.timeSeries.get(identifier).write(dataToWrite,indexInitToWrite);
+        return this.timeSeries.get(identifier).write(dataToWrite, indexInitToWrite);
     }
 
     void addEventToEventSeries(String identifier, Event event) {
@@ -102,15 +106,6 @@ public class SignalManager {
     boolean deleteEventToEventSeries(String identifier, Event event) {
         return this.eventSeries.get(identifier).deleteEvent(event);
     }
-
-    ArrayList<Event> getEvents(String identifier) {
-        return this.eventSeries.get(identifier).getEventsCopy();
-    }
-
-    SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
-        return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
-    }
-    //@debug metodo depuracion
 
     public void reset() {
         lockManager = LockManager.getInstance();
@@ -128,6 +123,7 @@ public class SignalManager {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
         threadCompletionService.start();
     }
+
     public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());
     }

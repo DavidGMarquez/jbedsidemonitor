@@ -1,4 +1,4 @@
-package completeTests;
+package completeTestsTimeSeries;
 
 import algorithms.AlgorithmDefaultImplementation;
 import algorithms.AlgorithmManager;

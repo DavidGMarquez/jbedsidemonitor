@@ -54,8 +54,8 @@ public class TesterWriterService {
         Writer2.addEventToWrite(e1);
         Writer2.addEventToWrite(e2);
         Writer2.addEventToWrite(e3);
-        assertEquals(0, signalManager.getEvents("Signal 1").size());
-        assertEquals(0, signalManager.getEvents("Signal 2").size());
+        assertEquals(0, signalManager.getEventsCopy("Signal 1").size());
+        assertEquals(0, signalManager.getEventsCopy("Signal 2").size());
         signalManager.encueWriteOperation(Writer1);
         signalManager.encueWriteOperation(Writer2);
 
@@ -64,8 +64,8 @@ public class TesterWriterService {
         } catch (InterruptedException ex) {
             Logger.getLogger(TesterWriterService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        assertEquals(1, signalManager.getEvents("Signal 1").size());
-        assertEquals(3, signalManager.getEvents("Signal 2").size());
+        assertEquals(1, signalManager.getEventsCopy("Signal 1").size());
+        assertEquals(3, signalManager.getEventsCopy("Signal 2").size());
 
     }
 
@@ -101,8 +101,8 @@ public class TesterWriterService {
         writerRunnableMultiSignal.addWriterRunnableOneSignal(writer2T);
         writerRunnableMultiSignal.addWriterRunnableOneSignal(writer1E);
         writerRunnableMultiSignal.addWriterRunnableOneSignal(writer2E);
-        assertEquals(0, signalManager.getEvents("Signal 1Event").size());
-        assertEquals(0, signalManager.getEvents("Signal 2Event").size());
+        assertEquals(0, signalManager.getEventsCopy("Signal 1Event").size());
+        assertEquals(0, signalManager.getEventsCopy("Signal 2Event").size());
         signalManager.encueWriteOperation(writerRunnableMultiSignal);
         try {
             Thread.sleep(100);
@@ -111,7 +111,7 @@ public class TesterWriterService {
         }
         assertTrue(AuxTestUtilities.compareArray(dataToWrite1, signalManager.readFromTimeSeries("Signal 1Time", 0, 10), dataToWrite1.length));
         assertTrue(AuxTestUtilities.compareArray(dataToWrite2, signalManager.readFromTimeSeries("Signal 2Time", 0, 100), dataToWrite2.length));
-        assertEquals(1, signalManager.getEvents("Signal 1Event").size());
-        assertEquals(3, signalManager.getEvents("Signal 2Event").size());                        
+        assertEquals(1, signalManager.getEventsCopy("Signal 1Event").size());
+        assertEquals(3, signalManager.getEventsCopy("Signal 2Event").size());
     }
 }
