@@ -50,8 +50,7 @@ class CircularBuffer {
      * @param dataToWrite
      * @return
      */
-    //@duda creo que habría que deshabilitar este metodo publicamente
-    public boolean write(float[] dataToWrite) {
+    private boolean write(float[] dataToWrite) {
         if (dataToWrite.length > this.capacity) {
             //@pendiente revisar esto
             throw new TooMuchDataToWriteException("dataToWrite is bigger that the size of buffer", this.getCapacity(), dataToWrite.length);
@@ -105,7 +104,6 @@ class CircularBuffer {
         }
         this.indexNextWrite = sampleInitToWrite;
         this.write(dataToWrite);
-        //@duda si hace falta podría volver olderSampleAvailabl la anterior.
         ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = new ConsecutiveSamplesAvailableInfo();
         return consecutiveSamplesAvailableInfo;
     }

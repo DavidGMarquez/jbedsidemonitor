@@ -1,47 +1,49 @@
 package signals;
 
 import java.util.LinkedList;
+import java.util.SortedSet;
 
 public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
 
-    private long firstInstantToInclude;
-    private long lastInstantToInclude;
+      private LinkedList<Event> eventsReadWritten;
+    private LinkedList<Event> eventsReadDeleted;
 
-    public ReaderCallableEventSeries(String identifierSignal, String identifierOwner) {
-        super(identifierSignal, identifierOwner);
-    }
-    //@duda como queremos implementar lo de los eventos
 
-    public ReaderCallableEventSeries(String identifierSignal, String identifierOwner, long firstInstantToInclude, long lastInstantToInclude) {
+   
+
+    public ReaderCallableEventSeries(String identifierSignal, String identifierOwner,
+            LinkedList<Event> eventsReadWritten,LinkedList<Event> eventsReadDeleted) {
         super(identifierSignal, identifierOwner);
-        this.firstInstantToInclude = firstInstantToInclude;
-        this.lastInstantToInclude = lastInstantToInclude;
+        this.eventsReadDeleted=eventsReadDeleted;
+        this.eventsReadWritten=eventsReadWritten;
     }
 
     @Override
     protected ReadResult read() {
-        SignalManager signalManager = SignalManager.getInstance();
         this.readResult = new ReadResultEventSeries(identifierOwner, identifierSignal,
-                new LinkedList<Event>(
-                signalManager.readFromEventSeriesFromTo(identifierSignal,
-                firstInstantToInclude, lastInstantToInclude)));
+                this.eventsReadWritten,this.eventsReadDeleted,
+                SignalManager.getInstance().getEventsUnmodifiableCopy(identifierSignal));
+                
+
         return readResult;
 
     }
 
-    public void setFirstInstantToInclude(long firstInstantToInclude) {
-        this.firstInstantToInclude = firstInstantToInclude;
+    public LinkedList<Event> getEventsReadDeleted() {
+        return eventsReadDeleted;
     }
 
-    public void setLastInstantToInclude(long lastInstantToInclude) {
-        this.lastInstantToInclude = lastInstantToInclude;
+    public void setEventsReadDeleted(LinkedList<Event> eventsReadDeleted) {
+        this.eventsReadDeleted = eventsReadDeleted;
     }
 
-    public long getFirstInstantToInclude() {
-        return firstInstantToInclude;
+    public LinkedList<Event> getEventsReadWritten() {
+        return eventsReadWritten;
     }
 
-    public long getLastInstantToInclude() {
-        return lastInstantToInclude;
+    public void setEventsReadWritten(LinkedList<Event> eventsReadWritten) {
+        this.eventsReadWritten = eventsReadWritten;
     }
+
+ 
 }
