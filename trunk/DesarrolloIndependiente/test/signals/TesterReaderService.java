@@ -115,12 +115,8 @@ public class TesterReaderService {
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.getEventsCopy("Events1"))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events1, new LinkedList<Event>(signalManager.readFromEventSeriesFromTo("Events1", 1000, 1300))));
         assertTrue(AuxTestUtilities.eventosCompararListas(events2, new LinkedList<Event>(signalManager.getEventsCopy("Events2"))));
-        ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Algorithm1");
-        reader1.setFirstInstantToInclude(1000);
-        reader1.setLastInstantToInclude(1300);
-        ReaderCallableEventSeries reader2 = new ReaderCallableEventSeries("Events2", "Algorithm1");
-        reader2.setFirstInstantToInclude(9900);
-        reader2.setLastInstantToInclude(9900 + 130);
+        ReaderCallableEventSeries reader1 = new ReaderCallableEventSeries("Events1", "Algorithm1",new LinkedList<Event>(),new LinkedList<Event>());
+        ReaderCallableEventSeries reader2 = new ReaderCallableEventSeries("Events2", "Algorithm1", new LinkedList<Event>(),new LinkedList<Event>());
         signalManager.encueReadOperation(reader1);
         signalManager.encueReadOperation(reader2);
         WriterRunnableEventSeries writer3 = new WriterRunnableEventSeries("Events1");
@@ -136,9 +132,7 @@ public class TesterReaderService {
   //@debug      System.out.println(signalManager.getEventsCopy("Events1").size());
         assertEquals(0, signalManager.getEventsCopy("Events1").size());
 
-        ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Algorithm1");
-        reader3.setFirstInstantToInclude(1000);
-        reader3.setLastInstantToInclude(1300);
+        ReaderCallableEventSeries reader3 = new ReaderCallableEventSeries("Events1", "Algorithm1",new LinkedList<Event>(),new LinkedList<Event>());
         signalManager.encueReadOperation(reader3);
 
     }
