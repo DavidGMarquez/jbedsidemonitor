@@ -29,8 +29,8 @@ public class EventSeriesTriggerTest {
         EventSeriesTrigger eventSeriesTrigger = new EventSeriesTrigger("EventSeriesOne", 300);
         assertEquals(eventSeriesTrigger.getIdentifierSignal(), "EventSeriesOne");
         assertEquals(eventSeriesTrigger.getTheshold(), 300);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 0);
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 0);
         assertEquals(eventSeriesTrigger.trigger(), false);
 
 
@@ -43,7 +43,8 @@ public class EventSeriesTriggerTest {
         Event event1 = new Event(1000, "DebugEvent", null);
         writerRunnableEventSeries.addEventToWrite(event1);
         eventSeriesTrigger.update(writerRunnableEventSeries);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 1);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 1);
     }
 
     @Test
@@ -54,43 +55,52 @@ public class EventSeriesTriggerTest {
         eventSeriesTrigger.update(writerRunnableEventSeries);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertFalse(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 99);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 99);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesOne", 300, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 399);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 399);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("", 99, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 399);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 399);
 
         eventSeriesTrigger = new EventSeriesTrigger("EventSeriesTwo", 100);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 99, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertFalse(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 99);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 99);
 
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesOne", 166, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertFalse(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 99);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 99);
 
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 1, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertFalse(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 100);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 100);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 1, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 101);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 101);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 166, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 267);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 267);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesTwo", 166, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 433);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 433);
 
 
     }
@@ -122,25 +132,25 @@ public class EventSeriesTriggerTest {
         assertFalse(eventSeriesTrigger.trigger());
         eventSeriesTrigger.update(writerRunnableEventSeries);
         assertTrue(eventSeriesTrigger.trigger());
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 0);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 200);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 200);
         assertEquals(eventSeriesTrigger.getTheshold(), 100);
         eventSeriesTrigger.reset();
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 200);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 0);
         assertEquals(eventSeriesTrigger.getTheshold(), 100);
         writerRunnableEventSeries = AuxTestUtilities.generarWriterRunnableEvents("EventSeriesOne", 33, 1000, 2000);
         eventSeriesTrigger.update(writerRunnableEventSeries);
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 200);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 33);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 33);
         assertEquals(eventSeriesTrigger.getTheshold(), 100);
         eventSeriesTrigger.reset();
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 233);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 0);
         assertEquals(eventSeriesTrigger.getTheshold(), 100);
         eventSeriesTrigger.update(writerRunnableEventSeries);
-        assertEquals(eventSeriesTrigger.getLastEventReported(), 233);
-        assertEquals(eventSeriesTrigger.getNewEventCount(), 33);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyDeletedCopy().size(), 0);
+        assertEquals(eventSeriesTrigger.getEventsAlreadyWrittenCopy().size(), 33);
         assertEquals(eventSeriesTrigger.getTheshold(), 100);
     }
 }

@@ -130,8 +130,8 @@ public class AuxTestUtilities {
             if (expectedResult instanceof ReaderCallableEventSeries && readerCallableOneSignal instanceof ReaderCallableEventSeries) {
                 ReaderCallableEventSeries expectedResultConcrete = (ReaderCallableEventSeries) expectedResult;
                 ReaderCallableEventSeries readerCallableOneSignalConcrete = (ReaderCallableEventSeries) readerCallableOneSignal;
-                if (!((expectedResultConcrete.getFirstInstantToInclude() == readerCallableOneSignalConcrete.getFirstInstantToInclude())
-                        && (expectedResultConcrete.getLastInstantToInclude() == readerCallableOneSignalConcrete.getLastInstantToInclude())
+                if (!((eventosCompararListas(expectedResultConcrete.getEventsReadDeleted(), readerCallableOneSignalConcrete.getEventsReadDeleted()))
+                        && (eventosCompararListas(expectedResultConcrete.getEventsReadWritten(), readerCallableOneSignalConcrete.getEventsReadWritten()))
                         && (expectedResultConcrete.getIdentifierOwner().equals(readerCallableOneSignalConcrete.getIdentifierOwner()))
                         && (expectedResultConcrete.getIdentifierSignal().equals(readerCallableOneSignalConcrete.getIdentifierSignal())))) {
                     return false;
