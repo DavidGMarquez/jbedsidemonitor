@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import signals.Event;
 import signals.ReadResult;
 import signals.ReadResultEventSeries;
@@ -27,14 +25,10 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmStupid2XMultiSignalsEventImplementation extends AlgorithmDefaultImplementation {
+public class AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation extends AlgorithmDefaultImplementation {
 
-    private Map<String, Integer> indexOfWrite;
-    SortedSet<Event> eventsUnmodifiableCopy = new TreeSet<Event>() ;
-
-    public AlgorithmStupid2XMultiSignalsEventImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
-        indexOfWrite = new HashMap<String, Integer>();
     }
 
     public boolean execute(ReadResult readResult) {
@@ -57,19 +51,24 @@ public class AlgorithmStupid2XMultiSignalsEventImplementation extends AlgorithmD
     }
 
     private void proccess(ReadResultEventSeries readResultEventSeries) {
-
-        if(indexOfWrite.get(readResultEventSeries.getIdentifierSignal())==null){
-            indexOfWrite.put(readResultEventSeries.getIdentifierSignal(), new Integer(0));
-             eventsUnmodifiableCopy = readResultEventSeries.getEventsUnmodifiableCopy();
-        }
         WriterRunnableEventSeries writerRunnableEventSeries = new WriterRunnableEventSeries(readResultEventSeries.getIdentifierSignal() + "_" + this.getIdentifier());
         LinkedList<Event> eventsReadWritten = readResultEventSeries.getEventsReadWritten();
         for (Event currentEvent : eventsReadWritten) {
-            writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation() * 2, currentEvent.getType(), currentEvent.getCopyOfAttributes()));
+            if (currentEvent.getLocation() % 3 != 0) {
+                writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation() , currentEvent.getType(), currentEvent.getCopyOfAttributes()));
+             System.out.println("Prueba");
+            } else {
+                System.out.println("Evento fuera");
+            }
         }
         LinkedList<Event> eventsReadDeleted = readResultEventSeries.getEventsReadDeleted();
         for (Event currentEvent : eventsReadDeleted) {
-            writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation() * 2, currentEvent.getType(), currentEvent.getCopyOfAttributes()));
+            if (currentEvent.getLocation() % 3 != 0) {
+                writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
+                System.out.println("Prueba");
+            } else {
+                System.out.println("Evento fuera");
+            }
         }
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
     }

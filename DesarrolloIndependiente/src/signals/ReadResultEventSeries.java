@@ -13,6 +13,7 @@ public class ReadResultEventSeries extends ReadResultOneSignal {
         super(identifierOwner, identifierSignal);
         this.eventsReadDeleted = eventsReadDeleted;
         this.eventsReadWritten = eventsReadWritten;
+        this.eventsUnmodifiableCopy=eventsUnmodifiableCopy;
     }
 
     public LinkedList<Event> getEventsReadDeleted() {
@@ -22,4 +23,9 @@ public class ReadResultEventSeries extends ReadResultOneSignal {
     public LinkedList<Event> getEventsReadWritten() {
         return eventsReadWritten;
     }
+
+    public SortedSet<Event> getEventsUnmodifiableCopy() {
+        return eventsUnmodifiableCopy;
+    }
+
 }

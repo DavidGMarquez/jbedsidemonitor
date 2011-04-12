@@ -126,7 +126,7 @@ public class TesterReaderService {
     //@debug    System.out.println(signalManager.getEventsCopy("Events1").size());
         signalManager.encueWriteOperation(writer3);
         try {
-            Thread.sleep(30);
+            Thread.sleep(300);
         } catch (InterruptedException ex) {
         }
   //@debug      System.out.println(signalManager.getEventsCopy("Events1").size());

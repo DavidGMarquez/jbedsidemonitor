@@ -5,6 +5,8 @@
 package completeTestsEventSeries;
 
 import completeTestsTimeSeries.*;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -18,7 +20,7 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class SerialEventSeriesSeriesGenerator {
+public class SerialEventSeriesGenerator {
 
     String nameSignal;
     Timer timer;
@@ -26,7 +28,7 @@ public class SerialEventSeriesSeriesGenerator {
     int currentIteration;
     int sizeOfIteration;
 
-    public SerialEventSeriesSeriesGenerator(int delayFirstTime, int periodOfTime, int limitOfIterations, String nameSignal, int sizeOfIteration) {
+    public SerialEventSeriesGenerator(int delayFirstTime, int periodOfTime, int limitOfIterations, String nameSignal, int sizeOfIteration) {
         timer = new Timer();
         timer.scheduleAtFixedRate(new RemindTask(), delayFirstTime, periodOfTime);
         this.currentIteration = 0;
@@ -44,7 +46,7 @@ public class SerialEventSeriesSeriesGenerator {
                 timer.cancel(); //Terminate the timer thread
             } else {
                 for (int i = 0; i < sizeOfIteration; i++) {
-                    writerRunnableEventSeries.addEventToWrite(new Event((currentIteration * 10) + (i), "Originated bySerialEventSeriesGenerator", null));
+                    writerRunnableEventSeries.addEventToWrite(new Event((currentIteration * 10) + (i), "Originated bySerialEventSeriesGenerator", new HashMap<String, String>()));
                     //         System.out.println((i+currentIteration*10)+"Value Serial +"+dataToWrite[i]);
                 }
                 SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
