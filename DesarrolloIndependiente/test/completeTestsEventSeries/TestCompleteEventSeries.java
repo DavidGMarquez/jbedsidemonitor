@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package completeTestsTimeSeries;
+package completeTestsEventSeries;
 
+import completeTestsTimeSeries.*;
 import auxiliarTools.*;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,10 +19,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    completeTestsTimeSeries.CreateTest.class,
-    completeTestsTimeSeries.CompleteTestOrder.class,
-    completeTestsTimeSeries.Basic2AlgorithmsTest.class,
-    completeTestsTimeSeries.Complete_TimeSeriesTest.class
+    completeTestsEventSeries.BasicTest.class,
+    completeTestsEventSeries.MediumEventTest.class,
+    completeTestsEventSeries.Complete_EventSeriesTest.class
 })
-public class TestCompleteTimeSeries {
+public class TestCompleteEventSeries {
 }

@@ -22,7 +22,7 @@ public abstract class AlgorithmDefaultImplementationOneSignal implements Algorit
         this.signalToWrite = signalToWrite;
         HashMap<String, Integer> eventSeriesHold = new HashMap<String, Integer>();
         for (String eventSerieName : eventSeries) {
-            eventSeriesHold.put(eventSerieName, new Integer(10));
+            eventSeriesHold.put(eventSerieName, new Integer(0));
         }
         HashMap<String, Integer> timeSeriesHold = new HashMap<String, Integer>();
         for (String timeSerieName : timeSeries) {

@@ -44,7 +44,7 @@ public class Basic2AlgorithmsTest {
         AuxTestUtilities.reset();
 
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-        timeSeries1_out= new TimeSeries("TimeSeries1_AlgorithmIN", "Simulated", 1, 100, "mv");
+        timeSeries1_out = new TimeSeries("TimeSeries1_AlgorithmIN", "Simulated", 1, 100, "mv");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
         timeSignals1.add("TimeSeries1");
@@ -105,8 +105,9 @@ public class Basic2AlgorithmsTest {
         }
 
         for (int i = 0; i < dataRead.length; i++) {
-        //@debug  System.out.println(i+"Comparar " + dataToWrite[i] + " y " + dataRead[i] / 2);
-            assertEquals(dataToWrite[i] , dataRead[i] / 2,000.1);
+            //@debug
+            System.out.println(i + "Comparar " + dataToWrite[i] + " y " + dataRead[i] / 2);
+            assertEquals(dataToWrite[i], dataRead[i] / 2, 000.1);
         }
     }
 }

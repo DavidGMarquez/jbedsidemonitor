@@ -16,7 +16,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({signals.EvenSeriesTest.class,
+@Suite.SuiteClasses({
+    signals.EventSeriesTest.class,
     signals.CircularBufferTest.class,
     signals.TesterWriterService.class,
     signals.TimeSeriesTest.class,
@@ -31,7 +32,9 @@ import org.junit.runners.Suite;
     algorithms.TriggerTest.class,
     algorithms.AlgorithmDefaultImplementationTest.class,
     algorithms.AlgorithmManagerTest.class,
-    completeTestsTimeSeries.TestCompleteTimeSeries.class
+    completeTestsTimeSeries.TestCompleteTimeSeries.class,
+    completeTestsEventSeries.TestCompleteEventSeries.class
+
 })
 public class TestAll {
 }

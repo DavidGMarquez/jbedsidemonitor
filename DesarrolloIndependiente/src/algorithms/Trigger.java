@@ -120,8 +120,8 @@ public class Trigger {
                         ,eventSeriesTrigger.getEventsAlreadyDeletedCopy());
                 eventSeriesTrigger.reset();
                 readerCallable.addReaderCallableOneSignal(readerCallableEventSeries);
+                }
             }
-        }
         return readerCallable;
     }
 

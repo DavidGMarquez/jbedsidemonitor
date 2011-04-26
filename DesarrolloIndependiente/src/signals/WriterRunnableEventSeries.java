@@ -21,7 +21,7 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
         }
         for (Event event : eventsToWrite) {
             signalManager.addEventToEventSeries(this.identifier, event);
-        }
+        }   
     }
 
     public void addEventToWrite(Event e) {
