@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class EvenSeriesTest {
+public class EventSeriesTest {
 
     public void testConstructor() {
         EventSeries evenSeries = generateStandardTestEventSeries();

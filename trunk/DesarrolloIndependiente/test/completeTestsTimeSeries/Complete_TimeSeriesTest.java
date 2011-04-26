@@ -20,7 +20,7 @@ import signals.SignalManager;
 import signals.TimeSeries;
 import static org.junit.Assert.*;
 
-public class TimeSeries_CompleteTest {
+public class Complete_TimeSeriesTest {
 
     TimeSeries timeSeries1;
     TimeSeries timeSeries2;
@@ -59,7 +59,7 @@ public class TimeSeries_CompleteTest {
     //@pendiente quizas hiciera falta un notify all cuando liberamos locks?
     //@pendiente detener los threads y los completions servers
 
-    public TimeSeries_CompleteTest() {
+    public Complete_TimeSeriesTest() {
     }
 
     @Before

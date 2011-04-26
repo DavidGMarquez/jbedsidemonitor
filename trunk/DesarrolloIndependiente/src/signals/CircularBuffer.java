@@ -7,7 +7,7 @@ package signals;
  * indexOldest apunta olderSampleAvailabl la muestra mas antigua que hay en el array
  * full es un boleano que indica si el buffer se ha lleanado ya de datos completamente
  */
-class CircularBuffer {
+public class CircularBuffer {
 
     private int indexNextWrite;
     private int capacity;
@@ -200,6 +200,9 @@ class CircularBuffer {
 
     public int getLastSampleWrite() {
         return lastSampleWritten;
+    }
+    public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesAvailableInfo(){
+        return new ConsecutiveSamplesAvailableInfo();
     }
 
     //ahora mismo he diseñado esta clase para que sus objetos sean inmutables

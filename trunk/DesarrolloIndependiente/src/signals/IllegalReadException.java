@@ -1,6 +1,6 @@
 package signals;
 
-class IllegalReadException extends RuntimeException {
+public class IllegalReadException extends RuntimeException {
 
     private String message;
     private String identifier;

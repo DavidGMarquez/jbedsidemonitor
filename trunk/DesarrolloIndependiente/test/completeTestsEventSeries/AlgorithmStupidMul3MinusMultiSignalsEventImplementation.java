@@ -6,6 +6,7 @@ package completeTestsEventSeries;
 
 import completeTestsTimeSeries.*;
 import algorithms.AlgorithmDefaultImplementation;
+import algorithms.AlgorithmDefaultImplementationOneSignal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,7 +26,7 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmStupidMul3MinusMultiSignalsEventImplementation extends AlgorithmDefaultImplementation {
+public class AlgorithmStupidMul3MinusMultiSignalsEventImplementation extends AlgorithmDefaultImplementationOneSignal {
 
     public AlgorithmStupidMul3MinusMultiSignalsEventImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
@@ -56,18 +57,14 @@ public class AlgorithmStupidMul3MinusMultiSignalsEventImplementation extends Alg
         for (Event currentEvent : eventsReadWritten) {
             if (currentEvent.getLocation() % 3 != 0) {
                 writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation() , currentEvent.getType(), currentEvent.getCopyOfAttributes()));
-             System.out.println("Prueba");
             } else {
-                System.out.println("Evento fuera");
             }
         }
         LinkedList<Event> eventsReadDeleted = readResultEventSeries.getEventsReadDeleted();
         for (Event currentEvent : eventsReadDeleted) {
             if (currentEvent.getLocation() % 3 != 0) {
                 writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
-                System.out.println("Prueba");
             } else {
-                System.out.println("Evento fuera");
             }
         }
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);

@@ -6,6 +6,7 @@ package completeTestsEventSeries;
 
 import completeTestsTimeSeries.*;
 import algorithms.AlgorithmDefaultImplementation;
+import algorithms.AlgorithmDefaultImplementationOneSignal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,7 +28,7 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmStupid2XMultiSignalsEventImplementation extends AlgorithmDefaultImplementation {
+public class AlgorithmStupid2XMultiSignalsEventImplementation extends AlgorithmDefaultImplementationOneSignal {
 
     private Map<String, Integer> indexOfWrite;
     SortedSet<Event> eventsUnmodifiableCopy = new TreeSet<Event>() ;

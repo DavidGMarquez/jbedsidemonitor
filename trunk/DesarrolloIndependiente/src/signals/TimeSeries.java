@@ -81,4 +81,7 @@ public class TimeSeries extends Series {
     {
         return buffer.getLastSampleWrite();
     }
+    public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesAvailableInfo(){
+        return this.buffer.getConsecutiveSamplesAvailableInfo();
+    }
 }

@@ -18,6 +18,7 @@ public class SignalManager {
     private ExecutorServiceWriter executorServiceWriter;
     private CompletionExecutorServiceReader completionExecutorServiceReader;
     private static final SignalManager INSTANCE = new SignalManager();
+    private JSignalAdapter jSignalAdapter;
 
     private SignalManager() {
         lockManager = LockManager.getInstance();
@@ -25,6 +26,7 @@ public class SignalManager {
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
+        jSignalAdapter=new JSignalAdapter();
     }
 
     public static SignalManager getInstance() {
@@ -32,7 +34,8 @@ public class SignalManager {
     }
     //@pendiente si es necesario hacer una copia del objeto ya que es mutable
     //Comentario hasta que se haga para que no se olvide copia defensiva
-
+    //@pendiente quizas dejar solo este metodo para añadir series
+    //@pendiente que ocurre si un TimeSeries y un EventSeries se llaman igual
     public Series addSeries(Series series) {
         if (series instanceof TimeSeries) {
             return this.addTimeSeries((TimeSeries) series);
@@ -46,6 +49,7 @@ public class SignalManager {
     public TimeSeries addTimeSeries(TimeSeries ts) {
         if (this.timeSeries.get(ts.getIdentifier()) == null) {
             this.lockManager.addLock(ts.getIdentifier());
+            this.jSignalAdapter.addTimeSeries(ts);
             return this.timeSeries.put(ts.getIdentifier(), ts);
         }
         throw new TimeSerieslAlreadyExistsException("TimeSeries already exists in Signal Manager", ts);
@@ -54,18 +58,33 @@ public class SignalManager {
     public EventSeries addEventSeries(EventSeries eventSeries) {
         if (this.eventSeries.get(eventSeries.getIdentifier()) == null) {
             this.lockManager.addLock(eventSeries.getIdentifier());
+            this.jSignalAdapter.addEventSeries(eventSeries);
             return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
         }
         throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager", eventSeries);
     }
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
+        this.jSignalAdapter.notifyWriterRunnable(writerRunnable);
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
     }
 
     public void encueReadOperation(ReaderCallable readerCallable) {
         this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
 
+    }
+     public float[] readSecureFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+         this.lockManager.getReadLock(identifier);
+        float[] read = this.timeSeries.get(identifier).read(posSrc, sizeToRead);
+        this.lockManager.releaseReadLock(identifier);
+        return read;
+    }
+    public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesTimeSeries(String identifier) {
+         this.lockManager.getReadLock(identifier);
+        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo
+                = this.timeSeries.get(identifier).getConsecutiveSamplesAvailableInfo();
+        this.lockManager.releaseReadLock(identifier);
+        return consecutiveSamplesAvailableInfo;
     }
 
     //@metodo debug no USAR segun api
@@ -92,7 +111,7 @@ public class SignalManager {
     public  SortedSet<Event> getEventsCopy(String identifier) {
         return this.eventSeries.get(identifier).getEventsCopy();
     }
-//@metodo debug no USAR segun api
+//@metodo debug no USAR segun api deberían de usarse solo con locks
 
     public SortedSet<Event> readFromEventSeriesFromTo(String identifierSignal, long firstInstantToInclude, long lastInstantToInclude) {
         return this.eventSeries.get(identifierSignal).getEvents(firstInstantToInclude, lastInstantToInclude);
@@ -133,5 +152,8 @@ public class SignalManager {
 
     public LinkedList<String> getAllEventSeriesNames() {
         return new LinkedList<String>(this.eventSeries.keySet());
+    }
+    public JSignalAdapter getJSignalAdapter(){
+        return this.jSignalAdapter;
     }
 }

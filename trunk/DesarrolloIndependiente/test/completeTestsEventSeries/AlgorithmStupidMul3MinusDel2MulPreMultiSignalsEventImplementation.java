@@ -6,6 +6,7 @@ package completeTestsEventSeries;
 
 import completeTestsTimeSeries.*;
 import algorithms.AlgorithmDefaultImplementation;
+import algorithms.AlgorithmDefaultImplementationOneSignal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,7 +26,7 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation extends AlgorithmDefaultImplementation {
+public class AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation extends AlgorithmDefaultImplementationOneSignal {
 
     public AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
@@ -52,24 +53,28 @@ public class AlgorithmStupidMul3MinusDel2MulPreMultiSignalsEventImplementation e
 
     private void proccess(ReadResultEventSeries readResultEventSeries) {
         WriterRunnableEventSeries writerRunnableEventSeries = new WriterRunnableEventSeries(readResultEventSeries.getIdentifierSignal() + "_" + this.getIdentifier());
+        WriterRunnableEventSeries writerRunnableEventSeriesDELETED = new WriterRunnableEventSeries(readResultEventSeries.getIdentifierSignal());
         LinkedList<Event> eventsReadWritten = readResultEventSeries.getEventsReadWritten();
         for (Event currentEvent : eventsReadWritten) {
             if (currentEvent.getLocation() % 3 != 0) {
-                writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation() , currentEvent.getType(), currentEvent.getCopyOfAttributes()));
-             System.out.println("Prueba");
+                writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
             } else {
-                System.out.println("Evento fuera");
+            }
+            if (currentEvent.getLocation() % 4 == 0) {
+                writerRunnableEventSeriesDELETED.addEventToDelete(currentEvent);
             }
         }
         LinkedList<Event> eventsReadDeleted = readResultEventSeries.getEventsReadDeleted();
         for (Event currentEvent : eventsReadDeleted) {
             if (currentEvent.getLocation() % 3 != 0) {
-                writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
-                System.out.println("Prueba");
+              //  writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
             } else {
-                System.out.println("Evento fuera");
+            }
+            if (currentEvent.getLocation() % 4 == 0) {
+               // writerRunnableEventSeriesDELETED.addEventToDelete(currentEvent);
             }
         }
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
+        SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeriesDELETED);
     }
 }
