@@ -4,16 +4,13 @@
  */
 package signals;
 
-import algorithms.AlgorithmDefaultImplementation;
-import algorithms.AlgorithmManager;
-import demojbedsidemonitor.AlgorithmStupid2XMultiSignalsImplementationOrder;
-import demojbedsidemonitor.SinTimeSeriesGeneratorOrder;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitorDataSourceAdapter;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorMark;
@@ -28,13 +25,23 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentMap<String, TimeSeries> timeSeries;
     private ConcurrentMap<String, EventSeries> eventSeries;
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
+    private JSignalMonitor jSignalMonitor =null;
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         signalsLocks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
+            }
+
+    public JSignalMonitor getjSignalMonitor() {
+        return jSignalMonitor;
     }
 
+    public void setjSignalMonitor(JSignalMonitor jSignalMonitor) {
+        this.jSignalMonitor = jSignalMonitor;
+    }
+
+    
     public void addTimeSeries(TimeSeries timeSeries) {
 
         if (this.timeSeries.put(timeSeries.getIdentifier(), timeSeries) == null) {
@@ -126,51 +133,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return tmp;
     }
 
-    void notifyWriterRunnable(WriterRunnable writerRunnable) {
-        if (writerRunnable instanceof WriterRunnableEventSeries) {
-            this.notifyWriterNunableEventSeries((WriterRunnableEventSeries) writerRunnable);
-        } else {
-            if (writerRunnable instanceof WriterRunnableTimeSeries) {
-                this.notifyWriterNunableTimeSeries((WriterRunnableTimeSeries) writerRunnable);
-            } else {
-                this.notifyWriterNunableTimeSeries((WriterRunnableMultiSignal) writerRunnable);
-            }
-        }
-    }
-
-    private void notifyWriterNunableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
-        String identifierSignal = writerRunnableEventSeries.getIdentifier();
-        this.signalsLocks.get(identifierSignal).writeLock().lock();
-        try {
-            LinkedList<Event> eventsToDelete = writerRunnableEventSeries.getEventsToDelete();
-            for (Event eventDelete : eventsToDelete) {
-                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
-            }
-            LinkedList<Event> eventsToWrite = writerRunnableEventSeries.getEventsToWrite();
-            for (Event eventWrite : eventsToWrite) {
-                this.eventSeries.get(identifierSignal).addEvent(eventWrite);
-            }
-        } finally {
-            this.signalsLocks.get(identifierSignal).writeLock().unlock();
-        }
-    }
-
-    private void notifyWriterNunableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {
-        String identifierSignal = writerRunnableTimeSeries.getIdentifier();
-        this.signalsLocks.get(identifierSignal).writeLock().lock();
-        try {
-            this.timeSeries.get(identifierSignal).write(writerRunnableTimeSeries.getDataToWrite(), writerRunnableTimeSeries.getIndexInitToWrite());
-        } finally {
-            this.signalsLocks.get(identifierSignal).writeLock().unlock();
-        }
-    }
-
-    private void notifyWriterNunableTimeSeries(WriterRunnableMultiSignal writerRunnableMultiSignal) {
-        for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnableMultiSignal.getWriterRunnables()) {
-            this.notifyWriterRunnable(writerRunnableOneSignal);
-        }
-    }
-
     public float[] readFromTimeSeries(String identifierSignal, int posSrc, int sizeToRead) {
         this.signalsLocks.get(identifierSignal).readLock().lock();
         float read[] = null;
@@ -215,5 +177,80 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
 
     public long getOrigin(String signalName) {
         return this.timeSeries.get(signalName).getOrigin();
+    }
+
+    void executeWriterRunnable(WriterRunnable writerRunnable) {
+        //@pendiente idea
+        //Cambiar esto a despues de haberse ejecutado los writer Runnables
+        Thread thread = new Thread(new executeJSignalAdapterRunnable(writerRunnable), "executeJSignalAdapterRunnable");
+        thread.start();
+    }
+
+    void notifyWriterRunnable(WriterRunnable writerRunnable) {
+        if (writerRunnable instanceof WriterRunnableEventSeries) {
+            this.notifyWriterRunnableEventSeries((WriterRunnableEventSeries) writerRunnable);
+        } else {
+            if (writerRunnable instanceof WriterRunnableTimeSeries) {
+                this.notifyWriterRunnableTimeSeries((WriterRunnableTimeSeries) writerRunnable);
+            } else {
+                this.notifyWriterRunnableMultiSignal((WriterRunnableMultiSignal) writerRunnable);
+            }
+        }
+    }
+
+    private void notifyWriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
+        String identifierSignal = writerRunnableEventSeries.getIdentifier();
+        this.signalsLocks.get(identifierSignal).writeLock().lock();
+        synchronized(writerRunnableEventSeries){
+        try {
+            LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
+            for (Event eventDelete : eventsToDelete) {
+                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+            }
+            LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
+            for (Event eventWrite : eventsToWrite) {
+                this.eventSeries.get(identifierSignal).addEvent(eventWrite);
+            }
+        } finally {
+            this.signalsLocks.get(identifierSignal).writeLock().unlock();
+        }
+
+    }
+    }
+
+    private void notifyWriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {
+        String identifierSignal = writerRunnableTimeSeries.getIdentifier();
+        this.signalsLocks.get(identifierSignal).writeLock().lock();
+        try {
+            this.timeSeries.get(identifierSignal).write(writerRunnableTimeSeries.getDataToWrite(), writerRunnableTimeSeries.getIndexInitToWrite());
+        } finally {
+            this.signalsLocks.get(identifierSignal).writeLock().unlock();
+        }
+        if(jSignalMonitor!=null){
+                jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSize(identifierSignal));
+
+                jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
+                jSignalMonitor.repaintAll();
+            }
+    }
+
+    private void notifyWriterRunnableMultiSignal(WriterRunnableMultiSignal writerRunnableMultiSignal) {
+        for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnableMultiSignal.getWriterRunnables()) {
+            this.notifyWriterRunnable(writerRunnableOneSignal);
+        }
+    }
+
+    public class executeJSignalAdapterRunnable implements Runnable {
+
+        WriterRunnable writerRunnable;
+
+        executeJSignalAdapterRunnable(WriterRunnable writerRunnable) {
+            //@pendiente habría que copiarlo para que el de eventos no de problemas
+            this.writerRunnable = writerRunnable;
+        }
+
+        public void run() {
+            notifyWriterRunnable(writerRunnable);
+        }
     }
 }

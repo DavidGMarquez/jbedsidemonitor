@@ -190,7 +190,8 @@ public class BasicTest {
                 index++;
                 contador--;
             }
-                
+
+            //@pendiente este test falla de vez en cuando
             assertEquals(currentEvent.getLocation(), index);
             assertEquals(currentEvent.getType(), "Originated bySerialEventSeriesGenerator");
             assertEquals(currentEvent, new Event( index, "Originated bySerialEventSeriesGenerator", null));
