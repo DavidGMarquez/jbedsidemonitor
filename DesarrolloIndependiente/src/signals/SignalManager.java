@@ -26,7 +26,7 @@ public class SignalManager {
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
-        jSignalAdapter=new JSignalAdapter();
+        jSignalAdapter = new JSignalAdapter();
     }
 
     public static SignalManager getInstance() {
@@ -36,6 +36,7 @@ public class SignalManager {
     //Comentario hasta que se haga para que no se olvide copia defensiva
     //@pendiente quizas dejar solo este metodo para añadir series
     //@pendiente que ocurre si un TimeSeries y un EventSeries se llaman igual
+
     public Series addSeries(Series series) {
         if (series instanceof TimeSeries) {
             return this.addTimeSeries((TimeSeries) series);
@@ -65,24 +66,34 @@ public class SignalManager {
     }
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
-        this.jSignalAdapter.notifyWriterRunnable(writerRunnable);
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+        WriterRunnable writerRunnableCopy = writerRunnable;
+        if (writerRunnable instanceof WriterRunnableEventSeries) {
+            WriterRunnableEventSeries writerRunnableEventSeries = (WriterRunnableEventSeries) writerRunnable;
+            writerRunnableCopy = new WriterRunnableEventSeries(writerRunnableEventSeries);
+        }
+        if (writerRunnable instanceof WriterRunnableMultiSignal) {
+            WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;
+            writerRunnableCopy = new WriterRunnableMultiSignal(writerRunnableMultiSignal);
+        }
+        this.jSignalAdapter.executeWriterRunnable(writerRunnableCopy);
     }
 
     public void encueReadOperation(ReaderCallable readerCallable) {
         this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
 
     }
-     public float[] readSecureFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
-         this.lockManager.getReadLock(identifier);
+
+    public float[] readSecureFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
+        this.lockManager.getReadLock(identifier);
         float[] read = this.timeSeries.get(identifier).read(posSrc, sizeToRead);
         this.lockManager.releaseReadLock(identifier);
         return read;
     }
+
     public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesTimeSeries(String identifier) {
-         this.lockManager.getReadLock(identifier);
-        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo
-                = this.timeSeries.get(identifier).getConsecutiveSamplesAvailableInfo();
+        this.lockManager.getReadLock(identifier);
+        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = this.timeSeries.get(identifier).getConsecutiveSamplesAvailableInfo();
         this.lockManager.releaseReadLock(identifier);
         return consecutiveSamplesAvailableInfo;
     }
@@ -103,13 +114,24 @@ public class SignalManager {
             return new float[0];
         }
     }
-    public SortedSet<Event> getEventsUnmodifiableCopy(String identifier){
-        return this.eventSeries.get(identifier).getEventsUnmodifiableCopy();
+
+    public SortedSet<Event> getEventsUnmodifiableCopy(String identifier) {
+        while(!this.lockManager.tryReadLock(identifier)){
+        }
+        SortedSet<Event> eventsUnmodifiableCopy = this.eventSeries.get(identifier).getEventsUnmodifiableCopy();
+        this.lockManager.releaseReadLock(identifier);
+        return eventsUnmodifiableCopy;
+
     }
     //@metodo debug no USAR segun api
 
-    public  SortedSet<Event> getEventsCopy(String identifier) {
-        return this.eventSeries.get(identifier).getEventsCopy();
+    public SortedSet<Event> getEventsCopy(String identifier) {
+                while(!this.lockManager.tryReadLock(identifier)){
+        }
+        SortedSet<Event> eventsCopy = this.eventSeries.get(identifier).getEventsCopy();
+        this.lockManager.releaseReadLock(identifier);
+        return eventsCopy;
+
     }
 //@metodo debug no USAR segun api deberían de usarse solo con locks
 
@@ -153,7 +175,8 @@ public class SignalManager {
     public LinkedList<String> getAllEventSeriesNames() {
         return new LinkedList<String>(this.eventSeries.keySet());
     }
-    public JSignalAdapter getJSignalAdapter(){
+
+    public JSignalAdapter getJSignalAdapter() {
         return this.jSignalAdapter;
     }
 }

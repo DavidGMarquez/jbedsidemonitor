@@ -15,7 +15,10 @@ public class WriterRunnableMultiSignal extends WriterRunnable {
         writerRunnables = new LinkedList<WriterRunnableOneSignal>();
         this.lockManager = LockManager.getInstance();
     }
-
+   public WriterRunnableMultiSignal(WriterRunnableMultiSignal writerRunnableMultiSignal) {
+        writerRunnables = new LinkedList<WriterRunnableOneSignal>(writerRunnableMultiSignal.writerRunnables);
+        this.lockManager = LockManager.getInstance();
+    }
     @Override
     public void run() {
        while(!this.getLocks()){

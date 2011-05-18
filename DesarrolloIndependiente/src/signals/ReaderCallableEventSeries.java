@@ -5,11 +5,11 @@ import java.util.SortedSet;
 
 public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
 
-      private LinkedList<Event> eventsReadWritten;
+    private LinkedList<Event> eventsReadWritten;
     private LinkedList<Event> eventsReadDeleted;
 
 
-   
+
 
     public ReaderCallableEventSeries(String identifierSignal, String identifierOwner,
             LinkedList<Event> eventsReadWritten,LinkedList<Event> eventsReadDeleted) {
@@ -23,7 +23,7 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
         this.readResult = new ReadResultEventSeries(identifierOwner, identifierSignal,
                 this.eventsReadWritten,this.eventsReadDeleted,
                 SignalManager.getInstance().getEventsUnmodifiableCopy(identifierSignal));
-                
+
 
         return readResult;
 
@@ -45,5 +45,5 @@ public class ReaderCallableEventSeries extends ReaderCallableOneSignal {
         this.eventsReadWritten = eventsReadWritten;
     }
 
- 
+
 }

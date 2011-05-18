@@ -34,6 +34,7 @@ public class FrameTestAutomatic extends JFrame {
         }
         //@JSignalMonitor configuracion Inicial
         jSignalMonitor = new JSignalMonitor(jSignalAdapter);
+        jSignalAdapter.setjSignalMonitor(jSignalMonitor);
         LinkedList<String> allTimeSeriesNames = jSignalAdapter.getAllTimeSeriesNames();
         for (String signalName : allTimeSeriesNames) {
             /*ChannelProperties properties = new ChannelProperties(signalName, jSignalAdapter.getOrigin(signalName)
