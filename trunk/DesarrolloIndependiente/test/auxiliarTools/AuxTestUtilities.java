@@ -82,7 +82,7 @@ public class AuxTestUtilities {
 
     public static void eventosAleatorios(LinkedList<Event> eventos, int numberofevents, int timeinit, int duration) {
         for (int i = 0; i < numberofevents; i++) {
-            eventos.add(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", null));
+            eventos.add(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", new HashMap<String, String>()));
         }
     }
 
@@ -95,7 +95,7 @@ public class AuxTestUtilities {
     public static WriterRunnableEventSeries generarWriterRunnableEvents(String nameSignal, int numberEvents, int timeinit, int duration) {
         WriterRunnableEventSeries writerRunnableEventSeries = new WriterRunnableEventSeries(nameSignal);
         for (int i = 0; i < numberEvents; i++) {
-            writerRunnableEventSeries.addEventToWrite(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", null));
+            writerRunnableEventSeries.addEventToWrite(new Event(timeinit + ((new Double(Math.random() * 99999).longValue()) % duration), "GeneradoAleatorio", new HashMap<String, String>()));
         }
         return writerRunnableEventSeries;
     }

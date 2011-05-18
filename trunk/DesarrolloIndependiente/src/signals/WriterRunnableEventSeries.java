@@ -10,55 +10,30 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
 
     public WriterRunnableEventSeries(String identifier) {
         super(identifier);
-        eventsToWrite = Collections.synchronizedList(new LinkedList<Event>());
-        eventsToDelete = Collections.synchronizedList(new LinkedList<Event>());
+        eventsToWrite = new LinkedList<Event>();
+        eventsToDelete = new LinkedList<Event>();
     }
 
     public WriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
         super(writerRunnableEventSeries.identifier);
-        this.eventsToDelete=Collections.unmodifiableList(new LinkedList<Event>());
-        this.eventsToWrite=Collections.unmodifiableList(new LinkedList<Event>());
+        this.eventsToDelete = new LinkedList<Event>();
+        this.eventsToWrite = new LinkedList<Event>();
 
-        LinkedList<Event> eventsRare=new LinkedList<Event>();
-        for(Event event:writerRunnableEventSeries.getEventsToDelete()){
+        for (Event event : writerRunnableEventSeries.getEventsToDelete()) {
             long location = event.getLocation();
             String type = event.getType();
             Map<String, String> copyOfAttributes = event.getCopyOfAttributes();
-            Event event2=new Event(location, type, copyOfAttributes);
-            eventsRare.add(event2);
-            
+            Event eventCopy = new Event(location, type, copyOfAttributes);
+            this.eventsToDelete.add(eventCopy);
         }
-        this.eventsToDelete=Collections.unmodifiableList(eventsRare);
-          LinkedList<Event> eventsRare2=new LinkedList<Event>();
-        for(Event event:writerRunnableEventSeries.getEventsToWrite()){
+        for (Event event : writerRunnableEventSeries.getEventsToDelete()) {
             long location = event.getLocation();
             String type = event.getType();
             Map<String, String> copyOfAttributes = event.getCopyOfAttributes();
-            Event event2=new Event(location, type, copyOfAttributes);
-            eventsRare2.add(event2);
-
+            Event eventCopy = new Event(location, type, copyOfAttributes);
+            this.eventsToDelete.add(eventCopy);
         }
-      //  this.eventsToWrite=Collections.unmodifiableList(eventsRare2);
-        /*eventsToDelete = Collections.synchronizedList(new LinkedList<Event>());
-        for(Event event:writerRunnableEventSeries.getEventsToDelete()){
-            long location = event.getLocation();
-            String type = event.getType();
-            Map<String, String> copyOfAttributes = event.getCopyOfAttributes();
-            Event event2=new Event(location, type, copyOfAttributes);
-            //eventsToDelete.add(event2);
-          //  eventsToDelete.add(new Event(event.getLocation(), event.getType(), event.getCopyOfAttributes()));
-        }
-        eventsToWrite = Collections.synchronizedList(new LinkedList<Event>());
-        for(Event event:writerRunnableEventSeries.getEventsToWrite()){
-                        long location = event.getLocation();
-            String type = event.getType();
-            Map<String, String> copyOfAttributes = event.getCopyOfAttributes();
-            Event event2=new Event(location, type, copyOfAttributes);
-          //  eventsToWrite.add(new Event(event.getLocation(), event.getType(), event.getCopyOfAttributes()));
-         * }
-         */
 
-        
 
     }
     private List<Event> eventsToDelete;
@@ -66,17 +41,12 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
 
     @Override
     protected void write() {
-        synchronized (eventsToDelete) {
-            synchronized (eventsToWrite) {
-
-                SignalManager signalManager = SignalManager.getInstance();
-                for (Event event : eventsToDelete) {
-                    signalManager.deleteEventToEventSeries(this.identifier, event);
-                }
-                for (Event event : eventsToWrite) {
-                    signalManager.addEventToEventSeries(this.identifier, event);
-                }
-            }
+        SignalManager signalManager = SignalManager.getInstance();
+        for (Event event : eventsToDelete) {
+            signalManager.deleteEventToEventSeries(this.identifier, event);
+        }
+        for (Event event : eventsToWrite) {
+            signalManager.addEventToEventSeries(this.identifier, event);
         }
     }
 

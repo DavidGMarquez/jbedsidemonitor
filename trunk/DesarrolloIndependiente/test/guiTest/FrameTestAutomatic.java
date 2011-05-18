@@ -119,13 +119,7 @@ public class FrameTestAutomatic extends JFrame {
         jButtonShowSignal3.setVisible(false);
     }
 
-    public static void main(String[] args) {
-        /*  FrameTestAutomatic frame1 = new FrameTestAutomatic();
-        frame1.setSize(800, 500);
-        frame1.setVisible(true);*/
-    }
-
-    public void jButtonRealTime_actionPerformed(ActionEvent e) {
+   public void jButtonRealTime_actionPerformed(ActionEvent e) {
         Timer timer = new Timer(100, new ActionListener() {
 
             private int samples = 500; //tiempo inicial

@@ -1,5 +1,7 @@
 package signals;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
 
 public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
@@ -21,6 +23,17 @@ public class WriterRunnableTimeSeries extends WriterRunnableOneSignal {
         this(identifier);
         copyArray(dataToWrite);
         this.indexInitToWrite = indexInitToWrite;
+    }
+
+    public WriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeS) {
+            super(writerRunnableTimeS.identifier);
+            this.dataToWrite=new float[writerRunnableTimeS.dataToWrite.length];
+        System.arraycopy(writerRunnableTimeS.dataToWrite, 0, this.dataToWrite, 0, writerRunnableTimeS.dataToWrite.length);
+      
+            this.indexInitToWrite=writerRunnableTimeS.indexInitToWrite;
+            this.olderSampleAvailable=writerRunnableTimeS.olderSampleAvailable;
+            this.samplesReadyToReadInOrder=writerRunnableTimeS.samplesReadyToReadInOrder;
+
     }
 
     @Override
