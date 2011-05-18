@@ -50,7 +50,7 @@ public class EventSeries extends Series {
     }
     public SortedSet<Event> getEventsUnmodifiableCopy(){
         //@pendiente revisar este metodo par aver si es Thread-Safe
-        return Collections.unmodifiableSortedSet(new TreeSet<Event>(events));
+        return Collections.unmodifiableSortedSet((events));
     }
 
     public boolean addEvent(Event event) {

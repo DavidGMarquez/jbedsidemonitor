@@ -8,8 +8,10 @@ import signals.ReadResult;
 import signals.ReaderCallable;
 import signals.SignalManager;
 import signals.WriterRunnable;
+import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableMultiSignal;
 import signals.WriterRunnableOneSignal;
+import signals.WriterRunnableTimeSeries;
 
 /**
  * Singlenton
@@ -84,6 +86,18 @@ public class AlgorithmManager {
                 }
                 this.checkTriggers();
             }
+            //@pediente no se porque es necesario la copia pero bueno
+                    WriterRunnable writerRunnableCopy = null;
+        if (writerRunnable instanceof WriterRunnableEventSeries) {
+            WriterRunnableEventSeries writerRunnableEventSeries = (WriterRunnableEventSeries) writerRunnable;
+            writerRunnableCopy = new WriterRunnableEventSeries(writerRunnableEventSeries);
+        }
+        if (writerRunnable instanceof WriterRunnableTimeSeries) {
+            WriterRunnableTimeSeries writerRunnableTimeS = (WriterRunnableTimeSeries) writerRunnable;
+            writerRunnableCopy = new WriterRunnableTimeSeries(writerRunnableTimeS);
+        }
+        writerRunnableCopy.notNotifyAlgorithmManager();
+        SignalManager.getInstance().getJSignalAdapter().executeWriterRunnable(writerRunnableCopy);
         }
         else{
             WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;

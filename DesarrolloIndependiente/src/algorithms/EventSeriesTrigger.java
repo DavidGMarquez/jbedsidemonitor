@@ -20,6 +20,7 @@ class EventSeriesTrigger {
 
     public void update(WriterRunnableEventSeries writerRunnableEventSeries) {
         if(writerRunnableEventSeries.getIdentifier().equals(identifierSignal)){
+            //@pendiente revisar si hacer la copia a mano aqui
             eventsAlreadyDeleted.addAll(writerRunnableEventSeries.getEventsToDelete());
             eventsAlreadyWritten.addAll(writerRunnableEventSeries.getEventsToWrite());
         }

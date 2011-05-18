@@ -67,16 +67,6 @@ public class SignalManager {
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
         this.executorServiceWriter.executeWriterRunnable(writerRunnable);
-        WriterRunnable writerRunnableCopy = writerRunnable;
-        if (writerRunnable instanceof WriterRunnableEventSeries) {
-            WriterRunnableEventSeries writerRunnableEventSeries = (WriterRunnableEventSeries) writerRunnable;
-            writerRunnableCopy = new WriterRunnableEventSeries(writerRunnableEventSeries);
-        }
-        if (writerRunnable instanceof WriterRunnableMultiSignal) {
-            WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;
-            writerRunnableCopy = new WriterRunnableMultiSignal(writerRunnableMultiSignal);
-        }
-        this.jSignalAdapter.executeWriterRunnable(writerRunnableCopy);
     }
 
     public void encueReadOperation(ReaderCallable readerCallable) {

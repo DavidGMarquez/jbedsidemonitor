@@ -179,7 +179,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return this.timeSeries.get(signalName).getOrigin();
     }
 
-    void executeWriterRunnable(WriterRunnable writerRunnable) {
+    public void executeWriterRunnable(WriterRunnable writerRunnable) {
         //@pendiente idea
         //Cambiar esto a despues de haberse ejecutado los writer Runnables
         Thread thread = new Thread(new executeJSignalAdapterRunnable(writerRunnable), "executeJSignalAdapterRunnable");
