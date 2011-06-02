@@ -25,12 +25,8 @@ class TimeSeriesTrigger {
         //@debug          "getLast"+this.getLastSampleReported());
 
         if (writerRunnableTimeSeries.getIdentifier().equals(identifierSignal)) {
-            //@pendiente si la ultima muestra del agloritmo es mas nueva que la antigua hemos perdido datos
             if (writerRunnableTimeSeries.getOlderSampleAvailable() > (this.lastSampleReportedToAlgorithm + 1)) {
-                System.out.println("ERROR");
-                //@pendiente esto esta perdiendo datos ya que hemos perdido un trozo de señal (no debería pasar)
-                //Supongo que es que ya estan disponibles las otras muestras también
-                //@duda que hago en este caso?
+                 throw new DataLossException("Older sample avalible big that last sample Reported", writerRunnableTimeSeries);              
             }
             //@debug       System.out.println("Añadimos datos al trigger estaba en "+this.newData+"Ponemos a"+((writerRunnableTimeSeries.getOlderSampleAvailable() +
             //@debug               writerRunnableTimeSeries.getSamplesReadyToReadInOrder())-(this.lastSampleReportedToAlgorithm+1))+"limite"+this.getTheshold());
