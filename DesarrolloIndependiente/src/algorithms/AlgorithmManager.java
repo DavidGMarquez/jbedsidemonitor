@@ -87,22 +87,23 @@ public class AlgorithmManager {
                 this.checkTriggers();
             }
             //@pediente no se porque es necesario la copia pero bueno
-                    WriterRunnable writerRunnableCopy = null;
-        if (writerRunnable instanceof WriterRunnableEventSeries) {
-            WriterRunnableEventSeries writerRunnableEventSeries = (WriterRunnableEventSeries) writerRunnable;
-            writerRunnableCopy = new WriterRunnableEventSeries(writerRunnableEventSeries);
-        }
-        if (writerRunnable instanceof WriterRunnableTimeSeries) {
-            WriterRunnableTimeSeries writerRunnableTimeS = (WriterRunnableTimeSeries) writerRunnable;
-            writerRunnableCopy = new WriterRunnableTimeSeries(writerRunnableTimeS);
-        }
-        writerRunnableCopy.notNotifyAlgorithmManager();
-        SignalManager.getInstance().getJSignalAdapter().executeWriterRunnable(writerRunnableCopy);
-        }
-        else{
+            //@pendiente esto pasarlo a sus clases correspondiente haciendo un constructor de copia
+            WriterRunnable writerRunnableCopy = null;
+            if (writerRunnable instanceof WriterRunnableEventSeries) {
+                WriterRunnableEventSeries writerRunnableEventSeries = (WriterRunnableEventSeries) writerRunnable;
+                writerRunnableCopy = new WriterRunnableEventSeries(writerRunnableEventSeries);
+            }
+            if (writerRunnable instanceof WriterRunnableTimeSeries) {
+                WriterRunnableTimeSeries writerRunnableTimeS = (WriterRunnableTimeSeries) writerRunnable;
+                writerRunnableCopy = new WriterRunnableTimeSeries(writerRunnableTimeS);
+            }
+            //Esto es para que no vuelva  a notificar a este método
+            writerRunnableCopy.notNotifyAlgorithmManager();
+            SignalManager.getInstance().getJSignalAdapter().executeWriterRunnable(writerRunnableCopy);
+        } else {
             WriterRunnableMultiSignal writerRunnableMultiSignal = (WriterRunnableMultiSignal) writerRunnable;
             LinkedList<WriterRunnableOneSignal> writerRunnables = writerRunnableMultiSignal.getWriterRunnables();
-            for(WriterRunnableOneSignal writerRunnableOneSignal: writerRunnables){
+            for (WriterRunnableOneSignal writerRunnableOneSignal : writerRunnables) {
                 this.notifyNewData(writerRunnableOneSignal);
             }
         }
@@ -113,7 +114,7 @@ public class AlgorithmManager {
         for (String algorithmName : algorithmNames) {
             Trigger triggerAlgorithm = this.triggersByAlgorithmName.get(algorithmName);
             ReaderCallable readerCallable = triggerAlgorithm.getReaderCallableIfTriggerAndReset();
-            if (readerCallable!=null) {
+            if (readerCallable != null) {
                 signals.SignalManager.getInstance().encueReadOperation(readerCallable);
             }
         }
@@ -128,23 +129,23 @@ public class AlgorithmManager {
         this.executorServiceAlgorithm.executeAlgorithmReadResult(algorithm, readResult);
     }
 
+    //@comentario metodo de depuracion
     public Algorithm getAlgorithm(String name) {
         return this.algorithmsByName.get(name);
     }
-    //@debud metodos de depuracion
-
+    //@comentario metodo de depuracion
     public LinkedList<String> getAllAlgorithmNames() {
         return (new LinkedList<String>(this.algorithmsByName.keySet()));
     }
-
+    //@comentario metodo de depuracion
     public Trigger getTrigger(String algorithmName) {
         return this.triggersByAlgorithmName.get(algorithmName);
     }
-
+    //@comentario metodo de depuracion
     public LinkedList<String> getAlgorithmNamesToSignal(String signalName) {
         return this.algorithmsToNotifyBySignalName.get(signalName);
     }
-
+    //@comentario metodo de depuracion
     public void reset() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
         this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();
