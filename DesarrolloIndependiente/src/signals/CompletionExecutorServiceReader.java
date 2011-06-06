@@ -29,13 +29,6 @@ public class CompletionExecutorServiceReader implements Runnable {
             try {
                 Future<ReadResult> futureReadResult = executorCompletionService.take();
                 ReadResult readResult = futureReadResult.get();
-                //@debug borrar
-                if (readResult instanceof ReadResultTimeSeries) {
-                    ReadResultTimeSeries readResultTimeSeries = (ReadResultTimeSeries) readResult;
-                    //@debug         System.out.println("Obteniendo un resultado Futuro de "+readResult.getIdentifierOwner()+"desde: "+readResultTimeSeries.getPosInitToRead()+"Size"+readResultTimeSeries.getData().length);
-                } else {
-                   //@debug System.out.println("Obteniendo un resultado Futuro de " + readResult.getIdentifierOwner() + "desde");
-                }
                 AlgorithmManager.getInstance().processData(readResult);
             } catch (ExecutionException ex) {
                 Logger.getLogger(CompletionExecutorServiceReader.class.getName()).log(Level.SEVERE, null, ex);

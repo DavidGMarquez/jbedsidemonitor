@@ -25,13 +25,13 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentMap<String, TimeSeries> timeSeries;
     private ConcurrentMap<String, EventSeries> eventSeries;
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
-    private JSignalMonitor jSignalMonitor =null;
+    private JSignalMonitor jSignalMonitor = null;
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         signalsLocks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
-            }
+    }
 
     public JSignalMonitor getjSignalMonitor() {
         return jSignalMonitor;
@@ -41,7 +41,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         this.jSignalMonitor = jSignalMonitor;
     }
 
-    
     public void addTimeSeries(TimeSeries timeSeries) {
 
         if (this.timeSeries.put(timeSeries.getIdentifier(), timeSeries) == null) {
@@ -64,6 +63,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public float[] getChannelData(String signalName, long firstValueInMiliseconds,
             long lastValueInMiliseconds) {
         if (lastValueInMiliseconds < 0) {
+            //@pendiente y esto porque?
             return new float[1];
         }
         ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = this.getConsecutiveSamplesAvailableInfo(signalName);
@@ -182,6 +182,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public void executeWriterRunnable(WriterRunnable writerRunnable) {
         //@pendiente idea
         //Cambiar esto a despues de haberse ejecutado los writer Runnables
+        //Quizás hacer un executor Service para esto
         Thread thread = new Thread(new executeJSignalAdapterRunnable(writerRunnable), "executeJSignalAdapterRunnable");
         thread.start();
     }
@@ -201,21 +202,19 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private void notifyWriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
         String identifierSignal = writerRunnableEventSeries.getIdentifier();
         this.signalsLocks.get(identifierSignal).writeLock().lock();
-        synchronized(writerRunnableEventSeries){
-        try {
-            LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
-            for (Event eventDelete : eventsToDelete) {
-                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+            try {
+                LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
+                for (Event eventDelete : eventsToDelete) {
+                    this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+                }
+                LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
+                for (Event eventWrite : eventsToWrite) {
+                    this.eventSeries.get(identifierSignal).addEvent(eventWrite);
+                }
+            } finally {
+                this.signalsLocks.get(identifierSignal).writeLock().unlock();
             }
-            LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
-            for (Event eventWrite : eventsToWrite) {
-                this.eventSeries.get(identifierSignal).addEvent(eventWrite);
-            }
-        } finally {
-            this.signalsLocks.get(identifierSignal).writeLock().unlock();
-        }
 
-    }
     }
 
     private void notifyWriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {
@@ -226,12 +225,12 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         } finally {
             this.signalsLocks.get(identifierSignal).writeLock().unlock();
         }
-        if(jSignalMonitor!=null){
-                jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSize(identifierSignal));
+        if (jSignalMonitor != null) {
+            jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSize(identifierSignal));
 
-                jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
-                jSignalMonitor.repaintAll();
-            }
+            jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
+            jSignalMonitor.repaintAll();
+        }
     }
 
     private void notifyWriterRunnableMultiSignal(WriterRunnableMultiSignal writerRunnableMultiSignal) {

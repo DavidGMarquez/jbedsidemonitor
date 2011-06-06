@@ -21,7 +21,6 @@ public class IllegalReadException extends RuntimeException {
 
     IllegalReadException(IllegalReadException e, String identifier) {
         super(e.message + " Signal:" + identifier);
-        //@comentario animal de bellotas ¡los String! son inmutables!
         this.message = e.message;
         this.identifier = identifier;
 
