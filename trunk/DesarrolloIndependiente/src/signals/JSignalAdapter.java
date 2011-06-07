@@ -42,11 +42,9 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public void addTimeSeries(TimeSeries timeSeries) {
-
         if (this.timeSeries.put(timeSeries.getIdentifier(), timeSeries) == null) {
             signalsLocks.put(timeSeries.getIdentifier(), new ReentrantReadWriteLock());
         }
-
     }
 
     public void addEventSeries(EventSeries eventSeries) {
@@ -57,32 +55,30 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
 
     public ArrayList<String> getAvailableCategoriesOfAnnotations() {
         ArrayList<String> availableCategoriesOfAnnotations = new ArrayList<String>();
+        //@pendientes
         return availableCategoriesOfAnnotations;
     }
 
     public float[] getChannelData(String signalName, long firstValueInMiliseconds,
             long lastValueInMiliseconds) {
         if (lastValueInMiliseconds < 0) {
-            //@pendiente y esto porque?
+            //@pendiente en la documentacion pone algo de las abcisas
             return new float[1];
         }
         ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = this.getConsecutiveSamplesAvailableInfo(signalName);
-        int frequency = 1000;
-        int firstSample = (int) firstValueInMiliseconds / frequency;
-        int lastSample = (int) lastValueInMiliseconds / frequency;
-        System.out.println("PedidoGetChannelData" + signalName + "Desde" + firstSample + "Hasta" + lastSample);
+        int firstSample = (int) (firstValueInMiliseconds * getFrecuencySignalTimeSeries(signalName) / 1000);
+        int lastSample = (int) (lastValueInMiliseconds * getFrecuencySignalTimeSeries(signalName) / 1000);
+        //System.out.println("PedidoGetChannelData" + signalName + "Desde" + firstSample + "Hasta" + lastSample);
         //@pendiente que pasa si me pide datos mas antiguos de los que tengo
         if (lastSample > consecutiveSamplesAvailableInfo.getOlderSampleAvailable() + consecutiveSamplesAvailableInfo.getSamplesReadyToReadInOrder()) {
             lastSample = consecutiveSamplesAvailableInfo.getOlderSampleAvailable() + consecutiveSamplesAvailableInfo.getSamplesReadyToReadInOrder();
         }
-
-        System.out.println("GetChannelData" + signalName + "Desde" + firstSample + "Hasta" + lastSample);
+        //System.out.println("GetChannelData" + signalName + "Desde" + firstSample + "Hasta" + lastSample);
         try {
             if ((lastSample - firstSample) > 0) {
                 float[] readFromTimeSeries = this.readFromTimeSeries(signalName, firstSample, lastSample - firstSample);
                 return readFromTimeSeries;
             } else {
-                //@duda float de 1 o de 0?
                 return new float[1];
             }
         } catch (IllegalReadException e) {
@@ -93,11 +89,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public float getChannelValueAtTime(String signalName, long timeInMiliseconds) {
-        int sample = (int) timeInMiliseconds / 1000;
+        int sample = (int) (timeInMiliseconds * getFrecuencySignalTimeSeries(signalName) / 1000);
         if (sample < 0) {
             return 0;
         }
-        System.out.println("GetChannelValue" + signalName + "Sample" + sample);
+        //System.out.println("GetChannelValue" + signalName + "Sample" + sample);
         try {
             return this.readFromTimeSeries(signalName, sample, 1)[0];
         } catch (IllegalReadException e) {
@@ -107,18 +103,19 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
 
     public List<JSignalMonitorAnnotation> getAnnotations(long firstValue, long lastValue) {
         ArrayList<JSignalMonitorAnnotation> marksToReturn = new ArrayList<JSignalMonitorAnnotation>();
+        //@pendientes
         return marksToReturn;
     }
 
     public List<JSignalMonitorMark> getChannelMark(String signalName, long firstValue, long lastValue) {
-
         ArrayList<JSignalMonitorMark> marksToReturn = new ArrayList<JSignalMonitorMark>();
+        //@pendientes
         return marksToReturn;
     }
 
     public short[] getSignalEmphasisLevels(String signalName, long firstValueInMiliseconds,
             long lastValueInMiliseconds) {
-        //No valido
+        //@pendientes
         if (lastValueInMiliseconds < 0) {
             return new short[1];
         }
@@ -164,19 +161,49 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return new LinkedList<String>(this.eventSeries.keySet());
     }
 
-    public float getFrecuencySignal(String signalName) {
+    public float getFrecuencySignalTimeSeries(String signalName) {
         return this.timeSeries.get(signalName).getFrequency();
     }
 
-    public int getDataSize(String signalName) {
+    public int getDataSizeTimeSeries(String signalName) {
         ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo =
                 this.getConsecutiveSamplesAvailableInfo(signalName);
         //@pendiente revisar si es esto o lo otro
         return consecutiveSamplesAvailableInfo.getSamplesReadyToReadInOrder();
     }
 
-    public long getOrigin(String signalName) {
+    public long getOriginTimeSeries(String signalName) {
         return this.timeSeries.get(signalName).getOrigin();
+    }
+
+    public float getMaxSignalTimeSeries(String signalName) {
+        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo =
+                this.getConsecutiveSamplesAvailableInfo(signalName);
+        int origin = consecutiveSamplesAvailableInfo.getOlderSampleAvailable();
+        int length = consecutiveSamplesAvailableInfo.getSamplesReadyToReadInOrder();
+        float[] readFromTimeSeries = this.readFromTimeSeries(signalName, origin, length);
+        float max = Float.MIN_VALUE;
+        for (int i = 0; i < readFromTimeSeries.length; i++) {
+            if (readFromTimeSeries[i] > max) {
+                max = readFromTimeSeries[i];
+            }
+        }
+        return max;
+    }
+
+    public float getMinSignalTimeSeries(String signalName) {
+        ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo =
+                this.getConsecutiveSamplesAvailableInfo(signalName);
+        int origin = consecutiveSamplesAvailableInfo.getOlderSampleAvailable();
+        int length = consecutiveSamplesAvailableInfo.getSamplesReadyToReadInOrder();
+        float[] readFromTimeSeries = this.readFromTimeSeries(signalName, origin, length);
+        float min = Float.MAX_VALUE;
+        for (int i = 0; i < readFromTimeSeries.length; i++) {
+            if (readFromTimeSeries[i] < min) {
+                min = readFromTimeSeries[i];
+            }
+        }
+        return min;
     }
 
     public void executeWriterRunnable(WriterRunnable writerRunnable) {
@@ -202,19 +229,24 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private void notifyWriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
         String identifierSignal = writerRunnableEventSeries.getIdentifier();
         this.signalsLocks.get(identifierSignal).writeLock().lock();
-            try {
-                LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
-                for (Event eventDelete : eventsToDelete) {
-                    this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
-                }
-                LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
-                for (Event eventWrite : eventsToWrite) {
-                    this.eventSeries.get(identifierSignal).addEvent(eventWrite);
-                }
-            } finally {
-                this.signalsLocks.get(identifierSignal).writeLock().unlock();
+        try {
+            LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
+            for (Event eventDelete : eventsToDelete) {
+                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
             }
+            LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
+            for (Event eventWrite : eventsToWrite) {
+                this.eventSeries.get(identifierSignal).addEvent(eventWrite);
+            }
+        } finally {
+            this.signalsLocks.get(identifierSignal).writeLock().unlock();
+        }
+        this.processWriterRunnableEventSeries(writerRunnableEventSeries);
 
+    }
+
+    private void processWriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
+        //
     }
 
     private void notifyWriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {
@@ -225,11 +257,16 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         } finally {
             this.signalsLocks.get(identifierSignal).writeLock().unlock();
         }
-        if (jSignalMonitor != null) {
-            jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSize(identifierSignal));
+        this.processWriterRunnableTimeSeries(writerRunnableTimeSeries);
+    }
 
-            jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
-            jSignalMonitor.repaintAll();
+    private void processWriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {
+        String identifierSignal = writerRunnableTimeSeries.getIdentifier();
+
+        if (jSignalMonitor != null) {
+            jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSizeTimeSeries(identifierSignal));
+            //   jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
+          //  jSignalMonitor.repaintAll();
         }
     }
 
