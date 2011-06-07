@@ -48,16 +48,17 @@ public class TestGuiBasicFrame {
         timeSignals1 = new LinkedList<String>();
 
         timeSignals1.add("TimeSeries1");
-        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_IN", "Algorithm1", 0, 300, "NaN");
+        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_IN", "Algorithm1", 0, 100, "NaN");
         algorithmIN = new AlgorithmStupid2XMultiSignalsImplementationOrder("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries1_out);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
-        int iterations = 1000;
-        SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 100, iterations, "TimeSeries1");
+        int iterations = 10000;
+        SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 10, iterations, "TimeSeries1");
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
+            System.out.println("No sleep");
         }
         float[] readNewFromTimeSeriesTimeSeries = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1", 0);
         System.out.println("TimeSeries1 TAM:" + readNewFromTimeSeriesTimeSeries.length);
@@ -89,9 +90,5 @@ public class TestGuiBasicFrame {
         FrameTestAutomatic frame1 = new FrameTestAutomatic(SignalManager.getInstance().getJSignalAdapter());
         frame1.setSize(800, 500);
         frame1.setVisible(true);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-        }
     }
 }
