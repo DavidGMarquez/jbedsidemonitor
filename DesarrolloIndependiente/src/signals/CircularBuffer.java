@@ -137,15 +137,15 @@ public class CircularBuffer {
     float[] read(int posStartReading, int numDataToRead) {
 
         if (posStartReading < 0) {
-            throw new IllegalReadException("posStartReading is negative", this.capacity,
+            throw new IllegalReadException(" posStartReading is negative", this.capacity,
                     posStartReading, numDataToRead, this.lastSampleWritten);
         }
         if (posStartReading + numDataToRead > (this.lastSampleWritten + 1)) {
-            throw new IllegalReadException("try to read future data", this.capacity,
+            throw new IllegalReadException(" try to read future data", this.capacity,
                     posStartReading, numDataToRead, this.lastSampleWritten);
         }
         if (posStartReading < ((this.lastSampleWritten + 1) - this.capacity)) {
-            throw new IllegalReadException("try to read data not avalible, data too old ", this.capacity,
+            throw new IllegalReadException(" try to read data not avalible, data too old capacity"+this.capacity+"posStart"+posStartReading+"lastSample"+this.lastSampleWritten, this.capacity,
                     posStartReading, numDataToRead, this.lastSampleWritten);
         }
 
