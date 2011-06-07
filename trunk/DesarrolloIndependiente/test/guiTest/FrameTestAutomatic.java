@@ -24,6 +24,7 @@ public class FrameTestAutomatic extends JFrame {
     private JButton jButtonRealTime = new JButton();
     private JButton jButtonRefresh = new JButton();
     private JComboBox jComboBoxSignals = new JComboBox();
+    private JComboBox jComboBoxAnnotations = new JComboBox();
     private Timer timer = null;
 
     public FrameTestAutomatic(JSignalAdapter jSignalAdapter) {
@@ -65,6 +66,8 @@ public class FrameTestAutomatic extends JFrame {
         jButtonRefresh.addActionListener(new FrameJSignalMonitor_jButtonRefresh_actionAdapter(this));
         jComboBoxSignals = new JComboBox(jSignalAdapter.getAllTimeSeriesNames().toArray());
         jComboBoxSignals.addActionListener(new FrameJSignalMonitor_jComboBoxSignals_actionAdapter(this));
+        jComboBoxAnnotations = new JComboBox(jSignalAdapter.getAllEventSeriesNames().toArray());
+        jComboBoxAnnotations.addActionListener(new FrameJSignalMonitor_jComboBoxAnnotations_actionAdapter(this));
         this.getContentPane().add(jToolBar1, BorderLayout.NORTH);
 
         jToolBar1.add(jButtonShowXY);
@@ -72,6 +75,7 @@ public class FrameTestAutomatic extends JFrame {
         jToolBar1.add(jButtonRealTime);
         jToolBar1.add(jButtonRefresh);
         jToolBar1.add(jComboBoxSignals);
+        jToolBar1.add(jComboBoxAnnotations);
     }
 
     public void jButton1_actionPerformed(ActionEvent e) {
@@ -99,11 +103,12 @@ public class FrameTestAutomatic extends JFrame {
             timer = new Timer(100, new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    if (Math.abs(jSignalMonitor.getScrollValue()+jSignalMonitor.getVisibleTime()-jSignalMonitor.getEndTime())<100) {
+                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 100) {
                         jSignalMonitor.repaintAll();
                         jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
                     } else {
                         jSignalMonitor.repaintAll();
+
                     }
                 }
             });
@@ -119,9 +124,9 @@ public class FrameTestAutomatic extends JFrame {
     }
 
     public void jButtonRefresh_actionPerformed(ActionEvent e) {
-        System.out.println("Time:" + jSignalMonitor.getVisibleTime()+"EndTime:"+jSignalMonitor.getEndTime() + "Scrool:" + jSignalMonitor.getScrollValue() + "BasTiem:" + jSignalMonitor.getScrollBaseTime());
-        System.out.println(jSignalMonitor.getVisibleTime()+jSignalMonitor.getScrollValue());
-        if (Math.abs(jSignalMonitor.getScrollValue()+jSignalMonitor.getVisibleTime()-jSignalMonitor.getEndTime())<100) {
+        System.out.println("Time:" + jSignalMonitor.getVisibleTime() + "EndTime:" + jSignalMonitor.getEndTime() + "Scrool:" + jSignalMonitor.getScrollValue() + "BasTiem:" + jSignalMonitor.getScrollBaseTime()+"frec"+jSignalMonitor.getFrecuency());        
+        System.out.println(Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime())/jSignalMonitor.getFrecuency());
+        if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200*jSignalMonitor.getFrecuency()) {
             jSignalMonitor.repaintAll();
             jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
         } else {
@@ -141,6 +146,12 @@ public class FrameTestAutomatic extends JFrame {
             properties.setHasEmphasis(false);
             jSignalMonitor.addChannel(signalSelection, properties);
         }
+    }
+
+    public void jComboBoxAnnotations_actionPerformed(ActionEvent e) {
+        String signalSelection = (String) jComboBoxAnnotations.getSelectedItem();
+        System.out.println("Elegido"+signalSelection);
+        jSignalAdapter.switchEventSeriesToAnnotations(signalSelection);
     }
 }
 
@@ -180,6 +191,19 @@ class FrameJSignalMonitor_jComboBoxSignals_actionAdapter implements ActionListen
 
     public void actionPerformed(ActionEvent e) {
         adaptee.jComboBoxSignals_actionPerformed(e);
+    }
+}
+
+class FrameJSignalMonitor_jComboBoxAnnotations_actionAdapter implements ActionListener {
+
+    private FrameTestAutomatic adaptee;
+
+    FrameJSignalMonitor_jComboBoxAnnotations_actionAdapter(FrameTestAutomatic adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        adaptee.jComboBoxAnnotations_actionPerformed(e);
     }
 }
 

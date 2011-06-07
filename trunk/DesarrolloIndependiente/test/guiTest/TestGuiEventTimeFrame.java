@@ -4,6 +4,7 @@
  */
 package guiTest;
 
+import java.util.ArrayList;
 import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
 import completeTestsTimeSeries.SinTimeSeriesGeneratorOrder;
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 import signals.TimeSeries;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
+import completeTestsEventSeries.SerialEventSeriesGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,31 +32,33 @@ import static org.junit.Assert.*;
  *
  * @author USUARIO
  */
-public class TestGuiBasicFrame {
+public class TestGuiEventTimeFrame {
 
-    public TestGuiBasicFrame() {
+    public TestGuiEventTimeFrame() {
     }
 
     public static void main(String[] args) {
         AuxTestUtilities.reset();
         TimeSeries timeSeries1;
+        EventSeries eventSeries1;
         TimeSeries timeSeries1_out;
         AlgorithmDefaultImplementation algorithmIN;
         LinkedList<String> eventSignals1;
         LinkedList<String> timeSignals1;
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-        timeSeries1_out = new TimeSeries("TimeSeries1_AlgorithmIN", "Simulated", 1, 100, "mv");
+        eventSeries1 = new EventSeries("EventSeries1", "Simulated", 0, new ArrayList<String>(), "NaN");        
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
 
         timeSignals1.add("TimeSeries1");
-        TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_IN", "Algorithm1", 0, 100, "NaN");
+        TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_AlgorithmIN", "Algorithm1", 0, 100, "NaN");
         algorithmIN = new AlgorithmStupid2XMultiSignalsImplementationOrder("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
-        SignalManager.getInstance().addTimeSeries(timeSeries1_out);
+        SignalManager.getInstance().addEventSeries(eventSeries1);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         int iterations = 10000;
         SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 10, iterations, "TimeSeries1");
+        SerialEventSeriesGui serialEventSeriesGui=new SerialEventSeriesGui(10, 10, 1000, "EventSeries1", 10);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {

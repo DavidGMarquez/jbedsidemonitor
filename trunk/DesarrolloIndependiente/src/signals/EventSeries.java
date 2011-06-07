@@ -34,11 +34,11 @@ public class EventSeries extends Series {
     public String getUnits() {
         return units;
     }
-
+    //@pendiente revisar esto parece dar problemas de concurrencia
     public SortedSet<Event> getEvents(long firstInstantToInclude, long lastInstantToInclude) {
         Event eventFrom = new Event(firstInstantToInclude, "", null);
         Event eventTo = new Event(lastInstantToInclude + 1, "", null);
-        return new TreeSet<Event>(events.subSet(eventFrom, eventTo));
+        return (events.subSet(eventFrom, eventTo));
     }
 
     public int getNumberOfEvents() {

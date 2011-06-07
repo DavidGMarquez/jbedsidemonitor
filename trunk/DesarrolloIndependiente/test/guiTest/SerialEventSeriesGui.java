@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package completeTestsEventSeries;
+package guiTest;
 
+import completeTestsEventSeries.*;
 import completeTestsTimeSeries.*;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import signals.WriterRunnableTimeSeries;
  *
  * @author USUARIO
  */
-public class SerialEventSeriesGenerator {
+public class SerialEventSeriesGui {
 
     String nameSignal;
     Timer timer;
@@ -28,7 +29,7 @@ public class SerialEventSeriesGenerator {
     int currentIteration;
     int sizeOfIteration;
 
-    public SerialEventSeriesGenerator(int delayFirstTime, int periodOfTime, int limitOfIterations, String nameSignal, int sizeOfIteration) {
+    public SerialEventSeriesGui(int delayFirstTime, int periodOfTime, int limitOfIterations, String nameSignal, int sizeOfIteration) {
         timer = new Timer();
         timer.scheduleAtFixedRate(new RemindTask(), delayFirstTime, periodOfTime);
         this.currentIteration = 0;
@@ -46,7 +47,7 @@ public class SerialEventSeriesGenerator {
                 timer.cancel(); //Terminate the timer thread
             } else {
                 for (int i = 0; i < sizeOfIteration; i++) {
-                    writerRunnableEventSeries.addEventToWrite(new Event(((currentIteration * 10) + (i)), "Originated bySerialEventSeriesGenerator", new HashMap<String, String>()));
+                    writerRunnableEventSeries.addEventToWrite(new Event(10000*((currentIteration * 10) + (i)), "Originated bySerialEventSeriesGenerator", new HashMap<String, String>()));
                     //         System.out.println((i+currentIteration*10)+"Value Serial +"+dataToWrite[i]);
                 }
                 SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);

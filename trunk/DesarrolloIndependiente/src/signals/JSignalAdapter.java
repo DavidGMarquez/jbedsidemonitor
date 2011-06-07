@@ -4,14 +4,19 @@
  */
 package signals;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitorDataSourceAdapter;
+import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultInstantAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorMark;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
@@ -26,6 +31,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentMap<String, EventSeries> eventSeries;
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
     private JSignalMonitor jSignalMonitor = null;
+    private ArrayList<String> availableCategoriesOfAnnotations = new ArrayList<String>();
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
@@ -54,8 +60,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public ArrayList<String> getAvailableCategoriesOfAnnotations() {
-        ArrayList<String> availableCategoriesOfAnnotations = new ArrayList<String>();
-        //@pendientes
         return availableCategoriesOfAnnotations;
     }
 
@@ -103,7 +107,17 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
 
     public List<JSignalMonitorAnnotation> getAnnotations(long firstValue, long lastValue) {
         ArrayList<JSignalMonitorAnnotation> marksToReturn = new ArrayList<JSignalMonitorAnnotation>();
-        //@pendientes
+        for (String signalName : availableCategoriesOfAnnotations) {
+           // this.signalsLocks.get(signalName).writeLock().lock();
+             this.signalsLocks.get(signalName).readLock().lock();
+            SortedSet<Event> eventsEventSeries = this.getEventsEventSeries(signalName, firstValue, lastValue);
+            for (Event e : eventsEventSeries) {
+                marksToReturn.add(convertEvent2DefaultInstantAnnotation(e, signalName));
+            }
+            this.signalsLocks.get(signalName).readLock().unlock();
+            //this.signalsLocks.get(signalName).writeLock().unlock();
+        }
+
         return marksToReturn;
     }
 
@@ -130,7 +144,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return tmp;
     }
 
-    public float[] readFromTimeSeries(String identifierSignal, int posSrc, int sizeToRead) {
+    private float[] readFromTimeSeries(String identifierSignal, int posSrc, int sizeToRead) {
         this.signalsLocks.get(identifierSignal).readLock().lock();
         float read[] = null;
         try {
@@ -151,6 +165,32 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
             this.signalsLocks.get(identifierSignal).readLock().unlock();
         }
         return consecutiveSamplesAvailableInfo;
+    }
+
+    private DefaultInstantAnnotation convertEvent2DefaultInstantAnnotation(Event e, String category) {
+        DefaultInstantAnnotation defaultInstantAnnotation = new DefaultInstantAnnotation();
+        defaultInstantAnnotation.setAnnotationTime(e.getLocation());
+        defaultInstantAnnotation.setTitle(e.getType());
+        defaultInstantAnnotation.setColor(Color.yellow);
+        defaultInstantAnnotation.setCategory(category);
+        return defaultInstantAnnotation;
+
+    }
+
+    private SortedSet<Event> getEventsEventSeries(String signalName, long firstValue, long lastValue) {
+        SortedSet<Event> events = new TreeSet<Event>();
+     //   this.signalsLocks.get(signalName).writeLock().lock();
+        this.signalsLocks.get(signalName).readLock().lock();
+        try {
+            SortedSet<Event> eventsOriginal = (this.eventSeries.get(signalName).getEvents(firstValue, lastValue));
+            for(Event e:eventsOriginal){
+                events.add(e.copy());
+            }
+        } finally {
+            this.signalsLocks.get(signalName).readLock().unlock();
+       //     this.signalsLocks.get(signalName).writeLock().unlock();
+        }
+        return events;
     }
 
     public LinkedList<String> getAllTimeSeriesNames() {
@@ -204,6 +244,24 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
             }
         }
         return min;
+    }
+
+    public void switchEventSeriesToAnnotations(String signalName) {
+        if (eventSeries.get(signalName) != null) {
+            if (availableCategoriesOfAnnotations.contains(signalName)) {
+                removeEventSeriesToAnnotations(signalName);
+            } else { 
+                addEventSeriesToAnnotations(signalName);
+            }
+        }
+    }
+
+    private boolean addEventSeriesToAnnotations(String signalName) {
+        return availableCategoriesOfAnnotations.add(signalName);
+    }
+
+    private boolean removeEventSeriesToAnnotations(String signalName) {
+        return availableCategoriesOfAnnotations.remove(signalName);
     }
 
     public void executeWriterRunnable(WriterRunnable writerRunnable) {
@@ -266,7 +324,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         if (jSignalMonitor != null) {
             jSignalMonitor.getChannelProperties(identifierSignal).setDataSize(this.getDataSizeTimeSeries(identifierSignal));
             //   jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
-          //  jSignalMonitor.repaintAll();
+            //  jSignalMonitor.repaintAll();
         }
     }
 

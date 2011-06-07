@@ -64,4 +64,7 @@ public final class Event implements Comparable<Event> {
         result = 37 * result + ((int) (location ^ (location >>> 32)));
         return result;
     }
+    public Event copy(){
+        return new Event(this.location, this.type, this.attributes);
+    }
 }
