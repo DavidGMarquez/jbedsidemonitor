@@ -26,15 +26,13 @@ public class WriterRunnableEventSeries extends WriterRunnableOneSignal {
             Event eventCopy = new Event(location, type, copyOfAttributes);
             this.eventsToDelete.add(eventCopy);
         }
-        for (Event event : writerRunnableEventSeries.getEventsToDelete()) {
+        for (Event event : writerRunnableEventSeries.getEventsToWrite()) {
             long location = event.getLocation();
             String type = event.getType();
             Map<String, String> copyOfAttributes = event.getCopyOfAttributes();
             Event eventCopy = new Event(location, type, copyOfAttributes);
-            this.eventsToDelete.add(eventCopy);
+            this.eventsToWrite.add(eventCopy);
         }
-
-
     }
     private List<Event> eventsToDelete;
     private List<Event> eventsToWrite;

@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.LinkedList;
 import algorithms.AlgorithmDefaultImplementation;
+import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import signals.Event;
 import signals.TimeSeries;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
@@ -41,12 +43,13 @@ public class TestGuiEventTimeFrame {
         AuxTestUtilities.reset();
         TimeSeries timeSeries1;
         EventSeries eventSeries1;
-        TimeSeries timeSeries1_out;
+        EventSeries eventSeries2;
         AlgorithmDefaultImplementation algorithmIN;
         LinkedList<String> eventSignals1;
         LinkedList<String> timeSignals1;
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-        eventSeries1 = new EventSeries("EventSeries1", "Simulated", 0, new ArrayList<String>(), "NaN");        
+        eventSeries1 = new EventSeries("EventSeries1", "Simulated", 0, new ArrayList<String>(), "NaN");
+        eventSeries2 = new EventSeries("EventSeries2", "AlgorithmIN", 0, new ArrayList<String>(), "NaN");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
 
@@ -55,10 +58,12 @@ public class TestGuiEventTimeFrame {
         algorithmIN = new AlgorithmStupid2XMultiSignalsImplementationOrder("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         SignalManager.getInstance().addEventSeries(eventSeries1);
+        SignalManager.getInstance().addEventSeries(eventSeries2);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         int iterations = 10000;
         SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 10, iterations, "TimeSeries1");
         SerialEventSeriesGui serialEventSeriesGui=new SerialEventSeriesGui(10, 10, 1000, "EventSeries1", 10);
+        SerialEventSeriesMark serialEventSeriesMark=new SerialEventSeriesMark(10, 10, 10000, "EventSeries2", 10);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
@@ -88,6 +93,8 @@ public class TestGuiEventTimeFrame {
           //  assertEquals(readNewFromTimeSeriesTimeSeries[i], ((float) 2 * (Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100)))), 0.001);
 
         }
+        SortedSet<Event> eventsCopy = SignalManager.getInstance().getEventsCopy("EventSeries1");
+        System.out.println("EventsSeries1 TAM:"+eventsCopy.size());
         /*  FrameTestAutomatic frame1 = new FrameTestAutomatic();
         frame1.setSize(800, 500);
         frame1.setVisible(true);*/
