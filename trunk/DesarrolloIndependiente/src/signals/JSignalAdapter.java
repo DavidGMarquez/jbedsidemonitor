@@ -4,6 +4,8 @@
  */
 package signals;
 
+import algorithms.Algorithm;
+import algorithms.AlgorithmManager;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +19,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitorDataSourceAdapter;
 import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultInstantAnnotation;
+import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultInstantMark;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorMark;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
@@ -32,11 +35,15 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
     private JSignalMonitor jSignalMonitor = null;
     private ArrayList<String> availableCategoriesOfAnnotations = new ArrayList<String>();
+    private ConcurrentHashMap<String, ArrayList<JSignalMonitorMark>> marksOfSignals;
+    private ConcurrentHashMap<String, ArrayList<JSignalMonitorAnnotation>> annotationOfSignals;
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         signalsLocks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
+        marksOfSignals = new ConcurrentHashMap<String, ArrayList<JSignalMonitorMark>>();
+        annotationOfSignals = new ConcurrentHashMap<String, ArrayList<JSignalMonitorAnnotation>>();
     }
 
     public JSignalMonitor getjSignalMonitor() {
@@ -50,12 +57,14 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public void addTimeSeries(TimeSeries timeSeries) {
         if (this.timeSeries.put(timeSeries.getIdentifier(), timeSeries) == null) {
             signalsLocks.put(timeSeries.getIdentifier(), new ReentrantReadWriteLock());
+            marksOfSignals.put(timeSeries.getIdentifier(), new ArrayList<JSignalMonitorMark>());
         }
     }
 
     public void addEventSeries(EventSeries eventSeries) {
         if (this.eventSeries.put(eventSeries.getIdentifier(), eventSeries) == null) {
             signalsLocks.put(eventSeries.getIdentifier(), new ReentrantReadWriteLock());
+            annotationOfSignals.put(eventSeries.getIdentifier(), new ArrayList<JSignalMonitorAnnotation>());
         }
     }
 
@@ -106,24 +115,57 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public List<JSignalMonitorAnnotation> getAnnotations(long firstValue, long lastValue) {
-        ArrayList<JSignalMonitorAnnotation> marksToReturn = new ArrayList<JSignalMonitorAnnotation>();
+        ArrayList<JSignalMonitorAnnotation> annotationsToReturn = new ArrayList<JSignalMonitorAnnotation>();
         for (String signalName : availableCategoriesOfAnnotations) {
-           // this.signalsLocks.get(signalName).writeLock().lock();
-             this.signalsLocks.get(signalName).readLock().lock();
-            SortedSet<Event> eventsEventSeries = this.getEventsEventSeries(signalName, firstValue, lastValue);
-            for (Event e : eventsEventSeries) {
-                marksToReturn.add(convertEvent2DefaultInstantAnnotation(e, signalName));
+            // this.signalsLocks.get(signalName).writeLock().lock();
+            this.signalsLocks.get(signalName).readLock().lock();
+            try {
+                annotationsToReturn.addAll(this.getEventsAnnotations(signalName, firstValue, lastValue));
+            } finally {
+                this.signalsLocks.get(signalName).readLock().unlock();
             }
-            this.signalsLocks.get(signalName).readLock().unlock();
             //this.signalsLocks.get(signalName).writeLock().unlock();
         }
+        return annotationsToReturn;
+    }
 
-        return marksToReturn;
+    public List<JSignalMonitorAnnotation> getEventsAnnotations(String signalName, long firstValue, long lastValue) {
+        ArrayList<JSignalMonitorAnnotation> annotationsToReturn = new ArrayList<JSignalMonitorAnnotation>();
+        ArrayList<JSignalMonitorAnnotation> signalsAnnotations = this.annotationOfSignals.get(signalName);
+        if (signalsAnnotations != null) {
+            for (JSignalMonitorAnnotation jSignalMonitorAnnotation : signalsAnnotations) {
+                if (jSignalMonitorAnnotation.getAnnotationTime() < lastValue && jSignalMonitorAnnotation.getAnnotationTime() > firstValue) {
+                    annotationsToReturn.add(jSignalMonitorAnnotation);
+                }
+            }
+        }
+        return annotationsToReturn;
     }
 
     public List<JSignalMonitorMark> getChannelMark(String signalName, long firstValue, long lastValue) {
         ArrayList<JSignalMonitorMark> marksToReturn = new ArrayList<JSignalMonitorMark>();
-        //@pendientes
+         this.signalsLocks.get(signalName).writeLock().lock();
+       // this.signalsLocks.get(signalName).readLock().lock();
+        try {
+            marksToReturn.addAll(this.getEventsMarks(signalName, firstValue, lastValue));
+        } finally {
+         //   this.signalsLocks.get(signalName).readLock().unlock();
+            this.signalsLocks.get(signalName).writeLock().unlock();
+        }
+        
+        return marksToReturn;
+    }
+
+    private List<JSignalMonitorMark> getEventsMarks(String signalName, long firstValue, long lastValue) {
+        ArrayList<JSignalMonitorMark> marksToReturn = new ArrayList<JSignalMonitorMark>();
+        ArrayList<JSignalMonitorMark> signalsMarks = this.marksOfSignals.get(signalName);
+        if (signalsMarks != null) {
+            for (JSignalMonitorMark jSignalMonitorMark : signalsMarks) {
+                if (jSignalMonitorMark.getMarkTime() < lastValue && jSignalMonitorMark.getMarkTime() > firstValue) {
+                    marksToReturn.add(jSignalMonitorMark);
+                }
+            }
+        }
         return marksToReturn;
     }
 
@@ -167,6 +209,16 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return consecutiveSamplesAvailableInfo;
     }
 
+    private DefaultInstantMark convertEvent2DefaultInstantMark(Event e, String category) {
+        DefaultInstantMark defaultInstantMark = new DefaultInstantMark();
+        defaultInstantMark.setComentary(e.getType());
+        defaultInstantMark.setColor(Color.white);
+        defaultInstantMark.setMarkTime(e.getLocation());
+        defaultInstantMark.setTitle(category);
+        return defaultInstantMark;
+
+    }
+
     private DefaultInstantAnnotation convertEvent2DefaultInstantAnnotation(Event e, String category) {
         DefaultInstantAnnotation defaultInstantAnnotation = new DefaultInstantAnnotation();
         defaultInstantAnnotation.setAnnotationTime(e.getLocation());
@@ -175,22 +227,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         defaultInstantAnnotation.setCategory(category);
         return defaultInstantAnnotation;
 
-    }
-
-    private SortedSet<Event> getEventsEventSeries(String signalName, long firstValue, long lastValue) {
-        SortedSet<Event> events = new TreeSet<Event>();
-     //   this.signalsLocks.get(signalName).writeLock().lock();
-        this.signalsLocks.get(signalName).readLock().lock();
-        try {
-            SortedSet<Event> eventsOriginal = (this.eventSeries.get(signalName).getEvents(firstValue, lastValue));
-            for(Event e:eventsOriginal){
-                events.add(e.copy());
-            }
-        } finally {
-            this.signalsLocks.get(signalName).readLock().unlock();
-       //     this.signalsLocks.get(signalName).writeLock().unlock();
-        }
-        return events;
     }
 
     public LinkedList<String> getAllTimeSeriesNames() {
@@ -250,7 +286,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         if (eventSeries.get(signalName) != null) {
             if (availableCategoriesOfAnnotations.contains(signalName)) {
                 removeEventSeriesToAnnotations(signalName);
-            } else { 
+            } else {
                 addEventSeriesToAnnotations(signalName);
             }
         }
@@ -288,23 +324,58 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         String identifierSignal = writerRunnableEventSeries.getIdentifier();
         this.signalsLocks.get(identifierSignal).writeLock().lock();
         try {
-            LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
-            for (Event eventDelete : eventsToDelete) {
-                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
-            }
-            LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
-            for (Event eventWrite : eventsToWrite) {
-                this.eventSeries.get(identifierSignal).addEvent(eventWrite);
+            if (this.eventSeries.get(identifierSignal).getAgent().equals("Simulated")) {
+                processWriterRunnableEventSeriesAnnotation(writerRunnableEventSeries);
+            } else {
+                processWriterRunnableEventSeriesMark(writerRunnableEventSeries);
             }
         } finally {
             this.signalsLocks.get(identifierSignal).writeLock().unlock();
         }
-        this.processWriterRunnableEventSeries(writerRunnableEventSeries);
+    }
+
+    private void processWriterRunnableEventSeriesMark(WriterRunnableEventSeries writerRunnableEventSeries) {
+        String identifierSignal = writerRunnableEventSeries.getIdentifier();
+        String agentAlgorithmName = this.eventSeries.get(identifierSignal).getAgent();
+        Algorithm algorithm = AlgorithmManager.getInstance().getAlgorithm(agentAlgorithmName);
+        if (algorithm != null) {
+            if (algorithm.getNotifyPolice().getTimeSeriesTheshold().keySet().size() == 1) {
+                String signalName = algorithm.getNotifyPolice().getTimeSeriesTheshold().keySet().iterator().next();
+                //@pendiente decidir que lock coger
+                this.signalsLocks.get(signalName).writeLock().lock();
+                ArrayList<JSignalMonitorMark> marks = marksOfSignals.get(signalName);
+                ArrayList<JSignalMonitorMark> marksToAdd = new ArrayList<JSignalMonitorMark>();
+                LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
+                //@pendiente borrar eventos
+/*            for (Event eventDelete : eventsToDelete) {
+                this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+                }*/
+                LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
+                for (Event eventWrite : eventsToWrite) {
+                    marksToAdd.add(this.convertEvent2DefaultInstantMark(eventWrite, signalName));
+                }
+                marks.addAll(marksToAdd);
+                this.signalsLocks.get(signalName).writeLock().unlock();
+            }
+        }
+
 
     }
 
-    private void processWriterRunnableEventSeries(WriterRunnableEventSeries writerRunnableEventSeries) {
-        //
+    private void processWriterRunnableEventSeriesAnnotation(WriterRunnableEventSeries writerRunnableEventSeries) {
+        String identifierSignal = writerRunnableEventSeries.getIdentifier();
+        ArrayList<JSignalMonitorAnnotation> annotations = annotationOfSignals.get(identifierSignal);
+        ArrayList<JSignalMonitorAnnotation> annotationsToAdd = new ArrayList<JSignalMonitorAnnotation>();
+        LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
+        //@pendiente borrar eventos
+/*            for (Event eventDelete : eventsToDelete) {
+        this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+        }*/
+        LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
+        for (Event eventWrite : eventsToWrite) {
+            annotationsToAdd.add(this.convertEvent2DefaultInstantAnnotation(eventWrite, identifierSignal));
+        }
+        annotations.addAll(annotationsToAdd);
     }
 
     private void notifyWriterRunnableTimeSeries(WriterRunnableTimeSeries writerRunnableTimeSeries) {

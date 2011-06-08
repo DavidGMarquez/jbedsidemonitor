@@ -101,9 +101,8 @@ public class FrameTestAutomatic extends JFrame {
     public void jButtonRealTime_actionPerformed(ActionEvent e) {
         if (timer == null) {
             timer = new Timer(100, new ActionListener() {
-
                 public void actionPerformed(ActionEvent e) {
-                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 100) {
+                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200*jSignalMonitor.getFrecuency()) {
                         jSignalMonitor.repaintAll();
                         jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
                     } else {
