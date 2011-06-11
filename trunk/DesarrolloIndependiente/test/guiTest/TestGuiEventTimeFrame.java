@@ -49,7 +49,9 @@ public class TestGuiEventTimeFrame {
         LinkedList<String> timeSignals1;
         timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
         eventSeries1 = new EventSeries("EventSeries1", "Simulated", 0, new ArrayList<String>(), "NaN");
-        eventSeries2 = new EventSeries("EventSeries2", "AlgorithmIN", 0, new ArrayList<String>(), "NaN");
+        ArrayList<String> entradas= new ArrayList<String>();
+        entradas.add("TimeSeries1");
+        eventSeries2 = new EventSeries("EventSeries2", "TimeSeries1", 0, entradas, "NaN");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
 
