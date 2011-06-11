@@ -25,6 +25,10 @@ public class FrameTestAutomatic extends JFrame {
     private JButton jButtonRefresh = new JButton();
     private JComboBox jComboBoxSignals = new JComboBox();
     private JComboBox jComboBoxAnnotations = new JComboBox();
+    private JMenuBar jMenuBarTop=new JMenuBar();
+    private JMenu jMenuInicial=new JMenu("Archivo");
+    private JMenu jMenuSecundario=new JMenu("Señales");
+    private JMenuItem jMenuSalir=new JMenuItem("Salir");
     private Timer timer = null;
 
     public FrameTestAutomatic(JSignalAdapter jSignalAdapter) {
