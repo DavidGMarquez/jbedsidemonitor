@@ -16,6 +16,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitorDataSourceAdapter;
@@ -35,11 +36,13 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentMap<String, EventSeries> eventSeries;
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
     private JSignalMonitor jSignalMonitor = null;
-    private ArrayList<String> availableCategoriesOfAnnotations = new ArrayList<String>();
+    private List<String> availableCategoriesOfAnnotations;
     private ConcurrentHashMap<String, ArrayList<JSignalMonitorMark>> marksOfSignals;
     private ConcurrentHashMap<String, ArrayList<JSignalMonitorAnnotation>> annotationOfSignals;
     private ConcurrentHashMap<String, ArrayList<String>> channelsToMarks;
+    private ConcurrentHashMap<String, ArrayList<String>> channelsToMarksNotShow;
     private ConcurrentHashMap<String, ReentrantReadWriteLock> lockChannelsToMarks;
+    
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
@@ -48,7 +51,9 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         marksOfSignals = new ConcurrentHashMap<String, ArrayList<JSignalMonitorMark>>();
         annotationOfSignals = new ConcurrentHashMap<String, ArrayList<JSignalMonitorAnnotation>>();
         channelsToMarks = new ConcurrentHashMap<String, ArrayList<String>>();
+        channelsToMarksNotShow = new ConcurrentHashMap<String, ArrayList<String>>();
         lockChannelsToMarks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
+        availableCategoriesOfAnnotations = Collections.synchronizedList(new ArrayList<String>());
     }
 
     public JSignalMonitor getjSignalMonitor() {
@@ -75,7 +80,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public ArrayList<String> getAvailableCategoriesOfAnnotations() {
-        return availableCategoriesOfAnnotations;
+        return new ArrayList<String>(availableCategoriesOfAnnotations);
     }
 
     public float[] getChannelData(String signalName, long firstValueInMiliseconds,
@@ -151,22 +156,32 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public List<JSignalMonitorMark> getChannelMark(String signalName, long firstValue, long lastValue) {
         ArrayList<JSignalMonitorMark> marksToReturn = new ArrayList<JSignalMonitorMark>();
         lockChannelsToMarks.get(signalName).readLock().lock();
-        ArrayList<String> signalsWithMarks = null;
-        if (channelsToMarks.get(signalName) != null) {
-        try {
-            signalsWithMarks = new ArrayList<String>(channelsToMarks.get(signalName));
-        } finally {
-            lockChannelsToMarks.get(signalName).readLock().unlock();
-        }
-        
+        ArrayList<String> signalsWithMarks = channelsToMarks.get(signalName);
+        if (signalsWithMarks != null) {
+            try {
+                signalsWithMarks = new ArrayList<String>(channelsToMarks.get(signalName));
+            } finally {
+                lockChannelsToMarks.get(signalName).readLock().unlock();
+            }
             for (String signalWithMarks : signalsWithMarks) {
-                this.signalsLocks.get(signalWithMarks).readLock().lock();
-                try {
-                    marksToReturn.addAll(this.getIntervalMarksForSignal(signalWithMarks, firstValue, lastValue));
-                } finally {
-                    this.signalsLocks.get(signalWithMarks).readLock().unlock();
+                if (channelsToMarksNotShow.get(signalName) == null) {
+                    try {
+                        this.signalsLocks.get(signalWithMarks).readLock().lock();
+                        marksToReturn.addAll(this.getIntervalMarksForSignal(signalWithMarks, firstValue, lastValue));
+                    } finally {
+                        this.signalsLocks.get(signalWithMarks).readLock().unlock();
+                    }
+                } else if (!channelsToMarksNotShow.get(signalName).contains(signalWithMarks)) {
+                    try {
+                        this.signalsLocks.get(signalWithMarks).readLock().lock();
+                        marksToReturn.addAll(this.getIntervalMarksForSignal(signalWithMarks, firstValue, lastValue));
+                    } finally {
+                        this.signalsLocks.get(signalWithMarks).readLock().unlock();
+                    }
                 }
             }
+        } else {
+            lockChannelsToMarks.get(signalName).readLock().unlock();
         }
         return marksToReturn;
     }
@@ -217,7 +232,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         ConsecutiveSamplesAvailableInfo consecutiveSamplesAvailableInfo = null;
         try {
             consecutiveSamplesAvailableInfo = this.timeSeries.get(identifierSignal).getConsecutiveSamplesAvailableInfo();
-
         } finally {
             this.signalsLocks.get(identifierSignal).readLock().unlock();
         }
@@ -247,9 +261,15 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());
     }
+    public TimeSeries getTimeSeries(String signalName){
+        return this.timeSeries.get(signalName);
+    }
 
     public LinkedList<String> getAllEventSeriesNames() {
         return new LinkedList<String>(this.eventSeries.keySet());
+    }
+        public EventSeries getEventSeries(String signalName){
+        return this.eventSeries.get(signalName);
     }
 
     public float getFrecuencySignalTimeSeries(String signalName) {
@@ -300,8 +320,10 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public void switchEventSeriesToAnnotations(String signalName) {
         if (eventSeries.get(signalName) != null) {
             if (availableCategoriesOfAnnotations.contains(signalName)) {
+                System.out.println("Quitar"+signalName);
                 removeEventSeriesToAnnotations(signalName);
             } else {
+                System.out.println("Popner"+signalName);
                 addEventSeriesToAnnotations(signalName);
             }
         }
@@ -349,15 +371,21 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         }
     }
 
-    private boolean isEventSeriesLikeMarks(String signalName) {
-        EventSeries eventSerieName = this.eventSeries.get(signalName);
+    public boolean isEventSeriesLikeMarks(String signalName) {
+        boolean response=false;
+        this.signalsLocks.get(signalName).readLock().lock();
+        try{EventSeries eventSerieName = this.eventSeries.get(signalName);
         if (eventSerieName.getSeriesIsGeneratedFrom().size() == 1) {
-            String signalImputName = eventSerieName.getSeriesIsGeneratedFrom().get(0);          
+            String signalImputName = eventSerieName.getSeriesIsGeneratedFrom().get(0);
             if (timeSeries.get(signalImputName) != null) {
-                return true;
+                response= true;
             }
+        }}
+        finally{
+            this.signalsLocks.get(signalName).readLock().unlock();
         }
-        return false;
+
+        return response;
     }
 
     private void processWriterRunnableEventSeriesMark(WriterRunnableEventSeries writerRunnableEventSeries) {
@@ -428,6 +456,60 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
             lockChannelsToMarks.get(channelName).writeLock().unlock();
         }
     }
+
+    public String getInfoTimeSeries(String signalName) {
+        String infoSignal = "";
+        signalsLocks.get(signalName).readLock().lock();
+        try {
+            infoSignal = timeSeries.get(signalName).toString();
+        } finally {
+            signalsLocks.get(signalName).readLock().unlock();
+        }
+        return infoSignal;
+    }
+
+    public ArrayList<String> getSignalMarksForSignal(String signalName) {
+        ArrayList<String> signalsMark = new ArrayList<String>();
+        lockChannelsToMarks.get(signalName).readLock().lock();
+        try {
+            if (channelsToMarks.get(signalName) != null) {
+                signalsMark = channelsToMarks.get(signalName);
+            }
+        } finally {
+            lockChannelsToMarks.get(signalName).readLock().unlock();
+        }
+        return signalsMark;
+    }
+
+    public void switchMarkSignalShow(String signalName, String markSignal) {
+        lockChannelsToMarks.get(signalName).writeLock().lock();
+        try {
+            ArrayList<String> marksSignalsNotShow = channelsToMarksNotShow.get(signalName);
+            if (marksSignalsNotShow != null) {
+                if (marksSignalsNotShow.contains(markSignal)) {
+                    marksSignalsNotShow.remove(markSignal);
+                } else {
+                    marksSignalsNotShow.add(markSignal);
+                }
+            } else {
+                marksSignalsNotShow = new ArrayList<String>();
+                marksSignalsNotShow.add(markSignal);
+            }
+            channelsToMarksNotShow.put(signalName, marksSignalsNotShow);
+
+        } finally {
+            lockChannelsToMarks.get(signalName).writeLock().unlock();
+        }
+    }
+
+    public void switchStateSignalManager() {
+        if (SignalManager.getInstance().isRunning()) {
+            SignalManager.getInstance().pause();
+        } else {
+            SignalManager.getInstance().start();
+        }
+    }
+
 
     private void processWriterRunnableEventSeriesAnnotation(WriterRunnableEventSeries writerRunnableEventSeries) {
         String identifierSignal = writerRunnableEventSeries.getIdentifier();

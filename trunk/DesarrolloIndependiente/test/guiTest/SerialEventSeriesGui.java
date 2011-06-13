@@ -50,6 +50,15 @@ public class SerialEventSeriesGui {
                     writerRunnableEventSeries.addEventToWrite(new Event(10000*((currentIteration * 10) + (i)), "Originated bySerialEventSeriesGenerator", new HashMap<String, String>()));
                     //         System.out.println((i+currentIteration*10)+"Value Serial +"+dataToWrite[i]);
                 }
+                            while (!SignalManager.getInstance().isRunning()) {
+                synchronized (SignalManager.getInstance().getLockWaitRunning()) {
+                    try {
+                        SignalManager.getInstance().getLockWaitRunning().wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(SinTimeSeriesGeneratorGui.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
                 SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
                 currentIteration++;
             }

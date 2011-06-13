@@ -51,17 +51,26 @@ public class SerialEventSeriesMark {
                 timer.cancel(); //Terminate the timer thread
             } else {
                 for (int i = 0; i < sizeOfIteration; i++) {
-                    double muestraActual =  Math.sin(((float)currentIteration/10)+((float)i/100));
+                    double muestraActual = Math.sin(((float) currentIteration / 10) + ((float) i / 100));
                     if (muestraActual > muestraAnterior && muestraAnterior < muestraAnteriorAnterior) {
                         //Minimo
-                        writerRunnableEventSeries.addEventToWrite(new Event(1000*(int)((currentIteration/10)+((float)i/100)), "Minimo", new HashMap<String, String>()));
+                        writerRunnableEventSeries.addEventToWrite(new Event(1000 * (int) ((currentIteration / 10) + ((float) i / 100)), "Minimo", new HashMap<String, String>()));
                     }
                     if (muestraActual < muestraAnterior && muestraAnterior > muestraAnteriorAnterior) {
                         //Maximo
-                        writerRunnableEventSeries.addEventToWrite(new Event(1000*(int)((currentIteration/10)+((float)i/100)), "Maximo", new HashMap<String, String>()));
+                        writerRunnableEventSeries.addEventToWrite(new Event(1000 * (int) ((currentIteration / 10) + ((float) i / 100)), "Maximo", new HashMap<String, String>()));
                     }
-                    muestraAnteriorAnterior=muestraAnterior;
-                    muestraAnterior=muestraActual;
+                    muestraAnteriorAnterior = muestraAnterior;
+                    muestraAnterior = muestraActual;
+                }
+                while (!SignalManager.getInstance().isRunning()) {
+                    synchronized (SignalManager.getInstance().getLockWaitRunning()) {
+                        try {
+                            SignalManager.getInstance().getLockWaitRunning().wait();
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(SinTimeSeriesGeneratorGui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
                 SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
                 currentIteration++;

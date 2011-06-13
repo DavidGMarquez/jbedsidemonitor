@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
 
 /** Singleton Facade
@@ -19,6 +21,9 @@ public class SignalManager {
     private CompletionExecutorServiceReader completionExecutorServiceReader;
     private static final SignalManager INSTANCE = new SignalManager();
     private JSignalAdapter jSignalAdapter;
+    private boolean isRunning = true;
+    private ReentrantReadWriteLock lockRunning = new ReentrantReadWriteLock();
+    private ReentrantLock lockWaitRunning = new ReentrantLock();
 
     private SignalManager() {
         lockManager = LockManager.getInstance();
@@ -66,7 +71,9 @@ public class SignalManager {
     }
 
     public void encueWriteOperation(WriterRunnable writerRunnable) {
-        this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+        if (isRunning) {
+            this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+        }
     }
 
     public void encueReadOperation(ReaderCallable readerCallable) {
@@ -106,7 +113,7 @@ public class SignalManager {
     }
 
     public SortedSet<Event> getEventsUnmodifiableCopy(String identifier) {
-        while(!this.lockManager.tryReadLock(identifier)){
+        while (!this.lockManager.tryReadLock(identifier)) {
         }
         SortedSet<Event> eventsUnmodifiableCopy = this.eventSeries.get(identifier).getEventsUnmodifiableCopy();
         this.lockManager.releaseReadLock(identifier);
@@ -116,7 +123,7 @@ public class SignalManager {
     //@metodo debug no USAR segun api
 
     public SortedSet<Event> getEventsCopy(String identifier) {
-                while(!this.lockManager.tryReadLock(identifier)){
+        while (!this.lockManager.tryReadLock(identifier)) {
         }
         SortedSet<Event> eventsCopy = this.eventSeries.get(identifier).getEventsCopy();
         this.lockManager.releaseReadLock(identifier);
@@ -149,6 +156,45 @@ public class SignalManager {
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
         this.initiateThread();
 
+    }
+
+    public void start() {
+        this.lockRunning.writeLock().lock();
+        try {
+            this.isRunning = true;
+        } finally {
+            this.lockRunning.writeLock().unlock();
+        }
+       synchronized(lockWaitRunning){
+            this.lockWaitRunning.notifyAll();
+        } 
+    }
+
+    public void pause() {
+        this.lockRunning.writeLock().lock();
+        try {
+            this.isRunning = false;
+        } finally {
+            this.lockRunning.writeLock().unlock();
+        }
+       synchronized(lockWaitRunning){     
+            this.lockWaitRunning.notifyAll();
+        } 
+    }
+
+    public boolean isRunning() {
+        boolean response = false;
+        this.lockRunning.readLock().lock();
+        try {
+            response =this.isRunning;
+        } finally {
+            this.lockRunning.readLock().unlock();
+        }
+        return response;
+    }
+
+    public ReentrantLock getLockWaitRunning() {
+        return lockWaitRunning;
     }
 
 /////////A partir de aqui los métodos son discutibles
