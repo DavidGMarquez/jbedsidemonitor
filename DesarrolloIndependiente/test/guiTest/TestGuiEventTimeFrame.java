@@ -4,9 +4,9 @@
  */
 package guiTest;
 
+import completeTestsTimeSeries.SinTimeSeriesGeneratorOrder;
 import java.util.ArrayList;
 import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
-import completeTestsTimeSeries.SinTimeSeriesGeneratorOrder;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -28,6 +28,7 @@ import org.junit.Test;
 import signals.EventSeries;
 import signals.SignalManager;
 import signals.WriterRunnableTimeSeries;
+import userInterface.JBedSideMonitorMainWindow;
 import static org.junit.Assert.*;
 
 /**
@@ -63,11 +64,11 @@ public class TestGuiEventTimeFrame {
         SignalManager.getInstance().addEventSeries(eventSeries2);
         AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
         int iterations = 10000;
-        SinTimeSeriesGeneratorOrder sinTimeSeriesGenerator = new SinTimeSeriesGeneratorOrder(10, 10, iterations, "TimeSeries1");
+        SinTimeSeriesGeneratorGui sinTimeSeriesGeneratorGui = new SinTimeSeriesGeneratorGui(10, 100, iterations, "TimeSeries1",10,0.01);
         SerialEventSeriesGui serialEventSeriesGui=new SerialEventSeriesGui(10, 10, 1000, "EventSeries1", 10);
         SerialEventSeriesMark serialEventSeriesMark=new SerialEventSeriesMark(10, 10, 10000, "EventSeries2", 10);
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException ex) {
             System.out.println("No sleep");
         }
@@ -100,7 +101,11 @@ public class TestGuiEventTimeFrame {
         /*  FrameTestAutomatic frame1 = new FrameTestAutomatic();
         frame1.setSize(800, 500);
         frame1.setVisible(true);*/
-        FrameTestAutomatic frame1 = new FrameTestAutomatic(SignalManager.getInstance().getJSignalAdapter());
+/*        FrameTestAutomatic frame1 = new FrameTestAutomatic(SignalManager.getInstance().getJSignalAdapter());
+
+        frame1.setSize(800, 500);
+        frame1.setVisible(true);*/
+        JBedSideMonitorMainWindow frame1 =new JBedSideMonitorMainWindow(SignalManager.getInstance().getJSignalAdapter());
         frame1.setSize(800, 500);
         frame1.setVisible(true);
     }

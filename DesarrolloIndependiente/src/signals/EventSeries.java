@@ -38,7 +38,7 @@ public class EventSeries extends Series {
     public SortedSet<Event> getEvents(long firstInstantToInclude, long lastInstantToInclude) {
         Event eventFrom = new Event(firstInstantToInclude, "", null);
         Event eventTo = new Event(lastInstantToInclude + 1, "", null);
-        return (events.subSet(eventFrom, eventTo));
+        return new TreeSet<Event>(events.subSet(eventFrom, eventTo));
     }
 
     public int getNumberOfEvents() {

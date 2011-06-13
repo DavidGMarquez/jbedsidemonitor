@@ -1,5 +1,6 @@
 package signals;
 
+import java.util.ArrayList;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
 
 /**
@@ -61,14 +62,13 @@ public class TimeSeries extends Series {
         try {
             return this.buffer.read(posSrc, sizetoread);
         } catch (IllegalReadException e) {
-     //@debug       System.out.println("Excepcion capacity" + e.getBufferCapacity() + "lastSample" + e.getLastSampleWrite() + "dataToRead" + e.getNumDataToRead() + "pos StartReading" + e.getPosStartReading());
+            //@debug       System.out.println("Excepcion capacity" + e.getBufferCapacity() + "lastSample" + e.getLastSampleWrite() + "dataToRead" + e.getNumDataToRead() + "pos StartReading" + e.getPosStartReading());
             throw new IllegalReadException(e, this.getIdentifier());
         }
     }
 
-
     public ConsecutiveSamplesAvailableInfo write(float[] datatowrite, int indexInitToWrite) {
-    //@debug  System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);               
+        //@debug  System.out.println("<<-->>" + this.getIdentifier() + "Escribiendo en" + indexInitToWrite + "Cantidad " + datatowrite.length);
         try {
             return this.buffer.write(datatowrite, indexInitToWrite);
         } catch (TooMuchDataToWriteException e) {
@@ -77,11 +77,28 @@ public class TimeSeries extends Series {
             throw new IllegalWriteException(e, this.getIdentifier());
         }
     }
-    public int getLastSampleWrite()
-    {
+
+    public int getLastSampleWrite() {
         return buffer.getLastSampleWrite();
     }
-    public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesAvailableInfo(){
+
+    public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesAvailableInfo() {
         return this.buffer.getConsecutiveSamplesAvailableInfo();
+    }
+    @Override
+    public String toString(){
+        String stringToReturn="Identifier:"+this.getIdentifier()+"\n";
+        stringToReturn=stringToReturn.concat("Agent:"+this.getAgent()+"\n");
+        stringToReturn=stringToReturn.concat("Frequency:"+this.getFrequency()+"\n");
+        stringToReturn=stringToReturn.concat("Capacity:"+this.getCapacity()+"\n");
+        stringToReturn=stringToReturn.concat("Units:"+this.getUnits()+"\n");
+        stringToReturn=stringToReturn.concat("Origin:"+this.getOrigin()+"\n");
+        stringToReturn=stringToReturn.concat("SeriesIsGeneratedFrom:");
+        ArrayList<String> seriesIsGeneratedFrom = this.getSeriesIsGeneratedFrom();
+        for(String serie:seriesIsGeneratedFrom){
+            stringToReturn.concat(" "+serie);
+        }
+        stringToReturn.concat("\n");
+        return stringToReturn;
     }
 }
