@@ -2,4 +2,4 @@
 
 package algorithms;
 
-enum AlgorithmNotifyPoliceEnum{ALL,ONE};
+public enum AlgorithmNotifyPoliceEnum{ALL,ONE};

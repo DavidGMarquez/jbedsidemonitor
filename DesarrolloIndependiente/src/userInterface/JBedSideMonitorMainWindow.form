@@ -35,6 +35,14 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="{&#xa; LinkedList&lt;String&gt; signals=this.jSignalAdapter.getAllEventSeriesNames();&#xa; javax.swing.JMenu signalMenu;&#xa; javax.swing.JMenuItem signalShow;&#xa; javax.swing.JMenuItem signalInfo;&#xa; for(final String signal:signals)&#xa; {&#xa;  signalMenu=new javax.swing.JMenu();&#xa;  signalMenu.setText(signal);&#xa;  if(jSignalAdapter.isEventSeriesLikeMarks(signal)){&#xa;  }&#xa;  else{&#xa;  signalShow=new javax.swing.JMenuItem();&#xa;  signalShow.setText(&quot;Mostrar/Ocultar&quot;);&#xa;  signalShow.addActionListener(new java.awt.event.ActionListener() {&#xa;             public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                 jMenuItemActionAnnotationShowSignal(evt,signal);&#xa;             }&#xa;         });&#xa;  signalMenu.add(signalShow);&#xa;  }&#xa;  signalInfo=new javax.swing.JMenuItem();&#xa;  signalInfo.setText(&quot;Info&quot;);&#xa;  signalInfo.addActionListener(new java.awt.event.ActionListener() {&#xa;             public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                 jMenuItemActionInfoEventSeries(evt,signal);&#xa;             }&#xa;         });&#xa;  signalMenu.add(signalInfo);&#xa;  jMenu3.add(signalMenu);&#xa; }&#xa;}"/>
           </AuxValues>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu5">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Algorithm"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="{&#xa; LinkedList&lt;String&gt; algorithms=this.jSignalAdapter.getAllAlgorithmNames();&#xa; javax.swing.JMenu algorithmMenu;&#xa; javax.swing.JMenuItem algorithmInfo;&#xa; for(final String algorithm:algorithms)&#xa; {&#xa;  algorithmMenu=new javax.swing.JMenu();&#xa;  algorithmMenu.setText(algorithm);&#xa; &#xa;  algorithmInfo=new javax.swing.JMenuItem();&#xa;  algorithmInfo.setText(&quot;Info&quot;);&#xa;  algorithmInfo.addActionListener(new java.awt.event.ActionListener() {&#xa;             public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                 jMenuItemActionInfoAlgorithm(evt,algorithm);&#xa;             }&#xa;         });&#xa;  algorithmMenu.add(algorithmInfo);&#xa;  jMenu5.add(algorithmMenu);&#xa; }&#xa;}"/>
+          </AuxValues>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu4">
           <Properties>
             <Property name="text" type="java.lang.String" value="System"/>
@@ -137,10 +145,10 @@
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[44, 18]"/>
+          <Dimension value="[44, 20]"/>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[20, 18]"/>
+          <Dimension value="[20, 20]"/>
         </Property>
       </Properties>
       <Constraints>
@@ -149,13 +157,11 @@
         </Constraint>
       </Constraints>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-        <Property name="alignment" type="int" value="0"/>
-      </Layout>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jLabel1"/>
+            <Property name="text" type="java.lang.String" value="JBedSideMonitor"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
                 <BevelBorder bevelType="1"/>
@@ -168,6 +174,11 @@
               <Dimension value="[200, 16]"/>
             </Property>
           </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+              <BorderConstraints direction="Center"/>
+            </Constraint>
+          </Constraints>
         </Component>
       </SubComponents>
     </Container>
