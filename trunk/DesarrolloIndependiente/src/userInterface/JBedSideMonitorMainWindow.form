@@ -24,7 +24,7 @@
             <Property name="text" type="java.lang.String" value="TimeSeries"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="{&#xa;LinkedList&lt;String&gt; signals=this.jSignalAdapter.getAllTimeSeriesNames();&#xa;javax.swing.JMenu signalMenu;&#xa;javax.swing.JMenu signalsMarksMenu;&#xa;javax.swing.JMenuItem signalShow;&#xa;javax.swing.JMenuItem signalInfo;&#xa;javax.swing.JMenuItem signalMark;&#xa;for(final String signal:signals)&#xa;{&#xa; signalMenu=new javax.swing.JMenu();&#xa; signalMenu.setText(signal);&#xa; signalShow=new javax.swing.JMenuItem();&#xa; signalShow.setText(&quot;Mostrar/Ocultar&quot;);&#xa; signalShow.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                jMenuItemActionShowSignal(evt,signal);&#xa;            }&#xa;        });&#xa; signalInfo=new javax.swing.JMenuItem();&#xa; signalInfo.setText(&quot;Info&quot;);&#xa; signalInfo.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                jMenuItemActionInfoSignal(evt,signal);&#xa;            }&#xa;        });&#xa; &#xa; ArrayList&lt;String&gt; marksSignals=getSignalMarksForSignal(signal);&#xa;&#xa; if(!marksSignals.isEmpty()){&#xa;  signalsMarksMenu=new javax.swing.JMenu();&#xa;  signalsMarksMenu.setText(&quot;Marks&quot;);&#xa;   for(final String serieMark:marksSignals){&#xa;    signalMark=new javax.swing.JMenuItem();&#xa;    signalMark.setText(serieMark);&#xa;    signalMark.addActionListener(new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                jMenuItemActionMarksShowSignal(evt,signal,serieMark);&#xa;            }&#xa;        });&#xa;    signalsMarksMenu.add(signalMark);&#xa;   }&#xa;  signalMenu.add(signalsMarksMenu);&#xa; }&#xa; signalMenu.add(signalShow);&#xa; signalMenu.add(signalInfo);&#xa; jMenuTimeSeries.add(signalMenu);&#xa;}&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="this.jMenuTimeSeriesRefresh();"/>
           </AuxValues>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuEventSeries">
@@ -96,48 +96,59 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="jButtonRefresh">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Actualizar"/>
+            <Property name="text" type="java.lang.String" value="Refresh"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRefreshActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="jButtonFitRanges">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ajustar Rango"/>
+            <Property name="text" type="java.lang.String" value="Fit Ranges"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonFitRangesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="jButtonShowrXY">
           <Properties>
-            <Property name="text" type="java.lang.String" value="MostrarXY"/>
+            <Property name="text" type="java.lang.String" value="ShowXY"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonShowrXYActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton1">
+        <Component class="javax.swing.JToggleButton" name="jToggleButtonRealTime">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Tiempo Real"/>
+            <Property name="text" type="java.lang.String" value="Real Time"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonRealTimeActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonStart">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="START"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalTextPosition" type="int" value="0"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStartActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

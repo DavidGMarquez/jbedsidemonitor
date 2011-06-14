@@ -156,5 +156,6 @@ public class AuxTestUtilities {
         LockManager.getInstance().reset();
         SignalManager.getInstance().reset();
         AlgorithmManager.getInstance().reset();
+        SignalManager.getInstance().start();
     }
 }

@@ -514,8 +514,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         if (SignalManager.getInstance().isRunning()) {
             SignalManager.getInstance().pause();
         } else {
-            SignalManager.getInstance().start();
+            SignalManager.getInstance().resume();
         }
+    }
+    public boolean startSignalManager(){
+        return SignalManager.getInstance().start();
     }
 
 
