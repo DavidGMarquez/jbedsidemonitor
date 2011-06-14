@@ -23,7 +23,7 @@ public final class Event implements Comparable<Event> {
         if (attributes != null) {
             this.attributes = new HashMap<String, String>(attributes);
         } else {
-            this.attributes = null;
+            this.attributes = new HashMap<String, String>();
         }
     }
 
