@@ -272,6 +272,14 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return this.eventSeries.get(signalName);
     }
 
+        public LinkedList<String> getAllAlgorithmNames() {
+        return new LinkedList<String>(AlgorithmManager.getInstance().getAllAlgorithmNames());
+    }
+        public Algorithm getAlgorithm(String signalName){
+        return AlgorithmManager.getInstance().getAlgorithm(signalName);
+    }
+
+
     public float getFrecuencySignalTimeSeries(String signalName) {
         return this.timeSeries.get(signalName).getFrequency();
     }

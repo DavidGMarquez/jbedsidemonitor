@@ -58,6 +58,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
@@ -112,15 +113,15 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(44, 18));
-        jPanel1.setPreferredSize(new java.awt.Dimension(20, 18));
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jPanel1.setMinimumSize(new java.awt.Dimension(44, 20));
+        jPanel1.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("JBedSideMonitor");
         jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jLabel1.setMinimumSize(new java.awt.Dimension(34, 18));
         jLabel1.setPreferredSize(new java.awt.Dimension(200, 16));
-        jPanel1.add(jLabel1);
+        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
@@ -222,6 +223,29 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         }
         jMenuBar1.add(jMenu3);
 
+        jMenu5.setText("Algorithm");
+        {
+            LinkedList<String> algorithms=this.jSignalAdapter.getAllAlgorithmNames();
+            javax.swing.JMenu algorithmMenu;
+            javax.swing.JMenuItem algorithmInfo;
+            for(final String algorithm:algorithms)
+            {
+                algorithmMenu=new javax.swing.JMenu();
+                algorithmMenu.setText(algorithm);
+
+                algorithmInfo=new javax.swing.JMenuItem();
+                algorithmInfo.setText("Info");
+                algorithmInfo.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionInfoAlgorithm(evt,algorithm);
+                    }
+                });
+                algorithmMenu.add(algorithmInfo);
+                jMenu5.add(algorithmMenu);
+            }
+        }
+        jMenuBar1.add(jMenu5);
+
         jMenu4.setText("System");
 
         jMenuItem2.setText("Play/Pause");
@@ -311,6 +335,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -376,6 +401,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
     private void jMenuItemActionInfoEventSeries(java.awt.event.ActionEvent evt, String signalName) {
         ShowInfoEventSeries showInfoSignal = new ShowInfoEventSeries(this, true, jSignalAdapter.getEventSeries(signalName));
+        showInfoSignal.setLocationRelativeTo(this);
+        showInfoSignal.setVisible(true);
+    }
+        private void jMenuItemActionInfoAlgorithm(java.awt.event.ActionEvent evt, String signalName) {
+        ShowInfoAlgorithm showInfoSignal = new ShowInfoAlgorithm(this, true, jSignalAdapter.getAlgorithm(signalName));
         showInfoSignal.setLocationRelativeTo(this);
         showInfoSignal.setVisible(true);
     }
