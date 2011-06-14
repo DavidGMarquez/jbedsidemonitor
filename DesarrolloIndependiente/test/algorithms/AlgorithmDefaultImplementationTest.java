@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import signals.ReadResult;
+import signals.SignalManager;
 import signals.TimeSeries;
 
 public class AlgorithmDefaultImplementationTest {
@@ -25,6 +26,7 @@ public class AlgorithmDefaultImplementationTest {
         timeSignals.add("TimeSeries1");
         timeSignals.add("TimeSeries2");
         timeSignals.add("TimeSeries3");
+        
 
     }
 

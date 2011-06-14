@@ -14,6 +14,7 @@ public class TesterWriterService {
 
     @Test
     public void TestWriterTimeSeries() {
+        SignalManager.getInstance().start();
         SignalManager signalManager = SignalManager.getInstance();
         assertFalse(signalManager == null);
         signalManager.addTimeSeries(new TimeSeries("Signal 1", "Simulated", 1, 100, "mv"));

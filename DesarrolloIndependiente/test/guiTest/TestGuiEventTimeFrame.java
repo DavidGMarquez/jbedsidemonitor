@@ -4,9 +4,9 @@
  */
 package guiTest;
 
+import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
 import completeTestsTimeSeries.SinTimeSeriesGeneratorOrder;
 import java.util.ArrayList;
-import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -41,7 +41,6 @@ public class TestGuiEventTimeFrame {
     }
 
     public static void main(String[] args) {
-        AuxTestUtilities.reset();
         TimeSeries timeSeries1;
         EventSeries eventSeries1;
         EventSeries eventSeries2;
@@ -55,10 +54,9 @@ public class TestGuiEventTimeFrame {
         eventSeries2 = new EventSeries("EventSeries2", "TimeSeries1", 0, entradas, "NaN");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
-
         timeSignals1.add("TimeSeries1");
         TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_AlgorithmIN", "Algorithm1", 0, 100, "NaN");
-        algorithmIN = new AlgorithmStupid2XMultiSignalsImplementationOrder("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
+        algorithmIN = new Algorithm2XMultiSignalsImplementationGui("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         SignalManager.getInstance().addEventSeries(eventSeries1);
         SignalManager.getInstance().addEventSeries(eventSeries2);

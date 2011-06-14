@@ -1,5 +1,6 @@
 package signals;
 
+import algorithms.Algorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.SortedSet;
@@ -21,9 +22,11 @@ public class SignalManager {
     private CompletionExecutorServiceReader completionExecutorServiceReader;
     private static final SignalManager INSTANCE = new SignalManager();
     private JSignalAdapter jSignalAdapter;
-    private boolean isRunning = true;
-    private ReentrantReadWriteLock lockRunning = new ReentrantReadWriteLock();
-    private ReentrantLock lockWaitRunning = new ReentrantLock();
+    private boolean isRunning;
+    private boolean isStart;
+    private ReentrantReadWriteLock lockRunning;
+    private ReentrantReadWriteLock lockStart;
+    private ReentrantLock lockWaitRunning;
 
     private SignalManager() {
         lockManager = LockManager.getInstance();
@@ -32,6 +35,11 @@ public class SignalManager {
         executorServiceWriter = new ExecutorServiceWriter();
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
         jSignalAdapter = new JSignalAdapter();
+        isRunning = false;
+        isStart = false;
+        lockRunning = new ReentrantReadWriteLock();
+        lockStart = new ReentrantReadWriteLock();
+        lockWaitRunning = new ReentrantLock();
     }
 
     public static SignalManager getInstance() {
@@ -70,15 +78,21 @@ public class SignalManager {
         throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager", eventSeries);
     }
 
-    public void encueWriteOperation(WriterRunnable writerRunnable) {
-        if (isRunning) {
+    public boolean encueWriteOperation(WriterRunnable writerRunnable) {
+        if (isRunning & isStart) {
             this.executorServiceWriter.executeWriterRunnable(writerRunnable);
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public void encueReadOperation(ReaderCallable readerCallable) {
-        this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
-
+    public boolean encueReadOperation(ReaderCallable readerCallable) {
+        if (isStart) {
+            this.completionExecutorServiceReader.executeReaderCallable(readerCallable);
+            return true;
+        }
+        return false;
     }
 
     public float[] readSecureFromTimeSeries(String identifier, int posSrc, int sizeToRead) {
@@ -154,39 +168,77 @@ public class SignalManager {
         eventSeries = new ConcurrentHashMap<String, EventSeries>();
         executorServiceWriter = new ExecutorServiceWriter();
         completionExecutorServiceReader = new CompletionExecutorServiceReader();
+        jSignalAdapter = new JSignalAdapter();
+        isRunning = false;
+        isStart = false;
+        lockRunning = new ReentrantReadWriteLock();
+        lockStart = new ReentrantReadWriteLock();
+        lockWaitRunning = new ReentrantLock();
         this.initiateThread();
 
     }
 
-    public void start() {
+    public boolean resume() {
+        if (!isStart()) {
+            return false;
+        }
         this.lockRunning.writeLock().lock();
         try {
             this.isRunning = true;
         } finally {
             this.lockRunning.writeLock().unlock();
         }
-       synchronized(lockWaitRunning){
+        synchronized (lockWaitRunning) {
             this.lockWaitRunning.notifyAll();
-        } 
+        }
+        return true;
     }
 
-    public void pause() {
+    public boolean pause() {
+        if (!isStart()) {
+            return false;
+        }
         this.lockRunning.writeLock().lock();
         try {
             this.isRunning = false;
         } finally {
             this.lockRunning.writeLock().unlock();
         }
-       synchronized(lockWaitRunning){     
+        synchronized (lockWaitRunning) {
             this.lockWaitRunning.notifyAll();
-        } 
+        }
+        return true;
+    }
+
+    public boolean start() {
+        this.initiateThread();
+        this.lockStart.writeLock().lock();
+        try {
+            this.isStart = true;
+        } finally {
+            this.lockStart.writeLock().unlock();
+        }
+        this.resume();
+
+        return true;
+    }
+
+    public boolean isStart() {
+        boolean response = false;
+        this.lockStart.readLock().lock();
+        try {
+            response = this.isStart;
+        } finally {
+            this.lockStart.readLock().unlock();
+        }
+        return response;
     }
 
     public boolean isRunning() {
         boolean response = false;
         this.lockRunning.readLock().lock();
         try {
-            response =this.isRunning;
+            response = this.isRunning;
         } finally {
             this.lockRunning.readLock().unlock();
         }
@@ -197,12 +249,12 @@ public class SignalManager {
         return lockWaitRunning;
     }
 
-/////////A partir de aqui los métodos son discutibles
-    // Estan puesto public para los test
     void initiateThread() {
-        Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadComletion");
+        Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadCompletion");
         threadCompletionService.start();
     }
+/////////A partir de aqui los métodos son discutibles
+    // Estan puesto public para los test
 
     public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());

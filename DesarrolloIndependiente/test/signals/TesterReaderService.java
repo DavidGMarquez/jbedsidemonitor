@@ -18,6 +18,7 @@ public class TesterReaderService {
 
     @Test
     public void testReaderTimeSeries() {
+        SignalManager.getInstance().start();
         AuxTestUtilities.reset();
         SignalManager signalManager = SignalManager.getInstance();
         signalManager.initiateThread();

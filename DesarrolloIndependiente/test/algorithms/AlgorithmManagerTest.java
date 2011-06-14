@@ -1,5 +1,6 @@
 package algorithms;
 
+import signals.SignalManager;
 import signals.ReadResult;
 import auxiliarTools.AuxTestUtilities;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public class AlgorithmManagerTest {
 
     @Before
     public void setUp() {
+        SignalManager.getInstance().start();
         //@pendiente quizas algun método para reiniciar los Singlenton?
         eventSignalsA = new LinkedList<String>();
         timeSignalsA = new LinkedList<String>();

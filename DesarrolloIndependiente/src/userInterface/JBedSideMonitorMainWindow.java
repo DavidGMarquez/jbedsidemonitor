@@ -47,10 +47,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jButtonRefresh = new javax.swing.JButton();
+        jButtonFitRanges = new javax.swing.JButton();
+        jButtonShowrXY = new javax.swing.JButton();
+        jToggleButtonRealTime = new javax.swing.JToggleButton();
+        jButtonStart = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -67,49 +68,60 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
 
-        jButton1.setText("Actualizar");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefresh.setText("Refresh");
+        jButtonRefresh.setFocusable(false);
+        jButtonRefresh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonRefresh.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonRefreshActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(jButtonRefresh);
 
-        jButton2.setText("Ajustar Rango");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonFitRanges.setText("Fit Ranges");
+        jButtonFitRanges.setFocusable(false);
+        jButtonFitRanges.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonFitRanges.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonFitRanges.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonFitRangesActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton2);
+        jToolBar1.add(jButtonFitRanges);
 
-        jButton3.setText("MostrarXY");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButtonShowrXY.setText("ShowXY");
+        jButtonShowrXY.setFocusable(false);
+        jButtonShowrXY.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonShowrXY.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonShowrXY.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonShowrXYActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton3);
+        jToolBar1.add(jButtonShowrXY);
 
-        jToggleButton1.setText("Tiempo Real");
-        jToggleButton1.setFocusable(false);
-        jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        jToggleButtonRealTime.setText("Real Time");
+        jToggleButtonRealTime.setFocusable(false);
+        jToggleButtonRealTime.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButtonRealTime.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButtonRealTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                jToggleButtonRealTimeActionPerformed(evt);
             }
         });
-        jToolBar1.add(jToggleButton1);
+        jToolBar1.add(jToggleButtonRealTime);
+
+        jButtonStart.setText("START");
+        jButtonStart.setFocusable(false);
+        jButtonStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonStart.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButtonStart);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.NORTH);
 
@@ -138,54 +150,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenuTimeSeries.setText("TimeSeries");
-        {
-            LinkedList<String> signals=this.jSignalAdapter.getAllTimeSeriesNames();
-            javax.swing.JMenu signalMenu;
-            javax.swing.JMenu signalsMarksMenu;
-            javax.swing.JMenuItem signalShow;
-            javax.swing.JMenuItem signalInfo;
-            javax.swing.JMenuItem signalMark;
-            for(final String signal:signals)
-            {
-                signalMenu=new javax.swing.JMenu();
-                signalMenu.setText(signal);
-                signalShow=new javax.swing.JMenuItem();
-                signalShow.setText("Mostrar/Ocultar");
-                signalShow.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jMenuItemActionShowSignal(evt,signal);
-                    }
-                });
-                signalInfo=new javax.swing.JMenuItem();
-                signalInfo.setText("Info");
-                signalInfo.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jMenuItemActionInfoSignal(evt,signal);
-                    }
-                });
-
-                ArrayList<String> marksSignals=getSignalMarksForSignal(signal);
-
-                if(!marksSignals.isEmpty()){
-                    signalsMarksMenu=new javax.swing.JMenu();
-                    signalsMarksMenu.setText("Marks");
-                    for(final String serieMark:marksSignals){
-                        signalMark=new javax.swing.JMenuItem();
-                        signalMark.setText(serieMark);
-                        signalMark.addActionListener(new java.awt.event.ActionListener() {
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jMenuItemActionMarksShowSignal(evt,signal,serieMark);
-                            }
-                        });
-                        signalsMarksMenu.add(signalMark);
-                    }
-                    signalMenu.add(signalsMarksMenu);
-                }
-                signalMenu.add(signalShow);
-                signalMenu.add(signalInfo);
-                jMenuTimeSeries.add(signalMenu);
-            }
-        }
+        this.jMenuTimeSeriesRefresh();
         jMenuBar1.add(jMenuTimeSeries);
 
         jMenuEventSeries.setText("EventSeries");
@@ -264,7 +229,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
         if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200 * jSignalMonitor.getFrecuency()) {
             jSignalMonitor.repaintAll();
             jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
@@ -272,17 +237,17 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             jSignalMonitor.repaintAll();
         }
         this.jMenuRefresh();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonFitRangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFitRangesActionPerformed
         calculaMaxAndMinOfSignalsAndSetVisibleRange();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonFitRangesActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButtonShowrXYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonShowrXYActionPerformed
         jSignalMonitor.setRepresentingXYValues(!jSignalMonitor.isRepresentingXYValues());
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButtonShowrXYActionPerformed
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void jToggleButtonRealTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonRealTimeActionPerformed
         if (timer == null) {
             timer = new Timer(100, new ActionListener() {
 
@@ -306,7 +271,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             }
         }
 
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_jToggleButtonRealTimeActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
@@ -316,6 +281,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         jSignalAdapter.switchStateSignalManager();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
+        jSignalAdapter.startSignalManager();
+        jButtonStart.setVisible(false);
+    }//GEN-LAST:event_jButtonStartActionPerformed
 
     /**
      * @param args the command line arguments
@@ -329,9 +299,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonFitRanges;
+    private javax.swing.JButton jButtonRefresh;
+    private javax.swing.JButton jButtonShowrXY;
+    private javax.swing.JButton jButtonStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu4;
@@ -342,7 +313,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu jMenuTimeSeries;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton jToggleButtonRealTime;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
@@ -532,11 +503,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                 algorithmMenu.add(algorithmInfo);
                 jMenuAlgorithm.add(algorithmMenu);
             }
-            System.out.println("Ejecutando");
         }
     }
 
     private void jMenuRefresh() {
+        System.out.println("Refrescando menus");
         this.jMenuEventSeriesRefresh();
         this.jMenuTimeSeriesRefresh();
         this.jMenuAlgorithmRefresh();
