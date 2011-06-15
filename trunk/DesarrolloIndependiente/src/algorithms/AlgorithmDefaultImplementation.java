@@ -2,6 +2,7 @@ package algorithms;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import javax.swing.JFrame;
 import signals.Series;
 
 public abstract class AlgorithmDefaultImplementation implements Algorithm {
@@ -42,5 +43,13 @@ public abstract class AlgorithmDefaultImplementation implements Algorithm {
 
     public Series getSignalToWrite() {
         return this.signalToWrite;
+    }
+
+    public boolean hasConfigurationGui() {
+        return false;
+    }
+
+    public void showConfigurationGui(JFrame jframe) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

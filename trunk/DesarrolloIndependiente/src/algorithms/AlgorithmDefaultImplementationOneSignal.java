@@ -2,6 +2,7 @@ package algorithms;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import javax.swing.JFrame;
 import signals.Series;
 
 public abstract class AlgorithmDefaultImplementationOneSignal implements Algorithm {
@@ -16,6 +17,7 @@ public abstract class AlgorithmDefaultImplementationOneSignal implements Algorit
         this.signalToWrite = signalToWrite;
         this.algorithmNotifyPolice = algorithmNotifyPolice;
     }
+
     public AlgorithmDefaultImplementationOneSignal(String identifier, Series signalToWrite,
             LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         this.identifier = identifier;
@@ -42,5 +44,13 @@ public abstract class AlgorithmDefaultImplementationOneSignal implements Algorit
 
     public Series getSignalToWrite() {
         return this.signalToWrite;
+    }
+
+    public boolean hasConfigurationGui() {
+        return false;
+    }
+
+    public void showConfigurationGui(JFrame jframe) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

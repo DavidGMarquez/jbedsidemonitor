@@ -1,9 +1,11 @@
 package algorithms;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import signals.ReadResult;
 import signals.ReaderCallable;
 import signals.SignalManager;
@@ -22,6 +24,7 @@ public class AlgorithmManager {
     private Map<String, LinkedList<String>> algorithmsToNotifyBySignalName;
     private Map<String, Trigger> triggersByAlgorithmName;
     private ExecutorServiceAlgorithm executorServiceAlgorithm;
+    private ConcurrentHashMap<String, Boolean> activeAlgorithms;
     private static final AlgorithmManager INSTANCE = new AlgorithmManager();
 
     public static AlgorithmManager getInstance() {
@@ -33,6 +36,8 @@ public class AlgorithmManager {
         this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
+        this.activeAlgorithms = new ConcurrentHashMap<String, Boolean>();
+
     }
 
     public Algorithm addAlgorithm(Algorithm algorithm) {
@@ -40,6 +45,7 @@ public class AlgorithmManager {
             SignalManager.getInstance().addSeries(algorithm.getSignalToWrite());
             this.addTrigger(algorithm);
             this.addSignalNamesToMap(algorithm);
+            this.activeAlgorithms.put(algorithm.getIdentifier(), Boolean.TRUE);
             return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
         } else {
             throw new AlgorithmAlreadyExistsException("Algorithm already exists in Algorithm Manager", algorithm);
@@ -81,8 +87,10 @@ public class AlgorithmManager {
             LinkedList<String> algorithmNames = this.algorithmsToNotifyBySignalName.get(signalName);
             if (algorithmNames != null) {
                 for (String algorithmName : algorithmNames) {
-                    Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
-                    algorithmTrigger.notifyNewData(writerRunnableOneSignal);
+                    if (activeAlgorithms.get(algorithmName).booleanValue()) {
+                        Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
+                        algorithmTrigger.notifyNewData(writerRunnableOneSignal);
+                    }
                 }
                 this.checkTriggers();
             }
@@ -129,23 +137,38 @@ public class AlgorithmManager {
         this.executorServiceAlgorithm.executeAlgorithmReadResult(algorithm, readResult);
     }
 
+    public boolean desactiveAlgorithm(String algorithmName) {
+        return this.activeAlgorithms.put(algorithmName, Boolean.FALSE).booleanValue();
+    }
+
+    public boolean activeAlgorithm(String algorithmName) {
+        return this.activeAlgorithms.put(algorithmName, Boolean.TRUE).booleanValue();
+    }
+    public boolean isActiveAlgorithm(String algorithmName){
+        return this.activeAlgorithms.get(algorithmName);
+    }
     //@comentario metodo de depuracion
+
     public Algorithm getAlgorithm(String name) {
         return this.algorithmsByName.get(name);
     }
     //@comentario metodo de depuracion
+
     public LinkedList<String> getAllAlgorithmNames() {
         return (new LinkedList<String>(this.algorithmsByName.keySet()));
     }
     //@comentario metodo de depuracion
+
     public Trigger getTrigger(String algorithmName) {
         return this.triggersByAlgorithmName.get(algorithmName);
     }
     //@comentario metodo de depuracion
+
     public LinkedList<String> getAlgorithmNamesToSignal(String signalName) {
         return this.algorithmsToNotifyBySignalName.get(signalName);
     }
     //@comentario metodo de depuracion
+
     public void reset() {
         this.algorithmsByName = new HashMap<String, Algorithm>();
         this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();

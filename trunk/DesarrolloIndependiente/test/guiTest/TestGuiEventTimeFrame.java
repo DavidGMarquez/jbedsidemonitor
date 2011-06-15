@@ -4,14 +4,7 @@
  */
 package guiTest;
 
-import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
-import completeTestsTimeSeries.SinTimeSeriesGeneratorOrder;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.LinkedList;
 import algorithms.AlgorithmDefaultImplementation;
 import java.util.SortedSet;
@@ -20,16 +13,11 @@ import java.util.logging.Logger;
 import signals.Event;
 import signals.TimeSeries;
 import algorithms.AlgorithmManager;
-import auxiliarTools.AuxTestUtilities;
-import completeTestsEventSeries.SerialEventSeriesGenerator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import signals.EventSeries;
 import signals.SignalManager;
-import signals.WriterRunnableTimeSeries;
 import userInterface.JBedSideMonitorMainWindow;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -103,6 +91,24 @@ public class TestGuiEventTimeFrame {
 
         frame1.setSize(800, 500);
         frame1.setVisible(true);*/
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                UIManager.installLookAndFeel("NimROD", "com.nilo.plaf.nimrod.NimRODLookAndFeel");
+                try {
+                    UIManager.setLookAndFeel("com.nilo.plaf.nimrod.NimRODLookAndFeel");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    
         JBedSideMonitorMainWindow frame1 =new JBedSideMonitorMainWindow(SignalManager.getInstance().getJSignalAdapter());
         frame1.setSize(800, 500);
         frame1.setVisible(true);
