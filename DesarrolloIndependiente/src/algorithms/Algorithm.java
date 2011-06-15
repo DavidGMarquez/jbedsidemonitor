@@ -1,5 +1,6 @@
 package algorithms;
 
+import javax.swing.JFrame;
 import signals.ReadResult;
 import signals.Series;
 
@@ -14,5 +15,9 @@ public interface Algorithm {
     public AlgorithmNotifyPolice getNotifyPolice();
 
     public boolean execute(ReadResult readResult);
+
+    public boolean hasConfigurationGui();
+
+    public void showConfigurationGui(JFrame jframe);
     //Hacer metodos de interfaz para acceder y para poder saber lo que quiere, señales, señales que escribe, cada caunto
 }

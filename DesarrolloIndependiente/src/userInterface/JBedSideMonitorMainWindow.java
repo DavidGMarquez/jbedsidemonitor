@@ -14,7 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import net.javahispano.jsignalwb.jsignalmonitor.ChannelProperties;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import signals.JSignalAdapter;
@@ -33,6 +38,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     /** Creates new form JBedSideMonitorMainWindow */
     public JBedSideMonitorMainWindow(JSignalAdapter jSignalAdapter) {
         initJBedSideMonitor(jSignalAdapter);
+        lookAndFeel();
         initComponents();
         this.getContentPane().add(jSignalMonitor.getJSignalMonitorPanel());
     }
@@ -65,6 +71,8 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JBedSideMonitor");
+        setIconImage(new ImageIcon(getClass().getResource("/images/JBedSideMonitor.png")).getImage());
+        setName("JBedSideMonitorMainWindow"); // NOI18N
 
         jToolBar1.setRollover(true);
 
@@ -154,62 +162,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuBar1.add(jMenuTimeSeries);
 
         jMenuEventSeries.setText("EventSeries");
-        {
-            LinkedList<String> signals=this.jSignalAdapter.getAllEventSeriesNames();
-            javax.swing.JMenu signalMenu;
-            javax.swing.JMenuItem signalShow;
-            javax.swing.JMenuItem signalInfo;
-            for(final String signal:signals)
-            {
-                signalMenu=new javax.swing.JMenu();
-                signalMenu.setText(signal);
-                if(jSignalAdapter.isEventSeriesLikeMarks(signal)){
-                }
-                else{
-                    signalShow=new javax.swing.JMenuItem();
-                    signalShow.setText("Mostrar/Ocultar");
-                    signalShow.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            jMenuItemActionAnnotationShowSignal(evt,signal);
-                        }
-                    });
-                    signalMenu.add(signalShow);
-                }
-                signalInfo=new javax.swing.JMenuItem();
-                signalInfo.setText("Info");
-                signalInfo.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jMenuItemActionInfoEventSeries(evt,signal);
-                    }
-                });
-                signalMenu.add(signalInfo);
-                jMenuEventSeries.add(signalMenu);
-            }
-        }
+        this.jMenuEventSeriesRefresh();
         jMenuBar1.add(jMenuEventSeries);
 
         jMenuAlgorithm.setText("Algorithm");
-        {
-            LinkedList<String> algorithms=this.jSignalAdapter.getAllAlgorithmNames();
-            javax.swing.JMenu algorithmMenu;
-            javax.swing.JMenuItem algorithmInfo;
-            for(final String algorithm:algorithms)
-            {
-                algorithmMenu=new javax.swing.JMenu();
-                algorithmMenu.setText(algorithm);
-
-                algorithmInfo=new javax.swing.JMenuItem();
-                algorithmInfo.setText("Info");
-                algorithmInfo.addActionListener(new java.awt.event.ActionListener() {
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jMenuItemActionInfoAlgorithm(evt,algorithm);
-                    }
-                });
-                algorithmMenu.add(algorithmInfo);
-                jMenuAlgorithm.add(algorithmMenu);
-            }
-            System.out.println("Ejecutando");
-        }
+        this.jMenuAlgorithmRefresh();
         jMenuBar1.add(jMenuAlgorithm);
 
         jMenu4.setText("Status");
@@ -291,6 +248,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
@@ -316,6 +274,25 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButtonRealTime;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
+
+    private void lookAndFeel() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                UIManager.installLookAndFeel("NimROD", "com.nilo.plaf.nimrod.NimRODLookAndFeel");
+                try {
+                    UIManager.setLookAndFeel("com.nilo.plaf.nimrod.NimRODLookAndFeel");
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(JBedSideMonitorMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
 
     private void initJBedSideMonitor(JSignalAdapter jSignalAdapter) {
         this.jSignalAdapter = jSignalAdapter;
@@ -383,6 +360,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         ShowInfoAlgorithm showInfoSignal = new ShowInfoAlgorithm(this, true, jSignalAdapter.getAlgorithm(signalName));
         showInfoSignal.setLocationRelativeTo(this);
         showInfoSignal.setVisible(true);
+    }
+
+    private void jMenuItemActionSwitchStateAlgorithm(java.awt.event.ActionEvent evt, String algorithmName) {
+        jSignalAdapter.switchStateAlgorithm(algorithmName);
     }
 
     private void jMenuItemActionMarksShowSignal(java.awt.event.ActionEvent evt, String signalName, String markSignal) {
@@ -454,9 +435,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             javax.swing.JMenuItem signalInfo;
             for (final String signal : signals) {
                 signalMenu = new javax.swing.JMenu();
-                signalMenu.setText(signal);
                 if (jSignalAdapter.isEventSeriesLikeMarks(signal)) {
+                    signalMenu.setText(signal + "(Mark)");
                 } else {
+                    signalMenu.setText(signal + "(Annotation)");
                     signalShow = new javax.swing.JMenuItem();
                     signalShow.setText("Mostrar/Ocultar");
                     signalShow.addActionListener(new java.awt.event.ActionListener() {
@@ -488,6 +470,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             LinkedList<String> algorithms = this.jSignalAdapter.getAllAlgorithmNames();
             javax.swing.JMenu algorithmMenu;
             javax.swing.JMenuItem algorithmInfo;
+            javax.swing.JMenuItem algorithmState;
             for (final String algorithm : algorithms) {
                 algorithmMenu = new javax.swing.JMenu();
                 algorithmMenu.setText(algorithm);
@@ -500,14 +483,22 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                         jMenuItemActionInfoAlgorithm(evt, algorithm);
                     }
                 });
+                algorithmState = new javax.swing.JMenuItem();
+                algorithmState.setText("Active/Inactive");
+                algorithmState.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionSwitchStateAlgorithm(evt, algorithm);
+                    }
+                });
                 algorithmMenu.add(algorithmInfo);
+                algorithmMenu.add(algorithmState);
                 jMenuAlgorithm.add(algorithmMenu);
             }
         }
     }
 
     private void jMenuRefresh() {
-        System.out.println("Refrescando menus");
         this.jMenuEventSeriesRefresh();
         this.jMenuTimeSeriesRefresh();
         this.jMenuAlgorithmRefresh();
