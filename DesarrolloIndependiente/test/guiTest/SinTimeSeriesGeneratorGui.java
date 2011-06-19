@@ -5,6 +5,7 @@
 package guiTest;
 
 import completeTestsTimeSeries.*;
+import datasource.DataSourceDefault;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -12,11 +13,7 @@ import java.util.logging.Logger;
 import signals.SignalManager;
 import signals.WriterRunnableTimeSeries;
 
-/**
- *
- * @author USUARIO
- */
-public class SinTimeSeriesGeneratorGui {
+public class SinTimeSeriesGeneratorGui extends DataSourceDefault{
 
     String nameSignal;
     Timer timer;
@@ -39,6 +36,7 @@ public class SinTimeSeriesGeneratorGui {
         this.nameSignal = nameSignal;
         this.index = 0;
         this.multiplier = multiplier;
+        this.registerThis();
     }
 
     class RemindTask extends TimerTask {
@@ -49,17 +47,8 @@ public class SinTimeSeriesGeneratorGui {
                 dataToWrite[i] = (float) Math.sin(index * multiplier);
                 index++;
             }
-            while (!SignalManager.getInstance().isRunning()) {
-                synchronized (SignalManager.getInstance().getLockWaitRunning()) {
-                    try {
-                        SignalManager.getInstance().getLockWaitRunning().wait();
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(SinTimeSeriesGeneratorGui.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
             WriterRunnableTimeSeries writerRunnableTimeSeries = new WriterRunnableTimeSeries(nameSignal, dataToWrite, currentIteration * 10);
-            SignalManager.getInstance().encueWriteOperation(writerRunnableTimeSeries);
+            waitAndSendWriterRunable(writerRunnableTimeSeries);
             currentIteration++;
             if (currentIteration > limitOfItIterations) {
                 System.out.println("Time's end!" + nameSignal);

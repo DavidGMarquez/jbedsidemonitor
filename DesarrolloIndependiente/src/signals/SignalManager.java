@@ -1,6 +1,7 @@
 package signals;
 
 import algorithms.Algorithm;
+import datasource.DataSource;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.SortedSet;
@@ -27,6 +28,9 @@ public class SignalManager {
     private ReentrantReadWriteLock lockRunning;
     private ReentrantReadWriteLock lockStart;
     private ReentrantLock lockWaitRunning;
+    private ConcurrentMap<String, DataSource> dataSources;
+    private ConcurrentMap<String, Boolean> activeDataSources;
+    private ReentrantReadWriteLock lockDataSourcesInfo;
 
     private SignalManager() {
         lockManager = LockManager.getInstance();
@@ -40,6 +44,9 @@ public class SignalManager {
         lockRunning = new ReentrantReadWriteLock();
         lockStart = new ReentrantReadWriteLock();
         lockWaitRunning = new ReentrantLock();
+        dataSources = new ConcurrentHashMap<String, DataSource>();
+        activeDataSources = new ConcurrentHashMap<String, Boolean>();
+        lockDataSourcesInfo = new ReentrantReadWriteLock();
     }
 
     public static SignalManager getInstance() {
@@ -76,6 +83,18 @@ public class SignalManager {
             return this.eventSeries.put(eventSeries.getIdentifier(), eventSeries);
         }
         throw new EventSerieslAlreadyExistsException("EventSeries already exists in Signal Manager", eventSeries);
+    }
+
+    public boolean registerDataSource(DataSource dataSource) {
+        this.lockDataSourcesInfo.writeLock().lock();
+        try{
+            dataSources.put(dataSource.getIdentifier(),dataSource);
+            activeDataSources.put(dataSource.getIdentifier(), Boolean.TRUE);
+        }
+        finally{
+            this.lockDataSourcesInfo.writeLock().unlock();
+        }
+        return true;
     }
 
     public boolean encueWriteOperation(WriterRunnable writerRunnable) {
@@ -174,6 +193,9 @@ public class SignalManager {
         lockRunning = new ReentrantReadWriteLock();
         lockStart = new ReentrantReadWriteLock();
         lockWaitRunning = new ReentrantLock();
+        dataSources = new ConcurrentHashMap<String, DataSource>();
+        activeDataSources = new ConcurrentHashMap<String, Boolean>();
+        lockDataSourcesInfo = new ReentrantReadWriteLock();
         this.initiateThread();
 
     }
