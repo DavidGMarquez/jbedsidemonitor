@@ -76,7 +76,7 @@ public class AlgorithmManagerTest {
 
         AuxTestUtilities.reset();
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", 
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1",
                 timeSeriesOut1, timeSignalsA, eventSignalsA){
             public boolean execute(ReadResult readResult) {
                 throw new UnsupportedOperationException("Not supported yet.");
@@ -134,20 +134,20 @@ public class AlgorithmManagerTest {
         TimeSeries timeSeriesOut1 = new TimeSeries("Out_Algorithm_1", "Algorithm_1", 0, 300, "NaN");
         EventSeries eventSeriesOut2 = new EventSeries("Out_Algorithm_2", "Algorithm_2", 0, new ArrayList<String>(), "NaN");
         TimeSeries timeSeriesOut3 = new TimeSeries("Out_Algorithm_3", "Algorithm_3", 0, 300, "NaN");
-        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1", 
+        Algorithm algorithm1 = new AlgorithmDefaultImplementation("Algorithm_1",
                 timeSeriesOut1, timeSignalsA, eventSignalsA)
                 {
             public boolean execute(ReadResult readResult) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };
-        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2", 
+        Algorithm algorithm2 = new AlgorithmDefaultImplementation("Algorithm_2",
                 eventSeriesOut2, timeSignalsA, eventSignalsA){
             public boolean execute(ReadResult readResult) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };
-        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3", 
+        Algorithm algorithm3 = new AlgorithmDefaultImplementation("Algorithm_3",
                 timeSeriesOut3, timeSignalsB, eventSignalsB){
             public boolean execute(ReadResult readResult) {
                 throw new UnsupportedOperationException("Not supported yet.");
