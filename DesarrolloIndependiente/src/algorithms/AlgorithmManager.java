@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import signals.ReadResult;
 import signals.ReaderCallable;
 import signals.SignalManager;
@@ -14,6 +15,7 @@ import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableMultiSignal;
 import signals.WriterRunnableOneSignal;
 import signals.WriterRunnableTimeSeries;
+import sun.security.x509.AlgorithmId;
 
 /**
  * Singlenton
@@ -26,6 +28,7 @@ public class AlgorithmManager {
     private ExecutorServiceAlgorithm executorServiceAlgorithm;
     private ConcurrentHashMap<String, Boolean> activeAlgorithms;
     private static final AlgorithmManager INSTANCE = new AlgorithmManager();
+    private ConcurrentMap<String, AlgorithmExecutionInfo> executionInfoByAlgorithmName;
 
     public static AlgorithmManager getInstance() {
         return INSTANCE;
@@ -37,6 +40,7 @@ public class AlgorithmManager {
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
         this.activeAlgorithms = new ConcurrentHashMap<String, Boolean>();
+        this.executionInfoByAlgorithmName=new ConcurrentHashMap<String, AlgorithmExecutionInfo>();
 
     }
 
@@ -45,6 +49,7 @@ public class AlgorithmManager {
             SignalManager.getInstance().addSeries(algorithm.getSignalToWrite());
             this.addTrigger(algorithm);
             this.addSignalNamesToMap(algorithm);
+            this.addExecutionInfo(algorithm);
             this.activeAlgorithms.put(algorithm.getIdentifier(), Boolean.TRUE);
             return this.algorithmsByName.put(algorithm.getIdentifier(), algorithm);
         } else {
@@ -78,6 +83,10 @@ public class AlgorithmManager {
             this.algorithmsToNotifyBySignalName.put(eventSeriesName, algorithmNames);
         }
     }
+    public void addExecutionInfo(Algorithm algorithm){
+        AlgorithmExecutionInfo algorithmExecutionInfo=new AlgorithmExecutionInfo(algorithm.getIdentifier());
+        executionInfoByAlgorithmName.put(algorithm.getIdentifier(), algorithmExecutionInfo);
+    }
 
     public void notifyNewData(WriterRunnable writerRunnable) {
         if (writerRunnable instanceof WriterRunnableOneSignal) {
@@ -88,6 +97,7 @@ public class AlgorithmManager {
             if (algorithmNames != null) {
                 for (String algorithmName : algorithmNames) {
                     if (activeAlgorithms.get(algorithmName).booleanValue()) {
+                        this.executionInfoByAlgorithmName.get(algorithmName).incrementTriggerUpdates();
                         Trigger algorithmTrigger = this.triggersByAlgorithmName.get(algorithmName);
                         algorithmTrigger.notifyNewData(writerRunnableOneSignal);
                     }
@@ -130,6 +140,7 @@ public class AlgorithmManager {
 
     public void processData(ReadResult readResult) {
         Algorithm algorithm = this.algorithmsByName.get(readResult.getIdentifierOwner());
+        this.executionInfoByAlgorithmName.get(algorithm.getIdentifier()).incrementExecutionUpdates();
         this.encueAlgorithmReadResultOperation(algorithm, readResult);
     }
 
@@ -151,6 +162,9 @@ public class AlgorithmManager {
 
     public Algorithm getAlgorithm(String name) {
         return this.algorithmsByName.get(name);
+    }
+    public AlgorithmExecutionInfo getAlgorithmExecutionInfo(String name){
+        return executionInfoByAlgorithmName.get(name);
     }
     //@comentario metodo de depuracion
 
@@ -174,5 +188,6 @@ public class AlgorithmManager {
         this.algorithmsToNotifyBySignalName = new HashMap<String, LinkedList<String>>();
         this.triggersByAlgorithmName = new HashMap<String, Trigger>();
         this.executorServiceAlgorithm = new ExecutorServiceAlgorithm();
+        this.executionInfoByAlgorithmName=new ConcurrentHashMap<String, AlgorithmExecutionInfo>();
     }
 }
