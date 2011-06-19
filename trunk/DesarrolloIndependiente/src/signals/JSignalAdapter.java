@@ -5,6 +5,7 @@
 package signals;
 
 import algorithms.Algorithm;
+import algorithms.AlgorithmExecutionInfo;
 import algorithms.AlgorithmManager;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -330,6 +331,10 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
 
     public Algorithm getAlgorithm(String signalName) {
         return AlgorithmManager.getInstance().getAlgorithm(signalName);
+    }
+
+    public AlgorithmExecutionInfo getAlgorithmExecutionInfo(String signalName) {
+        return AlgorithmManager.getInstance().getAlgorithmExecutionInfo(signalName);
     }
 
     public float getFrecuencySignalTimeSeries(String signalName) {

@@ -277,6 +277,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
     private void lookAndFeel() {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 UIManager.installLookAndFeel("NimROD", "com.nilo.plaf.nimrod.NimRODLookAndFeel");
                 try {
@@ -360,6 +361,12 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         ShowInfoAlgorithm showInfoSignal = new ShowInfoAlgorithm(this, true, jSignalAdapter.getAlgorithm(signalName));
         showInfoSignal.setLocationRelativeTo(this);
         showInfoSignal.setVisible(true);
+    }
+
+    private void jMenuItemActionExecutionInfoAlgorithm(java.awt.event.ActionEvent evt, String signalName) {
+        ShowExecutionInfoAlgorithm showExecutionInfoSignal = new ShowExecutionInfoAlgorithm(this, true, jSignalAdapter.getAlgorithmExecutionInfo(signalName));
+        showExecutionInfoSignal.setLocationRelativeTo(this);
+        showExecutionInfoSignal.setVisible(true);
     }
 
     private void jMenuItemActionSwitchStateAlgorithm(java.awt.event.ActionEvent evt, String algorithmName) {
@@ -470,6 +477,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             LinkedList<String> algorithms = this.jSignalAdapter.getAllAlgorithmNames();
             javax.swing.JMenu algorithmMenu;
             javax.swing.JMenuItem algorithmInfo;
+            javax.swing.JMenuItem algorithmExecutionInfo;
             javax.swing.JMenuItem algorithmState;
             for (final String algorithm : algorithms) {
                 algorithmMenu = new javax.swing.JMenu();
@@ -483,6 +491,14 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                         jMenuItemActionInfoAlgorithm(evt, algorithm);
                     }
                 });
+                algorithmExecutionInfo = new javax.swing.JMenuItem();
+                algorithmExecutionInfo.setText("ExecutionInfo");
+                algorithmExecutionInfo.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionExecutionInfoAlgorithm(evt, algorithm);
+                    }
+                });
                 algorithmState = new javax.swing.JMenuItem();
                 algorithmState.setText("Active/Inactive");
                 algorithmState.addActionListener(new java.awt.event.ActionListener() {
@@ -492,6 +508,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                     }
                 });
                 algorithmMenu.add(algorithmInfo);
+                algorithmMenu.add(algorithmExecutionInfo);
                 algorithmMenu.add(algorithmState);
                 jMenuAlgorithm.add(algorithmMenu);
             }
