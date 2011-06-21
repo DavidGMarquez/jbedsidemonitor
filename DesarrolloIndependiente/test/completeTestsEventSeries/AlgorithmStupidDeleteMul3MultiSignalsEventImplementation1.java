@@ -71,8 +71,9 @@ public class AlgorithmStupidDeleteMul3MultiSignalsEventImplementation1 extends A
         WriterRunnableEventSeries writerRunnableEventSeries = new WriterRunnableEventSeries(readResultEventSeries.getIdentifierSignal() + "_" + this.getIdentifier());
         LinkedList<Event> eventsReadWritten = readResultEventSeries.getEventsReadWritten();
         for (Event currentEvent : eventsReadWritten) {
-            writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
-             if (currentEvent.getLocation() % 3 == 0) {
+            
+             if (currentEvent.getLocation() % 3 != 0) {
+                 writerRunnableEventSeries.addEventToWrite(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
                  eventsNew.add(currentEvent);
              }
         }
@@ -80,9 +81,6 @@ public class AlgorithmStupidDeleteMul3MultiSignalsEventImplementation1 extends A
         for (Event currentEvent : eventsReadDeleted) {
             writerRunnableEventSeries.addEventToDelete(new Event(currentEvent.getLocation(), currentEvent.getType(), currentEvent.getCopyOfAttributes()));
 
-        }
-        for(Event event:eventsOld){
-            writerRunnableEventSeries.addEventToDelete(event);
         }
         SignalManager.getInstance().encueWriteOperation(writerRunnableEventSeries);
     }
