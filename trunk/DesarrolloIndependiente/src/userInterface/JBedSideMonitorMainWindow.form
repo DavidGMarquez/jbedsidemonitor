@@ -43,6 +43,14 @@
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="this.jMenuAlgorithmRefresh();"/>
           </AuxValues>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuDataSource">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="DataSource"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="this.jMenuDataSourcesRefresh();"/>
+          </AuxValues>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu4">
           <Properties>
             <Property name="text" type="java.lang.String" value="Status"/>
@@ -136,6 +144,7 @@
         <Component class="javax.swing.JToggleButton" name="jToggleButtonRealTime">
           <Properties>
             <Property name="text" type="java.lang.String" value="Real Time"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

@@ -2,6 +2,7 @@ package signals;
 
 import algorithms.Algorithm;
 import datasource.DataSource;
+import datasource.DataSourceDefault;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.SortedSet;
@@ -87,13 +88,17 @@ public class SignalManager {
 
     public boolean registerDataSource(DataSource dataSource) {
         this.lockDataSourcesInfo.writeLock().lock();
-        try{
-            dataSources.put(dataSource.getIdentifier(),dataSource);
+        try {
+            dataSources.put(dataSource.getIdentifier(), dataSource);
             activeDataSources.put(dataSource.getIdentifier(), Boolean.TRUE);
-        }
-        finally{
+        } finally {
             this.lockDataSourcesInfo.writeLock().unlock();
         }
+        return true;
+    }
+
+    public boolean inactiveDataSource(DataSource dataSource) {
+        activeDataSources.put(dataSource.getIdentifier(), Boolean.FALSE);
         return true;
     }
 
@@ -234,6 +239,7 @@ public class SignalManager {
 
     public boolean start() {
         this.initiateThread();
+        this.initiateDataSources();
         this.lockStart.writeLock().lock();
         try {
             this.isStart = true;
@@ -275,8 +281,57 @@ public class SignalManager {
         Thread threadCompletionService = new Thread(completionExecutorServiceReader, "threadCompletion");
         threadCompletionService.start();
     }
+
+    private void initiateDataSources() {
+        //Considerar hacerlo en un hilo aparte
+        this.lockDataSourcesInfo.writeLock().lock();
+        try {
+            LinkedList<String> dataSourcesNames = new LinkedList<String>(this.dataSources.keySet());
+            for (String dataSourceName : dataSourcesNames) {
+                dataSources.get(dataSourceName).start();
+            }
+        } catch (Exception e) {
+            System.out.println("Error inializando DataSources" + e.getMessage());
+        } finally {
+            this.lockDataSourcesInfo.writeLock().unlock();
+        }
+    }
+
+    public LinkedList<String> getAllDataSourcesNames() {
+        LinkedList<String> dataSourcesNames = new LinkedList<String>();
+        this.lockDataSourcesInfo.readLock().lock();
+        try {
+            dataSourcesNames = new LinkedList<String>(this.dataSources.keySet());
+        } finally {
+            this.lockDataSourcesInfo.readLock().unlock();
+        }
+        return dataSourcesNames;
+    }
+
 /////////A partir de aqui los métodos son discutibles
     // Estan puesto public para los test
+    public DataSource getDataSource(String dataSourceName) {
+        DataSource dataSource = null;
+        this.lockDataSourcesInfo.readLock().lock();
+        try {
+            dataSource = this.dataSources.get(dataSourceName);
+        } finally {
+            this.lockDataSourcesInfo.readLock().unlock();
+        }
+        return dataSource;
+    }
+
+    public void getLockToModifyDataSources() {
+        this.lockDataSourcesInfo.writeLock().lock();
+    }
+
+    public void releaseLockToModifyDataSources() {
+        this.lockDataSourcesInfo.writeLock().unlock();
+    }
+
+    public boolean getStateOfDataSource(String dataSourceName) {
+        return this.activeDataSources.get(dataSourceName);
+    }
 
     public LinkedList<String> getAllTimeSeriesNames() {
         return new LinkedList<String>(this.timeSeries.keySet());
