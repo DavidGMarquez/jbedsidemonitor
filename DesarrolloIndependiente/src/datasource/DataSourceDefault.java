@@ -1,5 +1,6 @@
 package datasource;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -34,11 +35,22 @@ public abstract class DataSourceDefault implements DataSource {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String getIdentifier(){
+    public String getIdentifier() {
         return "DefaultDataSource";
     }
-    public boolean registerThis(){
+
+    public boolean registerThis() {
         return SignalManager.getInstance().registerDataSource(this);
     }
 
+    public boolean desactivate() {
+        return SignalManager.getInstance().inactiveDataSource(this);
+    }
+
+    public ArrayList<String> getSeriesGenerated() {
+        return new ArrayList<String>();
+    }
+    public boolean start(){
+        return true;
+    }
 }

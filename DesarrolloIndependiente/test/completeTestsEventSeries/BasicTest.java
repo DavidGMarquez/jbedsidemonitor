@@ -165,7 +165,7 @@ public class BasicTest {
         AlgorithmManager.getInstance().addAlgorithm(algorithm3);
         SerialEventSeriesGenerator serialEventSeriesSeriesGenerator = new SerialEventSeriesGenerator(10, 10, iterations, "EventSeries3", sizeOfIterations);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(CompleteTestOrder.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -190,12 +190,15 @@ public class BasicTest {
                 index++;
                 contador--;
             }
-
+       
             //@pendiente este test falla de vez en cuando
+            System.out.println(index+" "+contador);
             assertEquals(currentEvent.getLocation(), index);
             assertEquals(currentEvent.getType(), "Originated bySerialEventSeriesGenerator");
             assertEquals(currentEvent, new Event( index, "Originated bySerialEventSeriesGenerator", null));
             index++;
+                 if(contador==0)
+                break;
         }
         assertEquals(0, contador);
 

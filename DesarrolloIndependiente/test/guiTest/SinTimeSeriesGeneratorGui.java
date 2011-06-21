@@ -6,6 +6,7 @@ package guiTest;
 
 import completeTestsTimeSeries.*;
 import datasource.DataSourceDefault;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -38,7 +39,15 @@ public class SinTimeSeriesGeneratorGui extends DataSourceDefault{
         this.multiplier = multiplier;
         this.registerThis();
     }
-
+    public ArrayList<String> getSeriesGenerated() {
+        ArrayList seriesGenerated;
+        seriesGenerated=new ArrayList();
+        seriesGenerated.add(nameSignal);
+        return seriesGenerated;
+    }
+    public String getIdentifier(){
+        return "SinTimeSeriesGenerator";
+    }
     class RemindTask extends TimerTask {
 
         public void run() {
@@ -51,6 +60,7 @@ public class SinTimeSeriesGeneratorGui extends DataSourceDefault{
             waitAndSendWriterRunable(writerRunnableTimeSeries);
             currentIteration++;
             if (currentIteration > limitOfItIterations) {
+                desactivate();
                 System.out.println("Time's end!" + nameSignal);
                 timer.cancel(); //Terminate the timer thread
             }

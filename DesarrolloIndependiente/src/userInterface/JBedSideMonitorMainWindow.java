@@ -10,6 +10,7 @@
  */
 package userInterface;
 
+import datasource.DataSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     /** Creates new form JBedSideMonitorMainWindow */
     public JBedSideMonitorMainWindow(JSignalAdapter jSignalAdapter) {
         initJBedSideMonitor(jSignalAdapter);
+        //@pendiente creo que lookAndFeel no rula aqui
         lookAndFeel();
         initComponents();
         this.getContentPane().add(jSignalMonitor.getJSignalMonitorPanel());
@@ -66,6 +68,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuTimeSeries = new javax.swing.JMenu();
         jMenuEventSeries = new javax.swing.JMenu();
         jMenuAlgorithm = new javax.swing.JMenu();
+        jMenuDataSource = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
@@ -110,6 +113,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jToolBar1.add(jButtonShowrXY);
 
         jToggleButtonRealTime.setText("Real Time");
+        jToggleButtonRealTime.setEnabled(false);
         jToggleButtonRealTime.setFocusable(false);
         jToggleButtonRealTime.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButtonRealTime.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -169,6 +173,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         this.jMenuAlgorithmRefresh();
         jMenuBar1.add(jMenuAlgorithm);
 
+        jMenuDataSource.setText("DataSource");
+        this.jMenuDataSourcesRefresh();
+        jMenuBar1.add(jMenuDataSource);
+
         jMenu4.setText("Status");
 
         jMenuItem2.setText("Play/Pause");
@@ -205,29 +213,8 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonShowrXYActionPerformed
 
     private void jToggleButtonRealTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonRealTimeActionPerformed
-        if (timer == null) {
-            timer = new Timer(100, new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200 * jSignalMonitor.getFrecuency()) {
-                        jSignalMonitor.repaintAll();
-                        jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
-                    } else {
-                        jSignalMonitor.repaintAll();
-
-                    }
-                }
-            });
-            timer.start();
-        } else {
-            if (timer.isRunning()) {
-                timer.stop();
-
-            } else {
-                timer.start();
-            }
-        }
-
+        this.switchRealTime();
+        this.refresh();
     }//GEN-LAST:event_jToggleButtonRealTimeActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -242,6 +229,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         jSignalAdapter.startSignalManager();
         jButtonStart.setVisible(false);
+        jToggleButtonRealTime.setSelected(true);
+        jToggleButtonRealTime.setEnabled(true);
+        this.switchRealTime();
+        this.refresh();
     }//GEN-LAST:event_jButtonStartActionPerformed
 
     /**
@@ -266,6 +257,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenuAlgorithm;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuDataSource;
     private javax.swing.JMenu jMenuEventSeries;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -348,7 +340,12 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         ShowInfoTimeSeries showInfoSignal = new ShowInfoTimeSeries(this, true, jSignalAdapter.getTimeSeries(signalName));
         showInfoSignal.setLocationRelativeTo(this);
         showInfoSignal.setVisible(true);
+    }
 
+    private void jMenuItemActionInfoDataSource(java.awt.event.ActionEvent evt, String dataSourceName) {
+        ShowInfoDataSource showInfoDataSource = new ShowInfoDataSource(this, true, jSignalAdapter.getDataSource(dataSourceName));
+        showInfoDataSource.setLocationRelativeTo(this);
+        showInfoDataSource.setVisible(true);
     }
 
     private void jMenuItemActionInfoEventSeries(java.awt.event.ActionEvent evt, String signalName) {
@@ -375,6 +372,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
     private void jMenuItemActionMarksShowSignal(java.awt.event.ActionEvent evt, String signalName, String markSignal) {
         jSignalAdapter.switchMarkSignalShow(signalName, markSignal);
+    }
+
+    private void jMenuItemActionConfigureDataSource(java.awt.event.ActionEvent evt, String dataSourceName) {
+        DataSource dataSource = jSignalAdapter.getDataSource(dataSourceName);
+        dataSource.showConfigurationGui(this);
     }
 
     private void jMenuTimeSeriesRefresh() {
@@ -515,9 +517,80 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         }
     }
 
+    private void jMenuDataSourcesRefresh() {
+        jMenuDataSource.setText("DataSources");
+        jMenuDataSource.removeAll();
+        {
+            LinkedList<String> dataSources = this.jSignalAdapter.getAllDataSourceNames();
+            javax.swing.JMenu dataSourceMenu;
+            javax.swing.JMenuItem dataSourceInfo;
+            javax.swing.JMenuItem dataSourceConfigureGui;
+            for (final String dataSource : dataSources) {
+                dataSourceMenu = new javax.swing.JMenu();
+                if (jSignalAdapter.getStateOfDataSource(dataSource)) {
+                    dataSourceMenu.setText(dataSource + "(Active)");
+                } else {
+                    dataSourceMenu.setText(dataSource + "(Inactive)");
+                }
+
+                dataSourceInfo = new javax.swing.JMenuItem();
+                dataSourceInfo.setText("Info");
+                dataSourceInfo.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionInfoDataSource(evt, dataSource);
+                    }
+                });
+                dataSourceMenu.add(dataSourceInfo);
+
+                dataSourceConfigureGui = new javax.swing.JMenuItem();
+                dataSourceConfigureGui.setText("Config GUI");
+                dataSourceConfigureGui.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionConfigureDataSource(evt, dataSource);
+                    }
+                });
+                if (jSignalAdapter.getDataSource(dataSource).hasConfigurationGui()) {
+                    dataSourceMenu.add(dataSourceConfigureGui);
+                }
+                jMenuDataSource.add(dataSourceMenu);
+            }
+        }
+    }
+
     private void jMenuRefresh() {
         this.jMenuEventSeriesRefresh();
         this.jMenuTimeSeriesRefresh();
         this.jMenuAlgorithmRefresh();
+        this.jMenuDataSourcesRefresh();
+    }
+
+    private void refresh() {
+        this.jMenuRefresh();
+    }
+
+    private void switchRealTime() {
+        if (timer == null) {
+            timer = new Timer(100, new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200 * jSignalMonitor.getFrecuency()) {
+                        jSignalMonitor.repaintAll();
+                        jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
+                    } else {
+                        jSignalMonitor.repaintAll();
+                    }
+                }
+            });
+            timer.start();
+        } else {
+            if (timer.isRunning()) {
+                timer.stop();
+
+            } else {
+                timer.start();
+            }
+        }
     }
 }
