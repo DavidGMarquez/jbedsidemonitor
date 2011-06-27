@@ -24,6 +24,8 @@ import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitor;
 import net.javahispano.jsignalwb.jsignalmonitor.JSignalMonitorDataSourceAdapter;
 import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultInstantAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultInstantMark;
+import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultIntervalAnnotation;
+import net.javahispano.jsignalwb.jsignalmonitor.defaultmarks.DefaultIntervalMark;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorAnnotation;
 import net.javahispano.jsignalwb.jsignalmonitor.marks.JSignalMonitorMark;
 import signals.CircularBuffer.ConsecutiveSamplesAvailableInfo;
@@ -297,7 +299,6 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         defaultInstantMark.setMarkTime(e.getLocation());
         defaultInstantMark.setTitle(category);
         return defaultInstantMark;
-
     }
 
     private DefaultInstantAnnotation convertEvent2DefaultInstantAnnotation(Event e, String category) {
@@ -307,7 +308,33 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         defaultInstantAnnotation.setColor(Color.yellow);
         defaultInstantAnnotation.setCategory(category);
         return defaultInstantAnnotation;
+    }
+        private DefaultIntervalAnnotation convertEvent2DefaultIntervalAnnotation(Event e, String category) {
+            DefaultIntervalAnnotation defaultIntervalAnnotation= new DefaultIntervalAnnotation();
+        defaultIntervalAnnotation.setAnnotationTime(e.getLocation());
+        defaultIntervalAnnotation.setTitle(e.getType());
+        defaultIntervalAnnotation.setColor(Color.yellow);
+        defaultIntervalAnnotation.setCategory(category);
+        return defaultIntervalAnnotation;
+    }
 
+    private DefaultIntervalMark convertEvent2DefaultIntervalMark(Event e, String category) {
+        DefaultIntervalMark defaultIntervalMark = new DefaultIntervalMark();
+        defaultIntervalMark.setComentary(e.getType());
+        defaultIntervalMark.setColor(Color.red);
+        defaultIntervalMark.setMarkTime(e.getLocation() - 300);
+        defaultIntervalMark.setEndTime(e.getLocation() + 300);
+        defaultIntervalMark.setTitle(category);
+        return defaultIntervalMark;
+    }
+
+    private DefaultInstantAnnotation convertEvent2DefaultInvervalAnnotation(Event e, String category) {
+        DefaultInstantAnnotation defaultInstantAnnotation = new DefaultInstantAnnotation();
+        defaultInstantAnnotation.setAnnotationTime(e.getLocation());
+        defaultInstantAnnotation.setTitle(e.getType());
+        defaultInstantAnnotation.setColor(Color.yellow);
+        defaultInstantAnnotation.setCategory(category);
+        return defaultInstantAnnotation;
     }
 
     public LinkedList<String> getAllTimeSeriesNames() {
@@ -337,12 +364,15 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     public AlgorithmExecutionInfo getAlgorithmExecutionInfo(String signalName) {
         return AlgorithmManager.getInstance().getAlgorithmExecutionInfo(signalName);
     }
-    public DataSource getDataSource(String dataSourceName){
+
+    public DataSource getDataSource(String dataSourceName) {
         return SignalManager.getInstance().getDataSource(dataSourceName);
     }
-    public boolean getStateOfDataSource(String dataSourceName){
+
+    public boolean getStateOfDataSource(String dataSourceName) {
         return SignalManager.getInstance().getStateOfDataSource(dataSourceName);
     }
+
     public LinkedList<String> getAllDataSourceNames() {
         return new LinkedList<String>(SignalManager.getInstance().getAllDataSourcesNames());
     }
@@ -535,11 +565,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
             LinkedList<Event> eventsToDelete = new LinkedList<Event>(writerRunnableEventSeries.getEventsToDelete());
             //@pendiente borrar eventos
 /*            for (Event eventDelete : eventsToDelete) {
-            this.eventSeries.get(identifierSignal).deleteEvent(eventDelete);
+            this.eventSeries.get(identif++++++ierSignal).deleteEvent(eventDelete);
             }*/
             LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
             for (Event eventWrite : eventsToWrite) {
-                marksToAdd.add(this.convertEvent2DefaultInstantMark(eventWrite, identifierSignal));
+                marksToAdd.add(this.convertEvent2DefaultIntervalMark(eventWrite, identifierSignal));
             }
             marks.addAll(marksToAdd);
         } finally {

@@ -22,6 +22,8 @@ public class ReaderCallableTimeSeries extends ReaderCallableOneSignal {
     //@debug    System.out.println(">>>>>>>>>>>>>EJECUTANDO READER CALLABLE<"+identifierSignal+" Desde "+posInitToRead+" Size:"+sizeToRead+" Para"+identifierOwner);
         this.readResult = new ReadResultTimeSeries(identifierOwner, identifierSignal,
                 signalManager.readFromTimeSeries(identifierSignal, posInitToRead, sizeToRead), posInitToRead);
+
+
         return readResult;
     }
 

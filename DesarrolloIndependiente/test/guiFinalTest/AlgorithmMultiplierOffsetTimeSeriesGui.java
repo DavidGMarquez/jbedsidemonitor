@@ -31,16 +31,16 @@ import signals.TimeSeries;
  *
  * @author USUARIO
  */
-public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
+public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog {
 
-    DataSourceSinTimeSeries dataSourceSinTimeSeries;
+    AlgorithmMultiplierOffsetTimeSeries algorithmMultiplierOffsetTimeSeries;
 
     /** Creates new form ShowInfoTimeSeries */
-    public DataSourceSinTimeSeriesGui(java.awt.Frame parent, boolean modal, DataSourceSinTimeSeries dataSourceSinTimeSeries) {
+    public AlgorithmMultiplierOffsetTimeSeriesGui(java.awt.Frame parent, boolean modal, AlgorithmMultiplierOffsetTimeSeries algorithmMultiplierOffsetTimeSeries) {
         super(parent, modal);
         initComponents();
-        this.dataSourceSinTimeSeries = dataSourceSinTimeSeries;
-        showInfo(dataSourceSinTimeSeries);
+        this.algorithmMultiplierOffsetTimeSeries = algorithmMultiplierOffsetTimeSeries;
+        showInfo(algorithmMultiplierOffsetTimeSeries);
     }
 
     /** This method is called from within the constructor to
@@ -66,15 +66,11 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jButtonAceptarCambios = new javax.swing.JButton();
         jButtonSalir = new javax.swing.JButton();
-        jTextFieldLimitOfIterations = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldSizeOfIteration = new javax.swing.JTextField();
+        jTextFieldOffset = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldMultiplier = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextFieldFrecuency = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jLabelSignalNameOut = new javax.swing.JLabel();
+        jLabelSignaToWriteIdentifier = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,18 +97,18 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("DataSourceSinTimeSeries");
+        setTitle("AlgorithmMultiplierOffsetGui");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("CurrentIteration:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel3.setText("LimitOfIterations:");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setText("Offset:");
 
-        jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelIdentifier.setText("Identifier:");
 
         jLabelCurrentIteration.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -142,24 +138,14 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 55, 0, 24);
         jPanel1.add(jButtonSalir, gridBagConstraints);
 
-        jTextFieldLimitOfIterations.setText("jTextField1");
-        jTextFieldLimitOfIterations.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldOffset.setText("jTextField1");
+        jTextFieldOffset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldLimitOfIterationsActionPerformed(evt);
+                jTextFieldOffsetActionPerformed(evt);
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel4.setText("SizeOfIteration:");
-
-        jTextFieldSizeOfIteration.setText("jTextField1");
-        jTextFieldSizeOfIteration.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldSizeOfIterationActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("Multiplier:");
 
         jTextFieldMultiplier.setText("jTextField1");
@@ -169,21 +155,11 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel6.setText("Frecuency:");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setText("SignalToWriteIdentifier:");
 
-        jTextFieldFrecuency.setText("jTextField1");
-        jTextFieldFrecuency.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldFrecuencyActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabel8.setText("S:ignalNameOut");
-
-        jLabelSignalNameOut.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jLabelSignalNameOut.setText("Agent:");
+        jLabelSignaToWriteIdentifier.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelSignaToWriteIdentifier.setText("Agent:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -200,19 +176,7 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldLimitOfIterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldSizeOfIteration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldMultiplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldFrecuency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldOffset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -220,7 +184,11 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabelSignalNameOut)))
+                        .addComponent(jLabelSignaToWriteIdentifier))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldMultiplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -233,7 +201,7 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabelSignalNameOut))
+                    .addComponent(jLabelSignaToWriteIdentifier))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -241,20 +209,12 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextFieldLimitOfIterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldSizeOfIteration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldOffset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jTextFieldMultiplier, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextFieldFrecuency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -275,21 +235,13 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButtonSalirActionPerformed
 
-    private void jTextFieldLimitOfIterationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLimitOfIterationsActionPerformed
+    private void jTextFieldOffsetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldOffsetActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldLimitOfIterationsActionPerformed
-
-    private void jTextFieldSizeOfIterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldSizeOfIterationActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldSizeOfIterationActionPerformed
+    }//GEN-LAST:event_jTextFieldOffsetActionPerformed
 
     private void jTextFieldMultiplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMultiplierActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldMultiplierActionPerformed
-
-    private void jTextFieldFrecuencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFrecuencyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldFrecuencyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,9 +250,15 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                DataSourceSinTimeSeries dataSourceSinTimeSeries = new DataSourceSinTimeSeries(10, 100, 1000, "TimeSeries1", 10, 0.01);
+                LinkedList<String> eventSignals1;
+                LinkedList<String> timeSignals1;
+                eventSignals1 = new LinkedList<String>();
+                timeSignals1 = new LinkedList<String>();
+                timeSignals1.add("TimeSeries1");
+                TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_AlgorithmIN", "Algorithm1", 0, 100, "NaN");
+                AlgorithmMultiplierOffsetTimeSeries algorithmMultiplierOffsetTimeSeries = new AlgorithmMultiplierOffsetTimeSeries("Algoritm1", timeSeriesOut1, timeSignals1, eventSignals1, new Float(3), new Float(2));
 
-                DataSourceSinTimeSeriesGui dialog = new DataSourceSinTimeSeriesGui(new javax.swing.JFrame(), true, dataSourceSinTimeSeries);
+                AlgorithmMultiplierOffsetTimeSeriesGui dialog = new AlgorithmMultiplierOffsetTimeSeriesGui(new javax.swing.JFrame(), true, algorithmMultiplierOffsetTimeSeries);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -318,43 +276,29 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelCurrentIteration;
     private javax.swing.JLabel jLabelIdentifier;
-    private javax.swing.JLabel jLabelSignalNameOut;
+    private javax.swing.JLabel jLabelSignaToWriteIdentifier;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextAreaSeriesIsGeneratedFrom1;
-    private javax.swing.JTextField jTextFieldFrecuency;
-    private javax.swing.JTextField jTextFieldLimitOfIterations;
     private javax.swing.JTextField jTextFieldMultiplier;
-    private javax.swing.JTextField jTextFieldSizeOfIteration;
+    private javax.swing.JTextField jTextFieldOffset;
     // End of variables declaration//GEN-END:variables
 
-    private void showInfo(DataSourceSinTimeSeries dataSourceSinTimeSeries) {
-        jLabelIdentifier.setText(dataSourceSinTimeSeries.getIdentifier());
-        jLabelSignalNameOut.setText(dataSourceSinTimeSeries.getNameSignal());
-        jLabelCurrentIteration.setText(String.valueOf(dataSourceSinTimeSeries.getCurrentIteration()));
-        jTextFieldFrecuency.setText(String.valueOf(dataSourceSinTimeSeries.getFrecuency()));
-        jTextFieldLimitOfIterations.setText(String.valueOf(dataSourceSinTimeSeries.getLimitOfItIterations()));
-        jTextFieldMultiplier.setText(String.valueOf(dataSourceSinTimeSeries.getMultiplier()));
-        jTextFieldSizeOfIteration.setText(String.valueOf(dataSourceSinTimeSeries.getSizeOfIteration()));
+    private void showInfo(AlgorithmMultiplierOffsetTimeSeries algorithmMultiplierOffsetTimeSeries) {
+        jLabelIdentifier.setText(algorithmMultiplierOffsetTimeSeries.getIdentifier());
+        jLabelSignaToWriteIdentifier.setText(algorithmMultiplierOffsetTimeSeries.getSignalToWrite().getIdentifier());
+        jTextFieldOffset.setText(String.valueOf(algorithmMultiplierOffsetTimeSeries.getOffset()));
+        jTextFieldMultiplier.setText(String.valueOf(algorithmMultiplierOffsetTimeSeries.getMultiplier()));
     }
 
     private void saveInfo() {
-        SignalManager.getInstance().getLockToModifyDataSources();
-        try {
-            this.dataSourceSinTimeSeries.setFrecuency(Float.valueOf(jTextFieldFrecuency.getText()));
-            this.dataSourceSinTimeSeries.setLimitOfItIterations(Integer.valueOf(jTextFieldLimitOfIterations.getText()));
-            this.dataSourceSinTimeSeries.setMultiplier(Double.valueOf(jTextFieldMultiplier.getText()));
-            this.dataSourceSinTimeSeries.setSizeOfIteration(Integer.valueOf(jTextFieldSizeOfIteration.getText()));
-        } finally {
-            SignalManager.getInstance().releaseLockToModifyDataSources();
-        }
+        this.algorithmMultiplierOffsetTimeSeries.setMultiplier(Float.valueOf(jTextFieldMultiplier.getText()));
+        this.algorithmMultiplierOffsetTimeSeries.setOffset(Float.valueOf(jTextFieldOffset.getText()));
     }
 }

@@ -178,6 +178,17 @@ public class SignalManager {
         return this.timeSeries.get(identifier).write(dataToWrite, indexInitToWrite);
     }
 
+    public float getFrecuencyTimeSeries(String identifierSignal){
+        return this.timeSeries.get(identifierSignal).getFrequency();
+    }
+
+    public long getOriginTimeSeries(String identifierSignal){
+        return this.timeSeries.get(identifierSignal).getOrigin();
+    }
+   public long getOriginEventSeries(String identifierSignal){
+        return this.eventSeries.get(identifierSignal).getOrigin();
+    }
+
     void addEventToEventSeries(String identifier, Event event) {
         this.eventSeries.get(identifier).addEvent(event);
     }

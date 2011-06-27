@@ -32,29 +32,57 @@ public class TestGuiFinal {
 
     public static void main(String[] args) {
         TimeSeries timeSeries1;
-        EventSeries eventSeries1;
-        EventSeries eventSeries2;
-        AlgorithmDefaultImplementation algorithmIN;
+        TimeSeries timeSeries2;
+        //Dos entradas sin y cosh
+        timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 0, 100, "mv");
+        timeSeries2 = new TimeSeries("TimeSeries2", "Simulated", 0, 100, "mv");
+        //Primer algoritmo sobre la primera señal
+        AlgorithmDefaultImplementation algorithmMultiplierOffsetSin;
         LinkedList<String> eventSignals1;
         LinkedList<String> timeSignals1;
-        timeSeries1 = new TimeSeries("TimeSeries1", "Simulated", 1, 100, "mv");
-        eventSeries1 = new EventSeries("EventSeries1", "Simulated", 0, new ArrayList<String>(), "NaN");
-        ArrayList<String> entradas= new ArrayList<String>();
-        entradas.add("TimeSeries1");
-        eventSeries2 = new EventSeries("EventSeries2", "TimeSeries1", 0, entradas, "NaN");
         eventSignals1 = new LinkedList<String>();
         timeSignals1 = new LinkedList<String>();
         timeSignals1.add("TimeSeries1");
-        TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_AlgorithmIN", "Algorithm1", 0, 100, "NaN");
-        algorithmIN = new Algorithm2XMultiSignalsImplementationGui("AlgorithmIN", timeSeriesOut1, timeSignals1, eventSignals1);
+        TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_Algorithm1", "Algorithm1", 0, 100, "NaN");
+        algorithmMultiplierOffsetSin = new AlgorithmMultiplierOffsetTimeSeries("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1, new Float(1), new Float(0));
+
+        //El mismo algoritmo pero sobre otra señal
+        AlgorithmDefaultImplementation algorithmMultiplierOffsetCosh;
+        LinkedList<String> eventSignals2;
+        LinkedList<String> timeSignals2;
+        eventSignals2 = new LinkedList<String>();
+        timeSignals2 = new LinkedList<String>();
+        timeSignals2.add("TimeSeries2");
+        TimeSeries timeSeriesOut2 = new TimeSeries("TimeSeries2_Algorithm2", "Algorithm2", 0, 100, "NaN");
+        algorithmMultiplierOffsetCosh = new AlgorithmMultiplierOffsetTimeSeries("Algorithm2", timeSeriesOut2, timeSignals2, eventSignals2, new Float(1.5), new Float(0));
+
+        //Algoritmo sobre la primera de las señales para detectar maximos y mínimos
+        AlgorithmDefaultImplementation algorithmMaxMin;
+        EventSeries eventSeries1MaxOut;
+        LinkedList<String> eventSignals3;
+        LinkedList<String> timeSignals3;
+        eventSignals3 = new LinkedList<String>();
+        timeSignals3 = new LinkedList<String>();
+        timeSignals3.add("TimeSeries1_Algorithm1");
+
+        ArrayList<String> entradas = new ArrayList<String>();
+        entradas.add("TimeSeries1_Algorithm1");
+        eventSeries1MaxOut = new EventSeries("EventSeriesMaxOut", "Simulated", 0, entradas, "NaN");
+        algorithmMaxMin = new AlgorithmMaxMinInTimeSeries("AlgorithmMax", eventSeries1MaxOut, timeSignals3, eventSignals3);
+
+        //Agregamos al SignalManager las señales
         SignalManager.getInstance().addTimeSeries(timeSeries1);
-        SignalManager.getInstance().addEventSeries(eventSeries1);
-        SignalManager.getInstance().addEventSeries(eventSeries2);
-        AlgorithmManager.getInstance().addAlgorithm(algorithmIN);
+        SignalManager.getInstance().addTimeSeries(timeSeries2);
+
+        //Agregamos al SignalManager los algoritmos
+        AlgorithmManager.getInstance().addAlgorithm(algorithmMultiplierOffsetSin);
+        AlgorithmManager.getInstance().addAlgorithm(algorithmMultiplierOffsetCosh);
+        AlgorithmManager.getInstance().addAlgorithm(algorithmMaxMin);
+
+        //Iniciamos los Datasources
         int iterations = 10000;
-        DataSourceSinTimeSeries dataSourceSinTimeSeries = new DataSourceSinTimeSeries(10, 100, iterations, "TimeSeries1",10,0.01);
-        SerialEventSeriesGui serialEventSeriesGui=new SerialEventSeriesGui(10, 10, 1000, "EventSeries1", 10);
-        SerialEventSeriesMark serialEventSeriesMark=new SerialEventSeriesMark(10, 10, 10000, "EventSeries2", 10);
+        DataSourceSinTimeSeries dataSourceSinTimeSeries = new DataSourceSinTimeSeries(10, 100, iterations, "TimeSeries1", 10, 0.01);
+        DataSourceCosTimeSeries dataSourceCosTimeSeries = new DataSourceCosTimeSeries(10, 100, iterations, "TimeSeries2", 10, 0.01);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
@@ -62,30 +90,10 @@ public class TestGuiFinal {
         }
         float[] readNewFromTimeSeriesTimeSeries = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1", 0);
         System.out.println("TimeSeries1 TAM:" + readNewFromTimeSeriesTimeSeries.length);
-       // assertTrue(readNewFromTimeSeriesTimeSeries.length == (iterations + 1) * 10);
-        //System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
-        //assertTrue(readNewFromTimeSeriesTimeSeries.length > 0);
-        for (int i = 0; i < readNewFromTimeSeriesTimeSeries.length - 1; i++) {
-            //if(readNewFromTimeSeriesTimeSeries1[i]!=((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
-            //  System.out.print("_");
-            //System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i] + "   " + ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))));
-          //  assertEquals(readNewFromTimeSeriesTimeSeries[i], ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))), 0.001);
-
-        }
-        readNewFromTimeSeriesTimeSeries = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_AlgorithmIN", 0);
+        readNewFromTimeSeriesTimeSeries = SignalManager.getInstance().readNewFromTimeSeries("TimeSeries1_Algorithm1", 0);
         System.out.println("TimeSeries1 TAM:" + readNewFromTimeSeriesTimeSeries.length);
-        //assertTrue(readNewFromTimeSeriesTimeSeries.length > ((iterations + 1) * 10) / 2);
-        //System.out.println("Tamano" + readNewFromTimeSeriesTimeSeries1.length);
-        //assertTrue(readNewFromTimeSeriesTimeSeries.length > 0);
-        for (int i = 0; i < readNewFromTimeSeriesTimeSeries.length - 1; i++) {
-            //if(readNewFromTimeSeriesTimeSeries1[i]!=((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))))
-            //  System.out.print("_");
-            //System.out.println(i + "  " + readNewFromTimeSeriesTimeSeries1[i] + "   " + ((float) Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100))));
-          //  assertEquals(readNewFromTimeSeriesTimeSeries[i], ((float) 2 * (Math.sin(((float) ((int) (i / 10))) / 10 + ((float) (i % 10) / 100)))), 0.001);
-
-        }
-        SortedSet<Event> eventsCopy = SignalManager.getInstance().getEventsCopy("EventSeries1");
-        System.out.println("EventsSeries1 TAM:"+eventsCopy.size());
+//        SortedSet<Event> eventsCopy = SignalManager.getInstance().getEventsCopy("EventSeries1");
+//        System.out.println("EventsSeries1 TAM:" + eventsCopy.size());
         Creator.main(args);
 
     }
