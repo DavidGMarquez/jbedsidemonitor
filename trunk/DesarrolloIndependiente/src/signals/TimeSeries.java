@@ -21,9 +21,8 @@ public class TimeSeries extends Series {
     private String units;
 
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
-        super(identifier, agent, origin);
+        super(identifier, agent, origin,units);
         this.frequency = frequency;
-        this.units = units.trim();
         if (3600 * 6 * this.frequency > defaultBufferSize) {
             this.buffer = new CircularBuffer(defaultBufferSize);
         } else {
@@ -50,9 +49,6 @@ public class TimeSeries extends Series {
         return (buffer.getIndexNextWrite() - 1) % this.getCapacity();
     }
 
-    public String getUnits() {
-        return units;
-    }
 
     public int getCapacity() {
         return this.buffer.getCapacity();
