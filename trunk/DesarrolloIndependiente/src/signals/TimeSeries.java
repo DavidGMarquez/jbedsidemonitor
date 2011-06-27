@@ -18,7 +18,6 @@ public class TimeSeries extends Series {
     private CircularBuffer buffer;
     private final int defaultBufferSize = 100000;
     private float frequency;
-    private String units;
 
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
         super(identifier, agent, origin,units);
