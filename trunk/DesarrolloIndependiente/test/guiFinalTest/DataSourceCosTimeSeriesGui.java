@@ -31,16 +31,16 @@ import signals.TimeSeries;
  *
  * @author USUARIO
  */
-public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
+public class DataSourceCosTimeSeriesGui extends javax.swing.JDialog {
 
-    DataSourceSinTimeSeries dataSourceSinTimeSeries;
+    DataSourceCosTimeSeries dataSourceCoshTimeSeries;
 
     /** Creates new form ShowInfoTimeSeries */
-    public DataSourceSinTimeSeriesGui(java.awt.Frame parent, boolean modal, DataSourceSinTimeSeries dataSourceSinTimeSeries) {
+    public DataSourceCosTimeSeriesGui(java.awt.Frame parent, boolean modal, DataSourceCosTimeSeries dataSourceCoshTimeSeries) {
         super(parent, modal);
         initComponents();
-        this.dataSourceSinTimeSeries = dataSourceSinTimeSeries;
-        showInfo(dataSourceSinTimeSeries);
+        this.dataSourceCoshTimeSeries = dataSourceCoshTimeSeries;
+        showInfo(dataSourceCoshTimeSeries);
     }
 
     /** This method is called from within the constructor to
@@ -101,7 +101,7 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("DataSourceSinTimeSeries");
+        setTitle("DataSourceCoshTimeSeries");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
@@ -298,9 +298,9 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                DataSourceSinTimeSeries dataSourceSinTimeSeries = new DataSourceSinTimeSeries(10, 100, 1000, "TimeSeries1", 10, 0.01);
+                DataSourceCosTimeSeries dataSourceCoshTimeSeries = new DataSourceCosTimeSeries(10, 100, 1000, "TimeSeries1", 10, 0.01);
 
-                DataSourceSinTimeSeriesGui dialog = new DataSourceSinTimeSeriesGui(new javax.swing.JFrame(), true, dataSourceSinTimeSeries);
+                DataSourceCosTimeSeriesGui dialog = new DataSourceCosTimeSeriesGui(new javax.swing.JFrame(), true, dataSourceCoshTimeSeries);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -336,23 +336,23 @@ public class DataSourceSinTimeSeriesGui extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldSizeOfIteration;
     // End of variables declaration//GEN-END:variables
 
-    private void showInfo(DataSourceSinTimeSeries dataSourceSinTimeSeries) {
-        jLabelIdentifier.setText(dataSourceSinTimeSeries.getIdentifier());
-        jLabelSignalNameOut.setText(dataSourceSinTimeSeries.getNameSignal());
-        jLabelCurrentIteration.setText(String.valueOf(dataSourceSinTimeSeries.getCurrentIteration()));
-        jTextFieldFrecuency.setText(String.valueOf(dataSourceSinTimeSeries.getFrecuency()));
-        jTextFieldLimitOfIterations.setText(String.valueOf(dataSourceSinTimeSeries.getLimitOfItIterations()));
-        jTextFieldMultiplier.setText(String.valueOf(dataSourceSinTimeSeries.getMultiplier()));
-        jTextFieldSizeOfIteration.setText(String.valueOf(dataSourceSinTimeSeries.getSizeOfIteration()));
+    private void showInfo(DataSourceCosTimeSeries dataSourceCoshTimeSeries) {
+        jLabelIdentifier.setText(dataSourceCoshTimeSeries.getIdentifier());
+        jLabelSignalNameOut.setText(dataSourceCoshTimeSeries.getNameSignal());
+        jLabelCurrentIteration.setText(String.valueOf(dataSourceCoshTimeSeries.getCurrentIteration()));
+        jTextFieldFrecuency.setText(String.valueOf(dataSourceCoshTimeSeries.getFrecuency()));
+        jTextFieldLimitOfIterations.setText(String.valueOf(dataSourceCoshTimeSeries.getLimitOfItIterations()));
+        jTextFieldMultiplier.setText(String.valueOf(dataSourceCoshTimeSeries.getMultiplier()));
+        jTextFieldSizeOfIteration.setText(String.valueOf(dataSourceCoshTimeSeries.getSizeOfIteration()));
     }
 
     private void saveInfo() {
         SignalManager.getInstance().getLockToModifyDataSources();
         try {
-            this.dataSourceSinTimeSeries.setFrecuency(Float.valueOf(jTextFieldFrecuency.getText()));
-            this.dataSourceSinTimeSeries.setLimitOfItIterations(Integer.valueOf(jTextFieldLimitOfIterations.getText()));
-            this.dataSourceSinTimeSeries.setMultiplier(Double.valueOf(jTextFieldMultiplier.getText()));
-            this.dataSourceSinTimeSeries.setSizeOfIteration(Integer.valueOf(jTextFieldSizeOfIteration.getText()));
+            this.dataSourceCoshTimeSeries.setFrecuency(Float.valueOf(jTextFieldFrecuency.getText()));
+            this.dataSourceCoshTimeSeries.setLimitOfItIterations(Integer.valueOf(jTextFieldLimitOfIterations.getText()));
+            this.dataSourceCoshTimeSeries.setMultiplier(Double.valueOf(jTextFieldMultiplier.getText()));
+            this.dataSourceCoshTimeSeries.setSizeOfIteration(Integer.valueOf(jTextFieldSizeOfIteration.getText()));
         } finally {
             SignalManager.getInstance().releaseLockToModifyDataSources();
         }

@@ -1,9 +1,14 @@
 package algorithms;
 
+import datasource.DataSourceDefault;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import signals.Series;
+import signals.SignalManager;
+import signals.WriterRunnable;
 
 public abstract class AlgorithmDefaultImplementation implements Algorithm {
 
@@ -51,5 +56,22 @@ public abstract class AlgorithmDefaultImplementation implements Algorithm {
 
     public void showConfigurationGui(JFrame jframe) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+        public boolean waitAndSendWriterRunable(WriterRunnable writerRunnable) {
+        while (!SignalManager.getInstance().isRunning()) {
+            synchronized (SignalManager.getInstance().getLockWaitRunning()) {
+                try {
+                    SignalManager.getInstance().getLockWaitRunning().wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DataSourceDefault.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        return sendWriterRunnable(writerRunnable);
+    }
+
+    public boolean sendWriterRunnable(WriterRunnable writerRunnable) {
+        return SignalManager.getInstance().encueWriteOperation(writerRunnable);
     }
 }

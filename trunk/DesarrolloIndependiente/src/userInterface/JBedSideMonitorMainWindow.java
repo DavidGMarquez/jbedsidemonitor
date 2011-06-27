@@ -10,6 +10,7 @@
  */
 package userInterface;
 
+import algorithms.Algorithm;
 import datasource.DataSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -379,6 +380,11 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         dataSource.showConfigurationGui(this);
     }
 
+    private void jMenuItemActionConfigureAlgorithm(java.awt.event.ActionEvent evt, String algorithmName) {
+        Algorithm algorithm =jSignalAdapter.getAlgorithm(algorithmName);
+        algorithm.showConfigurationGui(this);
+    }
+
     private void jMenuTimeSeriesRefresh() {
         jMenuTimeSeries.setText("TimeSeries");
         jMenuTimeSeries.removeAll();
@@ -481,6 +487,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             javax.swing.JMenuItem algorithmInfo;
             javax.swing.JMenuItem algorithmExecutionInfo;
             javax.swing.JMenuItem algorithmState;
+            javax.swing.JMenuItem algorithmConfigureGui;
             for (final String algorithm : algorithms) {
                 algorithmMenu = new javax.swing.JMenu();
                 algorithmMenu.setText(algorithm);
@@ -509,6 +516,20 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                         jMenuItemActionSwitchStateAlgorithm(evt, algorithm);
                     }
                 });
+
+                if (jSignalAdapter.getAlgorithm(algorithm).hasConfigurationGui()) {
+                    algorithmConfigureGui = new javax.swing.JMenuItem();
+                    algorithmConfigureGui.setText("Config GUI");
+                    algorithmConfigureGui.addActionListener(new java.awt.event.ActionListener() {
+
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            jMenuItemActionConfigureAlgorithm(evt, algorithm);
+                        }
+                    });
+                    algorithmMenu.add(algorithmConfigureGui);
+                }
+
+
                 algorithmMenu.add(algorithmInfo);
                 algorithmMenu.add(algorithmExecutionInfo);
                 algorithmMenu.add(algorithmState);
@@ -543,15 +564,16 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                 });
                 dataSourceMenu.add(dataSourceInfo);
 
-                dataSourceConfigureGui = new javax.swing.JMenuItem();
-                dataSourceConfigureGui.setText("Config GUI");
-                dataSourceConfigureGui.addActionListener(new java.awt.event.ActionListener() {
 
-                    public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        jMenuItemActionConfigureDataSource(evt, dataSource);
-                    }
-                });
                 if (jSignalAdapter.getDataSource(dataSource).hasConfigurationGui()) {
+                    dataSourceConfigureGui = new javax.swing.JMenuItem();
+                    dataSourceConfigureGui.setText("Config GUI");
+                    dataSourceConfigureGui.addActionListener(new java.awt.event.ActionListener() {
+
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            jMenuItemActionConfigureDataSource(evt, dataSource);
+                        }
+                    });
                     dataSourceMenu.add(dataSourceConfigureGui);
                 }
                 jMenuDataSource.add(dataSourceMenu);
