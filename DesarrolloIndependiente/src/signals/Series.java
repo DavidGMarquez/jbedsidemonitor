@@ -8,11 +8,13 @@ public abstract class Series {
     private String agent = "simulated";
     private long origin;
     private ArrayList<String> seriesIsGeneratedFrom;
+    private String units;
 
-    protected Series(String identifier, String agent, long timeinit) {
+    protected Series(String identifier, String agent, long timeinit,String units) {
         this.setIdentifier(identifier.trim());
         this.setAgent(agent.trim());
         this.setOrigin(timeinit);
+        this.setUnits(units);
         this.seriesIsGeneratedFrom = new ArrayList<String>();
     }
 
@@ -53,4 +55,13 @@ public abstract class Series {
     public void setSeriesIsGeneratedFrom(ArrayList<String> seriesIsGeneratedFrom) {
         this.seriesIsGeneratedFrom = new ArrayList<String>(seriesIsGeneratedFrom);
     }
+
+    public String getUnits() {
+        return units;
+    }
+
+    private void setUnits(String units) {
+        this.units = units;
+    }
+    
 }

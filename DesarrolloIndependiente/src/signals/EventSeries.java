@@ -4,13 +4,11 @@ import java.util.*;
 
 public class EventSeries extends Series {
 
-    private SortedSet<Event> events;
-    private String units;
+    private SortedSet<Event> events;    
 
     public EventSeries(String identifier, String agent, long timeinit, ArrayList<String> imputs, String units) {
-        super(identifier, agent, timeinit);
+        super(identifier, agent, timeinit,units);
         super.setSeriesIsGeneratedFrom(new ArrayList<String>(imputs));
-        this.units = units.trim();
         this.events = new TreeSet<Event>();
     }
 
@@ -31,9 +29,6 @@ public class EventSeries extends Series {
         return events.last().getLocation();
     }
 
-    public String getUnits() {
-        return units;
-    }
     //@pendiente revisar esto parece dar problemas de concurrencia
     public SortedSet<Event> getEvents(long firstInstantToInclude, long lastInstantToInclude) {
         Event eventFrom = new Event(firstInstantToInclude, "", null);
