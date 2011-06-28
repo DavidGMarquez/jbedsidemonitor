@@ -91,9 +91,9 @@ public class TimeSeries extends Series {
         stringToReturn=stringToReturn.concat("SeriesIsGeneratedFrom:");
         ArrayList<String> seriesIsGeneratedFrom = this.getSeriesIsGeneratedFrom();
         for(String serie:seriesIsGeneratedFrom){
-            stringToReturn.concat(" "+serie);
+             stringToReturn=stringToReturn.concat(" "+serie);
         }
-        stringToReturn.concat("\n");
+        stringToReturn=stringToReturn.concat("\n");
         return stringToReturn;
     }
 }

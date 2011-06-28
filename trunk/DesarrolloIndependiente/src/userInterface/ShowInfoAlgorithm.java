@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * ShowInfoTimeSeries.java
- *
- * Created on 13-jun-2011, 9:35:27
- */
 package userInterface;
 
 import algorithms.Algorithm;
@@ -340,7 +330,7 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
                     + "(Hold:" + algorithm.getNotifyPolice().getTimeSeriesTheshold().get(timeSerieHold).intValue()
                     + ")" + "\n");
         }
-        stringTimeSeriesHold.concat("\n");
+        stringTimeSeriesHold =stringTimeSeriesHold.concat("\n");
         jTextAreaTimeSeriesHold.setText(stringTimeSeriesHold);
 
         Set<String> eventSeriesHolds = algorithm.getNotifyPolice().getEventSeriesTheshold().keySet();
@@ -351,7 +341,7 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
                     + "(Hold:" + algorithm.getNotifyPolice().getEventSeriesTheshold().get(eventSerieHold).intValue()
                     + ")" + "\n");
         }
-        stringEventSeriesHold.concat("\n");
+        stringTimeSeriesHold =stringEventSeriesHold.concat("\n");
         jTextAreaEventSeriesHold.setText(stringEventSeriesHold);
     }
 }

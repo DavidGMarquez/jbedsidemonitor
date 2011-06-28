@@ -225,8 +225,7 @@ public class ShowInfoEventSeries extends javax.swing.JDialog {
         for (String serie : seriesIsGeneratedFrom) {
             stringIsGeneratedFrom=stringIsGeneratedFrom.concat(serie+"\n");
         }
-        stringIsGeneratedFrom.concat("\n");
-        System.out.println(stringIsGeneratedFrom);
+        stringIsGeneratedFrom=stringIsGeneratedFrom.concat("\n");
         jTextAreaSeriesIsGeneratedFrom.setText(stringIsGeneratedFrom);
 
         
