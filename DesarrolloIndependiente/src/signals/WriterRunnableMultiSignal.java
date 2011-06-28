@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 public class WriterRunnableMultiSignal extends WriterRunnable {
 
     protected LinkedList<WriterRunnableOneSignal> writerRunnables;
-    protected LockManager lockManager;
 
     public WriterRunnableMultiSignal() {
 

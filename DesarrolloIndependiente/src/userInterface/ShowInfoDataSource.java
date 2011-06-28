@@ -168,7 +168,7 @@ public class ShowInfoDataSource extends javax.swing.JDialog {
         for (String serie : seriesIsGeneratedFrom) {
             stringIsGeneratedFrom=stringIsGeneratedFrom.concat(serie+"\n");
         }
-        stringIsGeneratedFrom.concat("\n");
+        stringIsGeneratedFrom=stringIsGeneratedFrom.concat("\n");
         jTextAreaSeriesGenerated.setText(stringIsGeneratedFrom);
 
         

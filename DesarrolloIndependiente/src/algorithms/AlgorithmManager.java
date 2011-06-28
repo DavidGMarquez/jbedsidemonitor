@@ -104,7 +104,6 @@ public class AlgorithmManager {
                 }
                 this.checkTriggers();
             }
-            //@pediente no se porque es necesario la copia pero bueno
             //@pendiente esto pasarlo a sus clases correspondiente haciendo un constructor de copia
             WriterRunnable writerRunnableCopy = null;
             if (writerRunnable instanceof WriterRunnableEventSeries) {

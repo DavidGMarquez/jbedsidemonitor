@@ -39,7 +39,7 @@ public class AuxTestUtilities {
     public static float[] generateArray(int tam) {
         float[] array = new float[tam];
         for (int i = 0; i < tam; i++) {
-            array[i] = (float) Math.random() * 100;
+            array[i] = (float) (Math.random() * 100);
         }
         return array;
     }
@@ -47,7 +47,7 @@ public class AuxTestUtilities {
     public static int[] generateArrayInteger(int tam) {
         int[] array = new int[tam];
         for (int i = 0; i < tam; i++) {
-            array[i] = (int) Math.random() * 100;
+            array[i] = (int) (Math.random() * 100);
         }
         return array;
     }

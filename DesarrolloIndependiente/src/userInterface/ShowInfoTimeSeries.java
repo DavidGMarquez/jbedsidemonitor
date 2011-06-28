@@ -1,13 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/*
- * ShowInfoTimeSeries.java
- *
- * Created on 13-jun-2011, 9:35:27
- */
 package userInterface;
 
 import java.util.ArrayList;
@@ -267,8 +258,7 @@ public class ShowInfoTimeSeries extends javax.swing.JDialog {
         for (String serie : seriesIsGeneratedFrom) {
             stringIsGeneratedFrom=stringIsGeneratedFrom.concat(serie+"\n");
         }
-        stringIsGeneratedFrom.concat("\n");
-        System.out.println(stringIsGeneratedFrom);
+         stringIsGeneratedFrom=stringIsGeneratedFrom.concat("\n");
         jTextAreaSeriesIsGeneratedFrom.setText(stringIsGeneratedFrom);
 
         
