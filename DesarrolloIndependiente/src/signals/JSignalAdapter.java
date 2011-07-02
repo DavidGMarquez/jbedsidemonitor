@@ -46,6 +46,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentHashMap<String, ArrayList<String>> channelsToMarks;
     private ConcurrentHashMap<String, ArrayList<String>> channelsToMarksNotShow;
     private ConcurrentHashMap<String, ReentrantReadWriteLock> lockChannelsToMarks;
+    private ExecutorServiceJSignalAdapterRunnable executorServiceJSignalAdapterRunnable;
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
@@ -57,6 +58,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         channelsToMarksNotShow = new ConcurrentHashMap<String, ArrayList<String>>();
         lockChannelsToMarks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
         availableCategoriesOfAnnotations = Collections.synchronizedList(new ArrayList<String>());
+        executorServiceJSignalAdapterRunnable= new ExecutorServiceJSignalAdapterRunnable();
     }
 
     public JSignalMonitor getjSignalMonitor() {
@@ -523,11 +525,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     }
 
     public void executeWriterRunnable(WriterRunnable writerRunnable) {
-        //@pendiente idea
-        //Cambiar esto a despues de haberse ejecutado los writer Runnables
-        //Quizás hacer un executor Service para esto
-        Thread thread = new Thread(new executeJSignalAdapterRunnable(writerRunnable), "executeJSignalAdapterRunnable");
-        thread.start();
+        executorServiceJSignalAdapterRunnable.executeRunnable(new JSignalAdapterRunnable(writerRunnable));
     }
 
     void notifyWriterRunnable(WriterRunnable writerRunnable) {
@@ -618,11 +616,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         }
     }
 
-    public class executeJSignalAdapterRunnable implements Runnable {
+    public class JSignalAdapterRunnable implements Runnable {
 
         WriterRunnable writerRunnable;
 
-        executeJSignalAdapterRunnable(WriterRunnable writerRunnable) {
+        JSignalAdapterRunnable(WriterRunnable writerRunnable) {
             this.writerRunnable = writerRunnable;
         }
 
