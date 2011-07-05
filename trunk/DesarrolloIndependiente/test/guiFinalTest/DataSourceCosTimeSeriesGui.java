@@ -120,7 +120,7 @@ public class DataSourceCosTimeSeriesGui extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAceptarCambios.setText("Guardar Cambios");
+        jButtonAceptarCambios.setText("Save Changes");
         jButtonAceptarCambios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAceptarCambiosActionPerformed(evt);
@@ -128,7 +128,7 @@ public class DataSourceCosTimeSeriesGui extends javax.swing.JDialog {
         });
         jPanel1.add(jButtonAceptarCambios, new java.awt.GridBagConstraints());
 
-        jButtonSalir.setText("Salir");
+        jButtonSalir.setText("Exit");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSalirActionPerformed(evt);

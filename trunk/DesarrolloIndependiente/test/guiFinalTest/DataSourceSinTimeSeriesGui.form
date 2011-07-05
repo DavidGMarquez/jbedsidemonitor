@@ -205,7 +205,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButtonAceptarCambios">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Guardar Cambios"/>
+            <Property name="text" type="java.lang.String" value="Save Changes"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAceptarCambiosActionPerformed"/>
@@ -218,7 +218,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonSalir">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Salir"/>
+            <Property name="text" type="java.lang.String" value="Exit"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSalirActionPerformed"/>

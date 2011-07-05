@@ -67,7 +67,7 @@ public class ShowInfoDataSource extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13));
         jLabel7.setText("SeriesGenerated:");
 
         jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
@@ -79,7 +79,7 @@ public class ShowInfoDataSource extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Aceptar");
+        jButton1.setText("Accept");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

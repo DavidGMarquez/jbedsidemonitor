@@ -62,7 +62,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAceptarCambios.setText("Guardar Cambios");
+        jButtonAceptarCambios.setText("Save Changes");
         jButtonAceptarCambios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAceptarCambiosActionPerformed(evt);
@@ -70,7 +70,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
         });
         jPanel1.add(jButtonAceptarCambios, new java.awt.GridBagConstraints());
 
-        jButtonSalir.setText("Salir");
+        jButtonSalir.setText("Exit");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSalirActionPerformed(evt);
@@ -84,7 +84,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 55, 0, 24);
         jPanel1.add(jButtonSalir, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setText("Marks:");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -107,7 +107,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
 
         jTextFieldSizeMarks.setText("jTextField1");
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel11.setText("Size");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -159,7 +159,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
 
         jTextFieldSizeAnnotations.setText("jTextField1");
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel10.setText("Size");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -193,7 +193,7 @@ public class ConfigureAnnotationMark extends javax.swing.JDialog {
                 .addContainerGap(29, Short.MAX_VALUE))
         );
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel9.setText("Annotations:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

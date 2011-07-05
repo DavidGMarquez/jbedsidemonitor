@@ -18,7 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import signals.EventSeries;
 import signals.SignalManager;
-import userInterface.Creator;
+import userInterface.CreatorUserInterface;
 import userInterface.JBedSideMonitorMainWindow;
 
 /**
@@ -46,6 +46,7 @@ public class TestGuiFinal {
         TimeSeries timeSeriesOut1 = new TimeSeries("TimeSeries1_Algorithm1", "Algorithm1", 0, 100, "NaN");
         algorithmMultiplierOffsetSin = new AlgorithmMultiplierOffsetTimeSeries("Algorithm1", timeSeriesOut1, timeSignals1, eventSignals1, new Float(1), new Float(0));
 
+
         //El mismo algoritmo pero sobre otra señal
         AlgorithmDefaultImplementation algorithmMultiplierOffsetCosh;
         LinkedList<String> eventSignals2;
@@ -70,6 +71,23 @@ public class TestGuiFinal {
         eventSeries1MaxOut = new EventSeries("EventSeriesMaxOut", "Simulated", 0, entradas, "NaN");
         algorithmMaxMin = new AlgorithmMaxMinInTimeSeries("AlgorithmMax", eventSeries1MaxOut, timeSignals3, eventSignals3);
 
+        //Algoritmo acumulator
+        AlgorithmDefaultImplementation algorithmAcumulator;
+        EventSeries eventSeries2Acumulator;
+        LinkedList<String> eventSignals4;
+        LinkedList<String> timeSignals4;
+        eventSignals4 = new LinkedList<String>();
+        timeSignals4 = new LinkedList<String>();
+        timeSignals4.add("TimeSeries1");
+        timeSignals4.add("TimeSeries2");
+
+        ArrayList<String> entradasAcumultator = new ArrayList<String>();
+        entradasAcumultator.add("TimeSeries1");
+        entradasAcumultator.add("TimeSeries2");
+        eventSeries2Acumulator = new EventSeries("EventSeriesAcumultatorOut", "Simulated", 0, entradasAcumultator, "NaN");
+        algorithmAcumulator = new AlgorithmAcumulatorTimeSeries("Algorithm3", eventSeries2Acumulator, timeSignals4, eventSignals4, 1000);
+
+
         //Agregamos al SignalManager las señales
         SignalManager.getInstance().addTimeSeries(timeSeries1);
         SignalManager.getInstance().addTimeSeries(timeSeries2);
@@ -78,6 +96,7 @@ public class TestGuiFinal {
         AlgorithmManager.getInstance().addAlgorithm(algorithmMultiplierOffsetSin);
         AlgorithmManager.getInstance().addAlgorithm(algorithmMultiplierOffsetCosh);
         AlgorithmManager.getInstance().addAlgorithm(algorithmMaxMin);
+        AlgorithmManager.getInstance().addAlgorithm(algorithmAcumulator);
 
         //Iniciamos los Datasources
         int iterations = 10000;
@@ -94,7 +113,7 @@ public class TestGuiFinal {
         System.out.println("TimeSeries1 TAM:" + readNewFromTimeSeriesTimeSeries.length);
 //        SortedSet<Event> eventsCopy = SignalManager.getInstance().getEventsCopy("EventSeries1");
 //        System.out.println("EventsSeries1 TAM:" + eventsCopy.size());
-        Creator.main(args);
+        CreatorUserInterface.main(args);
 
     }
 }

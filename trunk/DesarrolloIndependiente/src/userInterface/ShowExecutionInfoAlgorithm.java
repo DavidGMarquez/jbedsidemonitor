@@ -82,21 +82,21 @@ public class ShowExecutionInfoAlgorithm extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("Number of Update Triggers:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText("Number of Executions:");
 
         jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabelIdentifier.setText("Identifier:");
 
-        jLabelnumberOfUpdateTriggers.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelnumberOfUpdateTriggers.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelnumberOfUpdateTriggers.setText("Agent:");
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Aceptar");
+        jButton1.setText("Accept");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -104,7 +104,7 @@ public class ShowExecutionInfoAlgorithm extends javax.swing.JDialog {
         });
         jPanel1.add(jButton1, new java.awt.GridBagConstraints());
 
-        jLabelnumberOfExecutions.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelnumberOfExecutions.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelnumberOfExecutions.setText("Notify Police");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

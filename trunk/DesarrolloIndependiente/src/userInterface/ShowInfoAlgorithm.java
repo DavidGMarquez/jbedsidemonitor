@@ -81,21 +81,21 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("Signal to Write:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText("Notify Police Type:");
 
         jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabelIdentifier.setText("Identifier:");
 
-        jLabelSignalToWrite.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelSignalToWrite.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelSignalToWrite.setText("Agent:");
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Aceptar");
+        jButton1.setText("Accept");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -111,7 +111,7 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
         jTextAreaTimeSeriesHold.setRows(5);
         jScrollPane4.setViewportView(jTextAreaTimeSeriesHold);
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setText("TimeSeries");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -139,7 +139,7 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
         jTextAreaEventSeriesHold.setRows(5);
         jScrollPane2.setViewportView(jTextAreaEventSeriesHold);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel7.setText("EventSeries");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -182,10 +182,10 @@ public class ShowInfoAlgorithm extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jLabelNotifyPolice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelNotifyPolice.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelNotifyPolice.setText("Notify Police");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setText("Notify Police Holds");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

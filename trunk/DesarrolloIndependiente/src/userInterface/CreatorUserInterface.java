@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import signals.SignalManager;
 public class CreatorUserInterface {
+    
 
     public static void main(String args[]) {
 
