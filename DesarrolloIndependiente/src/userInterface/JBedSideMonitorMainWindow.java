@@ -12,6 +12,7 @@ package userInterface;
 
 import algorithms.Algorithm;
 import datasource.DataSource;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -60,6 +62,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jButtonFitRanges = new javax.swing.JButton();
         jButtonShowrXY = new javax.swing.JButton();
         jToggleButtonRealTime = new javax.swing.JToggleButton();
+        jToggleButtonPlayPause = new javax.swing.JToggleButton();
         jButtonStart = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -72,6 +75,8 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuDataSource = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JBedSideMonitor");
@@ -80,6 +85,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
 
+        jButtonRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Refresh.png"))); // NOI18N
         jButtonRefresh.setText("Refresh");
         jButtonRefresh.setFocusable(false);
         jButtonRefresh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -91,6 +97,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         });
         jToolBar1.add(jButtonRefresh);
 
+        jButtonFitRanges.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/FitRanges.png"))); // NOI18N
         jButtonFitRanges.setText("Fit Ranges");
         jButtonFitRanges.setFocusable(false);
         jButtonFitRanges.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -102,6 +109,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         });
         jToolBar1.add(jButtonFitRanges);
 
+        jButtonShowrXY.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/XY.png"))); // NOI18N
         jButtonShowrXY.setText("ShowXY");
         jButtonShowrXY.setFocusable(false);
         jButtonShowrXY.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -113,6 +121,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         });
         jToolBar1.add(jButtonShowrXY);
 
+        jToggleButtonRealTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Time.png"))); // NOI18N
         jToggleButtonRealTime.setText("Real Time");
         jToggleButtonRealTime.setEnabled(false);
         jToggleButtonRealTime.setFocusable(false);
@@ -125,6 +134,20 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         });
         jToolBar1.add(jToggleButtonRealTime);
 
+        jToggleButtonPlayPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/PlayPause.png"))); // NOI18N
+        jToggleButtonPlayPause.setText("PlayPause");
+        jToggleButtonPlayPause.setEnabled(false);
+        jToggleButtonPlayPause.setFocusable(false);
+        jToggleButtonPlayPause.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButtonPlayPause.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToggleButtonPlayPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButtonPlayPauseActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jToggleButtonPlayPause);
+
+        jButtonStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Play.png"))); // NOI18N
         jButtonStart.setText("START");
         jButtonStart.setFocusable(false);
         jButtonStart.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -142,7 +165,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(20, 20));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("JBedSideMonitor");
+        jLabel1.setText("    JBedSideMonitor");
         jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jLabel1.setMinimumSize(new java.awt.Dimension(34, 18));
         jLabel1.setPreferredSize(new java.awt.Dimension(200, 16));
@@ -178,9 +201,9 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         this.jMenuDataSourcesRefresh();
         jMenuBar1.add(jMenuDataSource);
 
-        jMenu4.setText("Status");
+        jMenu4.setText("Settings");
 
-        jMenuItem2.setText("Play/Pause");
+        jMenuItem2.setText("Configurar Marcas Y Anotaciones");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -189,6 +212,18 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenu4.add(jMenuItem2);
 
         jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("About");
+
+        jMenuItem3.setText("About");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -202,15 +237,17 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         } else {
             jSignalMonitor.repaintAll();
         }
-        this.jMenuRefresh();
+        this.refresh();
     }//GEN-LAST:event_jButtonRefreshActionPerformed
 
     private void jButtonFitRangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFitRangesActionPerformed
         calculaMaxAndMinOfSignalsAndSetVisibleRange();
+        this.refresh();
     }//GEN-LAST:event_jButtonFitRangesActionPerformed
 
     private void jButtonShowrXYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonShowrXYActionPerformed
         jSignalMonitor.setRepresentingXYValues(!jSignalMonitor.isRepresentingXYValues());
+        this.refresh();
     }//GEN-LAST:event_jButtonShowrXYActionPerformed
 
     private void jToggleButtonRealTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonRealTimeActionPerformed
@@ -223,18 +260,33 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        jSignalAdapter.switchStateSignalManager();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         jSignalAdapter.startSignalManager();
         jButtonStart.setVisible(false);
         jToggleButtonRealTime.setSelected(true);
         jToggleButtonRealTime.setEnabled(true);
+                jToggleButtonPlayPause.setSelected(true);
+        jToggleButtonPlayPause.setEnabled(true);
         this.switchRealTime();
         this.refresh();
     }//GEN-LAST:event_jButtonStartActionPerformed
+
+    private void jToggleButtonPlayPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPlayPauseActionPerformed
+                jSignalAdapter.switchStateSignalManager();
+                this.refresh();
+    }//GEN-LAST:event_jToggleButtonPlayPauseActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+ConfigureAnnotationMark configureAnnotationMark=new ConfigureAnnotationMark(this, true, jSignalAdapter);
+configureAnnotationMark.setLocationRelativeTo(this);
+configureAnnotationMark.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        About aboutWindow=new About(this, true);
+        aboutWindow.setLocationRelativeTo(this);
+        aboutWindow.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,14 +308,17 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenuAlgorithm;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuDataSource;
     private javax.swing.JMenu jMenuEventSeries;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu jMenuTimeSeries;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JToggleButton jToggleButtonPlayPause;
     private javax.swing.JToggleButton jToggleButtonRealTime;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
@@ -381,8 +436,24 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
     }
 
     private void jMenuItemActionConfigureAlgorithm(java.awt.event.ActionEvent evt, String algorithmName) {
-        Algorithm algorithm =jSignalAdapter.getAlgorithm(algorithmName);
+        Algorithm algorithm = jSignalAdapter.getAlgorithm(algorithmName);
         algorithm.showConfigurationGui(this);
+    }
+
+    private void jMenuItemActionSetInvadeNearChannels(java.awt.event.ActionEvent evt, String signalName) {
+        ChannelProperties channelProperties = jSignalMonitor.getChannelProperties(signalName);
+        boolean option = channelProperties.isInvadeNearChannels();
+        channelProperties.setInvadeNearChannels(!option);
+    }
+
+    private void jMenuItemActionSelectColor(java.awt.event.ActionEvent evt, String signalName) {
+        JColorChooser jColorChooser = new JColorChooser();
+        ChannelProperties channelProperties = jSignalMonitor.getChannelProperties(signalName);
+        Color color = jColorChooser.showDialog(this, "Choose color for " + signalName,
+                channelProperties.getDataColor());
+        if (color != null) {
+            channelProperties.setDataColor(color);
+        }
     }
 
     private void jMenuTimeSeriesRefresh() {
@@ -391,14 +462,17 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         {
             LinkedList<String> signals = this.jSignalAdapter.getAllTimeSeriesNames();
             javax.swing.JMenu signalMenu;
+            javax.swing.JRadioButtonMenuItem signalShow;
             javax.swing.JMenu signalsMarksMenu;
-            javax.swing.JMenuItem signalShow;
             javax.swing.JMenuItem signalInfo;
-            javax.swing.JMenuItem signalMark;
+            javax.swing.JMenuItem signalColor;
+            javax.swing.JRadioButtonMenuItem signalMark;
+            javax.swing.JRadioButtonMenuItem invadeNearChannels;
             for (final String signal : signals) {
                 signalMenu = new javax.swing.JMenu();
                 signalMenu.setText(signal);
-                signalShow = new javax.swing.JMenuItem();
+                signalShow = new javax.swing.JRadioButtonMenuItem();
+                signalShow.setSelected(true);
                 signalShow.setText("Mostrar/Ocultar");
                 signalShow.addActionListener(new java.awt.event.ActionListener() {
 
@@ -414,14 +488,33 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                         jMenuItemActionInfoSignal(evt, signal);
                     }
                 });
+                signalColor = new javax.swing.JMenuItem();
+                signalColor.setText("Color");
+                signalColor.addActionListener(new java.awt.event.ActionListener() {
 
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionSelectColor(evt, signal);
+                    }
+                });
+
+                invadeNearChannels = new javax.swing.JRadioButtonMenuItem();
+                invadeNearChannels.setText("InvadeNearChannels");
+                invadeNearChannels.setSelected(true);
+                invadeNearChannels.addActionListener(new java.awt.event.ActionListener() {
+
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        jMenuItemActionSetInvadeNearChannels(evt, signal);
+                    }
+                });
+                signalMenu.add(invadeNearChannels);
                 ArrayList<String> marksSignals = getSignalMarksForSignal(signal);
 
                 if (!marksSignals.isEmpty()) {
                     signalsMarksMenu = new javax.swing.JMenu();
                     signalsMarksMenu.setText("Marks");
                     for (final String serieMark : marksSignals) {
-                        signalMark = new javax.swing.JMenuItem();
+                        signalMark = new javax.swing.JRadioButtonMenuItem();
+                        signalMark.setSelected(true);
                         signalMark.setText(serieMark);
                         signalMark.addActionListener(new java.awt.event.ActionListener() {
 
@@ -435,6 +528,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                 }
                 signalMenu.add(signalShow);
                 signalMenu.add(signalInfo);
+                signalMenu.add(signalColor);
                 jMenuTimeSeries.add(signalMenu);
             }
         }
@@ -446,7 +540,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         {
             LinkedList<String> signals = this.jSignalAdapter.getAllEventSeriesNames();
             javax.swing.JMenu signalMenu;
-            javax.swing.JMenuItem signalShow;
+            javax.swing.JRadioButtonMenuItem signalShow;
             javax.swing.JMenuItem signalInfo;
             for (final String signal : signals) {
                 signalMenu = new javax.swing.JMenu();
@@ -454,7 +548,8 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                     signalMenu.setText(signal + "(Mark)");
                 } else {
                     signalMenu.setText(signal + "(Annotation)");
-                    signalShow = new javax.swing.JMenuItem();
+                    signalShow = new javax.swing.JRadioButtonMenuItem();
+                    signalShow.setSelected(true);
                     signalShow.setText("Mostrar/Ocultar");
                     signalShow.addActionListener(new java.awt.event.ActionListener() {
 
@@ -486,7 +581,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             javax.swing.JMenu algorithmMenu;
             javax.swing.JMenuItem algorithmInfo;
             javax.swing.JMenuItem algorithmExecutionInfo;
-            javax.swing.JMenuItem algorithmState;
+            javax.swing.JRadioButtonMenuItem algorithmState;
             javax.swing.JMenuItem algorithmConfigureGui;
             for (final String algorithm : algorithms) {
                 algorithmMenu = new javax.swing.JMenu();
@@ -508,7 +603,8 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
                         jMenuItemActionExecutionInfoAlgorithm(evt, algorithm);
                     }
                 });
-                algorithmState = new javax.swing.JMenuItem();
+                algorithmState = new javax.swing.JRadioButtonMenuItem();
+                algorithmState.setSelected(true);
                 algorithmState.setText("Active/Inactive");
                 algorithmState.addActionListener(new java.awt.event.ActionListener() {
 
@@ -597,7 +693,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
             timer = new Timer(100, new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 200 * jSignalMonitor.getFrecuency()) {
+                    if (Math.abs(jSignalMonitor.getScrollValue() + jSignalMonitor.getVisibleTime() - jSignalMonitor.getEndTime()) < 10 * jSignalMonitor.getFrecuency()) {
                         jSignalMonitor.repaintAll();
                         jSignalMonitor.setScrollValue(jSignalMonitor.getEndTime());
                     } else {
@@ -609,7 +705,6 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         } else {
             if (timer.isRunning()) {
                 timer.stop();
-
             } else {
                 timer.start();
             }

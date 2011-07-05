@@ -9,7 +9,7 @@ public class LockManager {
     private static final LockManager INSTANCE = new LockManager();
     private ConcurrentMap<String, ReentrantReadWriteLock> signalsLocks;
 
-    public LockManager() {
+    private LockManager() {
         signalsLocks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
     }
 

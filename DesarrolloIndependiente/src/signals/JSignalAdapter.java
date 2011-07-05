@@ -47,6 +47,10 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
     private ConcurrentHashMap<String, ArrayList<String>> channelsToMarksNotShow;
     private ConcurrentHashMap<String, ReentrantReadWriteLock> lockChannelsToMarks;
     private ExecutorServiceJSignalAdapterRunnable executorServiceJSignalAdapterRunnable;
+    private boolean annotationInterval = true;
+    private boolean markInterval = true;
+    private int annotationIntervalSize = 250;
+    private int markIntervalSize = 250;
 
     public JSignalAdapter() {
         timeSeries = new ConcurrentHashMap<String, TimeSeries>();
@@ -58,7 +62,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         channelsToMarksNotShow = new ConcurrentHashMap<String, ArrayList<String>>();
         lockChannelsToMarks = new ConcurrentHashMap<String, ReentrantReadWriteLock>();
         availableCategoriesOfAnnotations = Collections.synchronizedList(new ArrayList<String>());
-        executorServiceJSignalAdapterRunnable= new ExecutorServiceJSignalAdapterRunnable();
+        executorServiceJSignalAdapterRunnable = new ExecutorServiceJSignalAdapterRunnable();
     }
 
     public JSignalMonitor getjSignalMonitor() {
@@ -85,6 +89,7 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
                 anotateEventSeriesMark(channelName, eventSeries.getIdentifier());
             } else {
                 annotationOfSignals.put(eventSeries.getIdentifier(), new ArrayList<JSignalMonitorAnnotation>());
+                                availableCategoriesOfAnnotations.add(eventSeries.getIdentifier());
             }
         }
     }
@@ -294,10 +299,42 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         return consecutiveSamplesAvailableInfo;
     }
 
+    public boolean isAnnotationInterval() {
+        return annotationInterval;
+    }
+
+    public void setAnnotationInterval(boolean annotationInterval) {
+        this.annotationInterval = annotationInterval;
+    }
+
+    public int getAnnotationIntervalSize() {
+        return annotationIntervalSize;
+    }
+
+    public void setAnnotationIntervalSize(int annotationIntervalSize) {
+        this.annotationIntervalSize = annotationIntervalSize;
+    }
+
+    public boolean isMarkInterval() {
+        return markInterval;
+    }
+
+    public void setMarkInterval(boolean markInterval) {
+        this.markInterval = markInterval;
+    }
+
+    public int getMarkIntervalSize() {
+        return markIntervalSize;
+    }
+
+    public void setMarkIntervalSize(int markIntervalSize) {
+        this.markIntervalSize = markIntervalSize;
+    }
+
     private DefaultInstantMark convertEvent2DefaultInstantMark(Event e, String category) {
         DefaultInstantMark defaultInstantMark = new DefaultInstantMark();
         defaultInstantMark.setComentary(e.getType());
-        defaultInstantMark.setColor(Color.white);
+        defaultInstantMark.setColor(Color.yellow);
         defaultInstantMark.setMarkTime(e.getLocation());
         defaultInstantMark.setTitle(category);
         return defaultInstantMark;
@@ -311,9 +348,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         defaultInstantAnnotation.setCategory(category);
         return defaultInstantAnnotation;
     }
-        private DefaultIntervalAnnotation convertEvent2DefaultIntervalAnnotation(Event e, String category) {
-            DefaultIntervalAnnotation defaultIntervalAnnotation= new DefaultIntervalAnnotation();
-        defaultIntervalAnnotation.setAnnotationTime(e.getLocation());
+
+    private DefaultIntervalAnnotation convertEvent2DefaultIntervalAnnotation(Event e, String category) {
+        DefaultIntervalAnnotation defaultIntervalAnnotation = new DefaultIntervalAnnotation();
+        defaultIntervalAnnotation.setAnnotationTime(e.getLocation() - annotationIntervalSize);
+        defaultIntervalAnnotation.setEndTime(e.getLocation() + annotationIntervalSize);
         defaultIntervalAnnotation.setTitle(e.getType());
         defaultIntervalAnnotation.setColor(Color.yellow);
         defaultIntervalAnnotation.setCategory(category);
@@ -324,19 +363,10 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         DefaultIntervalMark defaultIntervalMark = new DefaultIntervalMark();
         defaultIntervalMark.setComentary(e.getType());
         defaultIntervalMark.setColor(Color.red);
-        defaultIntervalMark.setMarkTime(e.getLocation() - 300);
-        defaultIntervalMark.setEndTime(e.getLocation() + 300);
+        defaultIntervalMark.setMarkTime(e.getLocation() - markIntervalSize);
+        defaultIntervalMark.setEndTime(e.getLocation() + markIntervalSize);
         defaultIntervalMark.setTitle(category);
         return defaultIntervalMark;
-    }
-
-    private DefaultInstantAnnotation convertEvent2DefaultInvervalAnnotation(Event e, String category) {
-        DefaultInstantAnnotation defaultInstantAnnotation = new DefaultInstantAnnotation();
-        defaultInstantAnnotation.setAnnotationTime(e.getLocation());
-        defaultInstantAnnotation.setTitle(e.getType());
-        defaultInstantAnnotation.setColor(Color.yellow);
-        defaultInstantAnnotation.setCategory(category);
-        return defaultInstantAnnotation;
     }
 
     public LinkedList<String> getAllTimeSeriesNames() {
@@ -567,7 +597,11 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
             }*/
             LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
             for (Event eventWrite : eventsToWrite) {
-                marksToAdd.add(this.convertEvent2DefaultIntervalMark(eventWrite, identifierSignal));
+                if (markInterval) {
+                    marksToAdd.add(this.convertEvent2DefaultIntervalMark(eventWrite, identifierSignal));
+                } else {
+                    marksToAdd.add(this.convertEvent2DefaultInstantMark(eventWrite, identifierSignal));
+                }
             }
             marks.addAll(marksToAdd);
         } finally {
@@ -586,7 +620,12 @@ public class JSignalAdapter extends JSignalMonitorDataSourceAdapter {
         }*/
         LinkedList<Event> eventsToWrite = new LinkedList<Event>(writerRunnableEventSeries.getEventsToWrite());
         for (Event eventWrite : eventsToWrite) {
-            annotationsToAdd.add(this.convertEvent2DefaultInstantAnnotation(eventWrite, identifierSignal));
+            if (annotationInterval) {
+                annotationsToAdd.add(this.convertEvent2DefaultIntervalAnnotation(eventWrite, identifierSignal));
+            } else {
+                annotationsToAdd.add(this.convertEvent2DefaultInstantAnnotation(eventWrite, identifierSignal));
+            }
+
         }
         annotations.addAll(annotationsToAdd);
     }
