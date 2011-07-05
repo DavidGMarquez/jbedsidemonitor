@@ -63,7 +63,7 @@ public abstract class AlgorithmDefaultImplementation implements Algorithm {
                 try {
                     SignalManager.getInstance().getLockWaitRunning().wait();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(DataSourceDefault.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(AlgorithmDefaultImplementation.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
