@@ -102,13 +102,13 @@ public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jLabel1.setText("Identifier:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("CurrentIteration:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel3.setText("Offset:");
 
-        jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabelIdentifier.setText("Identifier:");
 
         jLabelCurrentIteration.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -116,7 +116,7 @@ public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog 
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButtonAceptarCambios.setText("Guardar Cambios");
+        jButtonAceptarCambios.setText("Save Changes");
         jButtonAceptarCambios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAceptarCambiosActionPerformed(evt);
@@ -124,7 +124,7 @@ public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog 
         });
         jPanel1.add(jButtonAceptarCambios, new java.awt.GridBagConstraints());
 
-        jButtonSalir.setText("Salir");
+        jButtonSalir.setText("Exit");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSalirActionPerformed(evt);
@@ -145,7 +145,7 @@ public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog 
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setText("Multiplier:");
 
         jTextFieldMultiplier.setText("jTextField1");
@@ -155,10 +155,10 @@ public class AlgorithmMultiplierOffsetTimeSeriesGui extends javax.swing.JDialog 
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel8.setText("SignalToWriteIdentifier:");
 
-        jLabelSignaToWriteIdentifier.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelSignaToWriteIdentifier.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelSignaToWriteIdentifier.setText("Agent:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

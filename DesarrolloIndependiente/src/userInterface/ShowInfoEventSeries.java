@@ -74,13 +74,13 @@ public class ShowInfoEventSeries extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel2.setText("Agent:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel5.setText("Units:");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabel6.setText("Origin:");
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 13));
         jLabel7.setText("SeriesIsGeneratedFrom:");
 
         jLabelIdentifier.setFont(new java.awt.Font("Tahoma", 1, 14));
@@ -89,10 +89,10 @@ public class ShowInfoEventSeries extends javax.swing.JDialog {
         jLabelAgent.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelAgent.setText("Agent:");
 
-        jLabelUnits.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelUnits.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelUnits.setText("Units:");
 
-        jLabelOrigin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabelOrigin.setFont(new java.awt.Font("Tahoma", 0, 12));
         jLabelOrigin.setText("Origin:");
 
         jTextAreaSeriesIsGeneratedFrom.setColumns(20);
@@ -101,7 +101,7 @@ public class ShowInfoEventSeries extends javax.swing.JDialog {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Aceptar");
+        jButton1.setText("Accept");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

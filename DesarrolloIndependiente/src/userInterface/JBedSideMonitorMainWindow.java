@@ -15,6 +15,7 @@ import datasource.DataSource;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -79,7 +80,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("JBedSideMonitor");
+        setTitle("JBedsideMonitor");
         setIconImage(new ImageIcon(getClass().getResource("/images/JBedSideMonitor.png")).getImage());
         setName("JBedSideMonitorMainWindow"); // NOI18N
 
@@ -165,7 +166,7 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(20, 20));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("    JBedSideMonitor");
+        jLabel1.setText("    JBedsideMonitor");
         jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jLabel1.setMinimumSize(new java.awt.Dimension(34, 18));
         jLabel1.setPreferredSize(new java.awt.Dimension(200, 16));
@@ -173,8 +174,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
+        jMenu1.setMnemonic(KeyEvent.VK_F);
         jMenu1.setText("File");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Exit");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,25 +188,31 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenuTimeSeries.setMnemonic(KeyEvent.VK_T);
         jMenuTimeSeries.setText("TimeSeries");
         this.jMenuTimeSeriesRefresh();
         jMenuBar1.add(jMenuTimeSeries);
 
+        jMenuEventSeries.setMnemonic(KeyEvent.VK_E);
         jMenuEventSeries.setText("EventSeries");
         this.jMenuEventSeriesRefresh();
         jMenuBar1.add(jMenuEventSeries);
 
+        jMenuAlgorithm.setMnemonic(KeyEvent.VK_A);
         jMenuAlgorithm.setText("Algorithm");
         this.jMenuAlgorithmRefresh();
         jMenuBar1.add(jMenuAlgorithm);
 
+        jMenuDataSource.setMnemonic(KeyEvent.VK_D);
         jMenuDataSource.setText("DataSource");
         this.jMenuDataSourcesRefresh();
         jMenuBar1.add(jMenuDataSource);
 
+        jMenu4.setMnemonic(KeyEvent.VK_I);
         jMenu4.setText("Settings");
 
-        jMenuItem2.setText("Configurar Marcas Y Anotaciones");
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Marks&Annotations");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -213,8 +222,10 @@ public class JBedSideMonitorMainWindow extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu4);
 
+        jMenu5.setMnemonic(KeyEvent.VK_B);
         jMenu5.setText("About");
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem3.setText("About");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -473,7 +484,7 @@ configureAnnotationMark.setVisible(true);
                 signalMenu.setText(signal);
                 signalShow = new javax.swing.JRadioButtonMenuItem();
                 signalShow.setSelected(true);
-                signalShow.setText("Mostrar/Ocultar");
+                signalShow.setText("Visible");
                 signalShow.addActionListener(new java.awt.event.ActionListener() {
 
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -550,7 +561,7 @@ configureAnnotationMark.setVisible(true);
                     signalMenu.setText(signal + "(Annotation)");
                     signalShow = new javax.swing.JRadioButtonMenuItem();
                     signalShow.setSelected(true);
-                    signalShow.setText("Mostrar/Ocultar");
+                    signalShow.setText("Visible");
                     signalShow.addActionListener(new java.awt.event.ActionListener() {
 
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
