@@ -20,13 +20,20 @@ public class TimeSeries extends Series {
     private float frequency;
 
     public TimeSeries(String identifier, String agent, long origin, float frequency, String units) {
-        super(identifier, agent, origin,units);
+        super(identifier, agent, origin, units);
         this.frequency = frequency;
         if (3600 * 6 * this.frequency > defaultBufferSize) {
             this.buffer = new CircularBuffer(defaultBufferSize);
         } else {
             this.buffer = new CircularBuffer((int) Math.ceil(3600 * 6 * this.frequency));
         }
+    }
+
+    //Para forzar una capacidad
+    public TimeSeries(String identifier, String agent, long origin, float frequency, String units, int capacity) {
+        super(identifier, agent, origin, units);
+        this.frequency = frequency;
+        this.buffer = new CircularBuffer(capacity);
     }
 
     public int getSamplescounter() {
@@ -47,7 +54,6 @@ public class TimeSeries extends Series {
         }
         return (buffer.getIndexNextWrite() - 1) % this.getCapacity();
     }
-
 
     public int getCapacity() {
         return this.buffer.getCapacity();
@@ -80,20 +86,21 @@ public class TimeSeries extends Series {
     public ConsecutiveSamplesAvailableInfo getConsecutiveSamplesAvailableInfo() {
         return this.buffer.getConsecutiveSamplesAvailableInfo();
     }
+
     @Override
-    public String toString(){
-        String stringToReturn="Identifier:"+this.getIdentifier()+"\n";
-        stringToReturn=stringToReturn.concat("Agent:"+this.getAgent()+"\n");
-        stringToReturn=stringToReturn.concat("Frequency:"+this.getFrequency()+"\n");
-        stringToReturn=stringToReturn.concat("Capacity:"+this.getCapacity()+"\n");
-        stringToReturn=stringToReturn.concat("Units:"+this.getUnits()+"\n");
-        stringToReturn=stringToReturn.concat("Origin:"+this.getOrigin()+"\n");
-        stringToReturn=stringToReturn.concat("SeriesIsGeneratedFrom:");
+    public String toString() {
+        String stringToReturn = "Identifier:" + this.getIdentifier() + "\n";
+        stringToReturn = stringToReturn.concat("Agent:" + this.getAgent() + "\n");
+        stringToReturn = stringToReturn.concat("Frequency:" + this.getFrequency() + "\n");
+        stringToReturn = stringToReturn.concat("Capacity:" + this.getCapacity() + "\n");
+        stringToReturn = stringToReturn.concat("Units:" + this.getUnits() + "\n");
+        stringToReturn = stringToReturn.concat("Origin:" + this.getOrigin() + "\n");
+        stringToReturn = stringToReturn.concat("SeriesIsGeneratedFrom:");
         ArrayList<String> seriesIsGeneratedFrom = this.getSeriesIsGeneratedFrom();
-        for(String serie:seriesIsGeneratedFrom){
-             stringToReturn=stringToReturn.concat(" "+serie);
+        for (String serie : seriesIsGeneratedFrom) {
+            stringToReturn = stringToReturn.concat(" " + serie);
         }
-        stringToReturn=stringToReturn.concat("\n");
+        stringToReturn = stringToReturn.concat("\n");
         return stringToReturn;
     }
 }

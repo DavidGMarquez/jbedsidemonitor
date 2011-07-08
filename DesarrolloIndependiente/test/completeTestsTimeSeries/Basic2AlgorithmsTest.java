@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import signals.TimeSeries;
 import algorithms.AlgorithmManager;
 import auxiliarTools.AuxTestUtilities;
+import completeTestsTimeSeries.AlgorithmStupid2XMultiSignalsImplementationOrder;
+import completeTestsTimeSeries.AlgorithmStupidFileImplementation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
