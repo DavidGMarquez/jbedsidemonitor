@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package demo2;
+package demo3;
 
 import algorithms.AlgorithmDefaultImplementation;
 import java.util.HashMap;
@@ -21,14 +21,13 @@ import signals.WriterRunnableEventSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmAcumulatorTimeSeries extends AlgorithmDefaultImplementation {
+public class AlgorithmLatidoInTimeSeries extends AlgorithmDefaultImplementation {
 
-    private float acumulatorLimit;
-    private float count;
 
-    public AlgorithmAcumulatorTimeSeries(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries, float acumulatorLimit) {
+    private float contador = -1;
+
+    public AlgorithmLatidoInTimeSeries(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
-        this.acumulatorLimit = acumulatorLimit;
     }
 
     public boolean execute(ReadResult readResult) {
@@ -61,21 +60,22 @@ public class AlgorithmAcumulatorTimeSeries extends AlgorithmDefaultImplementatio
         float[] data = readResultTimeSeries.getData();
 
         for (int i = 0; i < data.length; i++) {
-
-            count = count + Math.abs(data[i]);
-            if(count>acumulatorLimit){
-            writerRunnableEventSeries.addEventToWrite(acumulatorLimit(i, posInitToRead, frecuency, origin));
-            count=0;
+            if(data[i]<-999){
+                if(contador<0){
+                writerRunnableEventSeries.addEventToWrite(latidoEvent(i, posInitToRead, frecuency, origin));
+                contador=50;}
             }
+            contador--;
         }
         this.waitAndSendWriterRunable(writerRunnableEventSeries);
     }
 
-    public Event acumulatorLimit(int index, int posInitToWrite, float frecuency, long origin) {
+    public Event latidoEvent(int index, int posInitToWrite, float frecuency, long origin) {
         long location = (long) (((index + posInitToWrite) * 1000) / frecuency + origin);
-        Event event = new Event(location, "Acumulator", new HashMap<String, String>());
+        Event event = new Event(location, "Latido", new HashMap<String, String>());
         return event;
     }
+
 
     public void process(ReadResultEventSeries readResultEventSeries) {
     }

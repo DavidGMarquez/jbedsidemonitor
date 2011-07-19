@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package demo2;
+package demo3;
 
 import algorithms.AlgorithmDefaultImplementation;
 import java.util.HashMap;
@@ -21,13 +21,14 @@ import signals.WriterRunnableEventSeries;
  *
  * @author USUARIO
  */
-public class AlgorithmLatidoInTimeSeries extends AlgorithmDefaultImplementation {
+public class AlgorithmAcumulatorTimeSeries extends AlgorithmDefaultImplementation {
 
+    private float acumulatorLimit;
+    private float count;
 
-    private float contador = -1;
-
-    public AlgorithmLatidoInTimeSeries(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries) {
+    public AlgorithmAcumulatorTimeSeries(String identifier, Series signalToWrite, LinkedList<String> timeSeries, LinkedList<String> eventSeries, float acumulatorLimit) {
         super(identifier, signalToWrite, timeSeries, eventSeries);
+        this.acumulatorLimit = acumulatorLimit;
     }
 
     public boolean execute(ReadResult readResult) {
@@ -60,24 +61,21 @@ public class AlgorithmLatidoInTimeSeries extends AlgorithmDefaultImplementation 
         float[] data = readResultTimeSeries.getData();
 
         for (int i = 0; i < data.length; i++) {
-            System.out.println("Data"+data[i]+"Contao"+contador);
-            if(data[i]<-999){
-                if(contador<0){
-                    System.out.println("Latido");
-                writerRunnableEventSeries.addEventToWrite(latidoEvent(i, posInitToRead, frecuency, origin));
-                contador=50;}
+
+            count = count + Math.abs(data[i]);
+            if(count>acumulatorLimit){
+            writerRunnableEventSeries.addEventToWrite(acumulatorLimit(i, posInitToRead, frecuency, origin));
+            count=0;
             }
-            contador--;
         }
         this.waitAndSendWriterRunable(writerRunnableEventSeries);
     }
 
-    public Event latidoEvent(int index, int posInitToWrite, float frecuency, long origin) {
+    public Event acumulatorLimit(int index, int posInitToWrite, float frecuency, long origin) {
         long location = (long) (((index + posInitToWrite) * 1000) / frecuency + origin);
-        Event event = new Event(location, "Latido", new HashMap<String, String>());
+        Event event = new Event(location, "Acumulator", new HashMap<String, String>());
         return event;
     }
-
 
     public void process(ReadResultEventSeries readResultEventSeries) {
     }
