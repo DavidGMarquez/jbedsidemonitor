@@ -299,10 +299,11 @@ public class SignalManager {
         try {
             LinkedList<String> dataSourcesNames = new LinkedList<String>(this.dataSources.keySet());
             for (String dataSourceName : dataSourcesNames) {
+                System.out.println(dataSourceName);
                 dataSources.get(dataSourceName).start();
             }
         } catch (Exception e) {
-            System.out.println("Error inializando DataSources" + e.getMessage());
+            System.out.println("Error inializando DataSources " + e.getMessage()+e.getCause()+e.getLocalizedMessage());
         } finally {
             this.lockDataSourcesInfo.writeLock().unlock();
         }

@@ -1,6 +1,5 @@
 package algorithms;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -15,7 +14,6 @@ import signals.WriterRunnableEventSeries;
 import signals.WriterRunnableMultiSignal;
 import signals.WriterRunnableOneSignal;
 import signals.WriterRunnableTimeSeries;
-import sun.security.x509.AlgorithmId;
 
 /**
  * Singlenton
