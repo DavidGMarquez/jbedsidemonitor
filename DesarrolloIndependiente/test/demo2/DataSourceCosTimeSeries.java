@@ -7,10 +7,6 @@ package demo2;
 import guiTest.*;
 import completeTestsTimeSeries.*;
 import datasource.DataSourceDefault;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,7 +16,7 @@ import javax.swing.JFrame;
 import signals.SignalManager;
 import signals.WriterRunnableTimeSeries;
 
-public class DataSourceFileTimeSeries extends DataSourceDefault {
+public class DataSourceCosTimeSeries extends DataSourceDefault {
 
     String nameSignal;
     Timer timer;
@@ -29,12 +25,10 @@ public class DataSourceFileTimeSeries extends DataSourceDefault {
     int sizeOfIteration;
     float frecuency;
     long index;
+    double multiplier;
     int delayFirstTime;
-    FileReader fr;
-    BufferedReader input;
-    String fileName;
 
-    public DataSourceFileTimeSeries(int delayFirstTime, float frecuency, int limitOfIterations, String nameSignal, int sizeOfIteration, String fileName) {
+    public DataSourceCosTimeSeries(int delayFirstTime, float frecuency, int limitOfIterations, String nameSignal, int sizeOfIteration, double multiplier) {
         this.delayFirstTime = delayFirstTime;
         this.sizeOfIteration = sizeOfIteration;
         this.currentIteration = 0;
@@ -42,18 +36,11 @@ public class DataSourceFileTimeSeries extends DataSourceDefault {
         this.limitOfItIterations = limitOfIterations;
         this.nameSignal = nameSignal;
         this.index = 0;
+        this.multiplier = multiplier;
         this.registerThis();
-        this.fileName=fileName;
     }
 
     public boolean start() {
-           try {
-            fr = new FileReader(fileName);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(DataSourceFileTimeSeries.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           
-        input = new BufferedReader(fr);
         timer = new Timer();
         float periodOfTime = (1 / frecuency) * 1000 * sizeOfIteration;
         timer.scheduleAtFixedRate(new RemindTask(), delayFirstTime, (long) periodOfTime);
@@ -68,9 +55,18 @@ public class DataSourceFileTimeSeries extends DataSourceDefault {
     }
 
     public String getIdentifier() {
-        return "FileDataSource";
+        return "DataSourceCoshTimeSeries";
     }
 
+    public boolean hasConfigurationGui() {
+        return true;
+    }
+
+    public void showConfigurationGui(JFrame jframe) {
+        DataSourceCosTimeSeriesGui dataSourceCoshTimeSeriesGui = new DataSourceCosTimeSeriesGui(jframe, true, this);
+        dataSourceCoshTimeSeriesGui.setLocationRelativeTo(jframe);
+        dataSourceCoshTimeSeriesGui.setVisible(true);
+    }
 
     public int getCurrentIteration() {
         return currentIteration;
@@ -104,6 +100,14 @@ public class DataSourceFileTimeSeries extends DataSourceDefault {
         this.limitOfItIterations = limitOfItIterations;
     }
 
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
+    }
+
     public String getNameSignal() {
         return nameSignal;
     }
@@ -121,13 +125,7 @@ public class DataSourceFileTimeSeries extends DataSourceDefault {
         public void run() {
             float[] dataToWrite = new float[sizeOfIteration];
             for (int i = 0; i < dataToWrite.length; i++) {
-                try {
-                    dataToWrite[i] = Float.parseFloat(input.readLine());
-                } catch (IOException ex) {
-                    Logger.getLogger(DataSourceFileTimeSeries.class.getName()).log(Level.SEVERE, null, ex);
-                    timer.cancel();
-                    break;
-                }
+                dataToWrite[i] = (float) Math.cos(index * multiplier);
                 index++;
             }
             WriterRunnableTimeSeries writerRunnableTimeSeries = new WriterRunnableTimeSeries(nameSignal, dataToWrite, currentIteration * sizeOfIteration);
